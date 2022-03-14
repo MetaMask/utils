@@ -1,9 +1,7 @@
-import greeter from '.';
+import * as mainModule from '.';
 
-describe('Test', () => {
-  it('greets', () => {
-    const name = 'Huey';
-    const result = greeter(name);
-    expect(result).toStrictEqual('Hello, Huey!');
+describe('Main entry point', () => {
+  it('has exports', () => {
+    expect(Object.keys(mainModule)).not.toHaveLength(0);
   });
 });
