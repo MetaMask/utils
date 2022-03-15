@@ -57,3 +57,10 @@ export type Mutable<
   {
     [Key in keyof Omit<T, TargetKey>]: T[Key];
   };
+
+/**
+ * Useful for representing some value that _migh_ be present and / or complete.
+ *
+ * @template T - The value that might be present or complete.
+ */
+export type Maybe<T> = Partial<T> | null | undefined;
