@@ -30,7 +30,12 @@ export function isValidJson(value: unknown): value is Json {
  * A String specifying the version of the JSON-RPC protocol.
  * MUST be exactly "2.0".
  */
-export type JsonRpcVersion = '2.0';
+export type JsonRpcVersion2 = '2.0';
+
+/**
+ * The string '2.0'.
+ */
+export const jsonrpc2 = '2.0' as const;
 
 /**
  * An identifier established by the Client that MUST contain a String, Number,
@@ -54,7 +59,7 @@ export type JsonRpcError = {
  * A JSON-RPC request object.
  */
 export type JsonRpcRequest<T> = {
-  jsonrpc: JsonRpcVersion;
+  jsonrpc: JsonRpcVersion2;
   method: string;
   id: JsonRpcId;
   params?: T;
@@ -64,7 +69,7 @@ export type JsonRpcRequest<T> = {
  * A JSON-RPC notification object.
  */
 export type JsonRpcNotification<T> = {
-  jsonrpc: JsonRpcVersion;
+  jsonrpc: JsonRpcVersion2;
   method: string;
   params?: T;
 };
@@ -73,7 +78,7 @@ export type JsonRpcNotification<T> = {
  * The internal, base type for JSON-RPC responses.
  */
 type JsonRpcResponseBase = {
-  jsonrpc: JsonRpcVersion;
+  jsonrpc: JsonRpcVersion2;
   id: JsonRpcId;
 };
 
