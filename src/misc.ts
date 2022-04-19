@@ -36,7 +36,7 @@ export type NonEmptyArray<T> = [T, ...T[]];
  * A JavaScript object that is not `null`, a function, or an array. The object
  * can still be an instance of a class.
  */
-export type PlainObject = Record<number | string | symbol, unknown>;
+export type RuntimeObject = Record<number | string | symbol, unknown>;
 
 //
 // Type Guards
@@ -56,7 +56,7 @@ export function isNonEmptyArray<T>(value: T[]): value is NonEmptyArray<T> {
 /**
  * Type guard for "nullishness".
  *
- * @param value - A value (literally anything).
+ * @param value - Any value.
  * @returns `true` if the value is null or undefined, `false` otherwise.
  */
 export function isNullish(value: unknown): value is null | undefined {
@@ -64,13 +64,13 @@ export function isNullish(value: unknown): value is null | undefined {
 }
 
 /**
- * A type guard for {@link PlainObject}.
+ * A type guard for {@link RuntimeObject}.
  *
  * @param value - The value to check.
- * @returns Whether the specified value is a "plain object", i.e. its runtime
- * type is `object` and its neither `null` nor an `Array`.
+ * @returns Whether the specified value has a runtime type of `object` and is
+ * neither `null` nor an `Array`.
  */
-export function isObject(value: unknown): value is PlainObject {
+export function isObject(value: unknown): value is RuntimeObject {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
@@ -84,9 +84,9 @@ export function isObject(value: unknown): value is PlainObject {
  * @param object - The object to check.
  * @param name - The property name to check for.
  * @returns Whether the specified object has an own property with the specified
- * name.
+ * name, regardless of whether it is enumerable or not.
  */
 export const hasProperty = (
-  object: PlainObject,
+  object: RuntimeObject,
   name: string | number | symbol,
 ): boolean => Reflect.hasOwnProperty.call(object, name);

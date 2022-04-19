@@ -1,4 +1,5 @@
 import deepEqual from 'fast-deep-equal';
+import { hasProperty } from './misc';
 
 /**
  * Any JSON-compatible value.
@@ -113,7 +114,7 @@ export type JsonRpcResponse<T = unknown> = JsonRpcSuccess<T> | JsonRpcFailure;
 export function isJsonRpcSuccess<T>(
   response: JsonRpcResponse<T>,
 ): response is JsonRpcSuccess<T> {
-  return 'result' in response;
+  return hasProperty(response, 'result');
 }
 
 /**
@@ -129,5 +130,5 @@ export function isJsonRpcSuccess<T>(
 export function isJsonRpcFailure(
   response: JsonRpcResponse<unknown>,
 ): response is JsonRpcFailure {
-  return 'error' in response;
+  return hasProperty(response, 'error');
 }
