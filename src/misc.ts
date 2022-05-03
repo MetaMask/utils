@@ -79,7 +79,7 @@ export function isObject(value: unknown): value is RuntimeObject {
 //
 
 /**
- * An alias for {@link Reflect.hasOwnProperty}.
+ * An alias for {@link Object.hasOwnProperty}.
  *
  * @param object - The object to check.
  * @param name - The property name to check for.
@@ -89,4 +89,4 @@ export function isObject(value: unknown): value is RuntimeObject {
 export const hasProperty = (
   object: RuntimeObject,
   name: string | number | symbol,
-): boolean => Reflect.hasOwnProperty.call(object, name);
+): boolean => Object.hasOwnProperty.call(object, name);
