@@ -59,7 +59,7 @@ export function isNonEmptyArray<T>(value: T[]): value is NonEmptyArray<T> {
  * @param value - Any value.
  * @returns `true` if the value is null or undefined, `false` otherwise.
  */
-export function isNullish(value: unknown): value is null | undefined {
+export function isNullOrUndefined(value: unknown): value is null | undefined {
   return value === null || value === undefined;
 }
 
