@@ -57,21 +57,25 @@ export type JsonRpcError = {
 
 /**
  * A JSON-RPC request object.
+ *
+ * @template Params - The type of the params.
  */
-export type JsonRpcRequest<T> = {
+export type JsonRpcRequest<Params> = {
   jsonrpc: JsonRpcVersion2;
   method: string;
   id: JsonRpcId;
-  params?: T;
+  params?: Params;
 };
 
 /**
  * A JSON-RPC notification object.
+ *
+ * @template Params - The type of the params.
  */
-export type JsonRpcNotification<T> = {
+export type JsonRpcNotification<Params> = {
   jsonrpc: JsonRpcVersion2;
   method: string;
-  params?: T;
+  params?: Params;
 };
 
 /**
@@ -85,10 +89,10 @@ type JsonRpcResponseBase = {
 /**
  * A successful JSON-RPC response object.
  *
- * @template T - The type of the result value.
+ * @template Result - The type of the result.
  */
-export type JsonRpcSuccess<T = unknown> = JsonRpcResponseBase & {
-  result: T;
+export type JsonRpcSuccess<Result = unknown> = JsonRpcResponseBase & {
+  result: Result;
 };
 
 /**
@@ -102,9 +106,11 @@ export type JsonRpcFailure = JsonRpcResponseBase & {
  * A JSON-RPC response object. Must be checked to determine whether it's a
  * success or failure.
  *
- * @template T - The type of the result value.
+ * @template Result - The type of the result.
  */
-export type JsonRpcResponse<T = unknown> = JsonRpcSuccess<T> | JsonRpcFailure;
+export type JsonRpcResponse<Result = unknown> =
+  | JsonRpcSuccess<Result>
+  | JsonRpcFailure;
 
 /**
  * ATTN:** Assumes that only one of the `result` and `error` properties is
@@ -116,9 +122,9 @@ export type JsonRpcResponse<T = unknown> = JsonRpcSuccess<T> | JsonRpcFailure;
  * @returns Whether the response object is a success, i.e. has a `result`
  * property.
  */
-export function isJsonRpcSuccess<T>(
-  response: JsonRpcResponse<T>,
-): response is JsonRpcSuccess<T> {
+export function isJsonRpcSuccess<Result>(
+  response: JsonRpcResponse<Result>,
+): response is JsonRpcSuccess<Result> {
   return hasProperty(response, 'result');
 }
 

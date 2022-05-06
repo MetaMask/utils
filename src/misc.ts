@@ -5,32 +5,32 @@
 /**
  * Makes every specified property of the specified object type mutable.
  *
- * @template T - The object whose readonly properties to make mutable.
+ * @template ObjectValue - The object whose readonly properties to make mutable.
  * @template TargetKey - The property key(s) to make mutable.
  */
 export type Mutable<
-  T extends Record<string, unknown>,
-  TargetKey extends string
+  ObjectValue extends Record<string, unknown>,
+  TargetKey extends keyof ObjectValue
 > = {
-  -readonly [Key in keyof Pick<T, TargetKey>]: T[Key];
+  -readonly [Key in keyof Pick<ObjectValue, TargetKey>]: ObjectValue[Key];
 } &
   {
-    [Key in keyof Omit<T, TargetKey>]: T[Key];
+    [Key in keyof Omit<ObjectValue, TargetKey>]: ObjectValue[Key];
   };
 
 /**
  * Useful for representing some value that _migh_ be present and / or complete.
  *
- * @template T - The value that might be present or complete.
+ * @template Value - The value that might be present or complete.
  */
-export type Maybe<T> = Partial<T> | null | undefined;
+export type Maybe<Value> = Partial<Value> | null | undefined;
 
 /**
  * Like {@link Array}, but always non-empty.
  *
- * @template T - The non-empty array member type.
+ * @template Element - The non-empty array member type.
  */
-export type NonEmptyArray<T> = [T, ...T[]];
+export type NonEmptyArray<Element> = [Element, ...Element[]];
 
 /**
  * A JavaScript object that is not `null`, a function, or an array. The object
@@ -45,11 +45,13 @@ export type RuntimeObject = Record<number | string | symbol, unknown>;
 /**
  * A {@link NonEmptyArray} type guard.
  *
- * @template T - The non-empty array member type.
+ * @template Element - The non-empty array member type.
  * @param value - The value to check.
  * @returns Whether the value is a non-empty array.
  */
-export function isNonEmptyArray<T>(value: T[]): value is NonEmptyArray<T> {
+export function isNonEmptyArray<Element>(
+  value: Element[],
+): value is NonEmptyArray<Element> {
   return Array.isArray(value) && value.length > 0;
 }
 
