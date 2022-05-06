@@ -66,12 +66,6 @@ describe('FrozenMap', () => {
       ).toMatchInlineSnapshot(`"FrozenMap(3) { a => 1, b => 2, c => 3 }"`);
     });
   });
-  // describe('forEach', () => {})
-  // describe('get', () => {})
-  // describe('has', () => {})
-  // describe('keys', () => {})
-  // describe('values', () => {})
-  // describe('size', () => {})
 });
 
 describe('FrozenSet', () => {
