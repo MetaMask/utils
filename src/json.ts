@@ -27,15 +27,15 @@ export function isValidJson(value: unknown): value is Json {
 }
 
 /**
- * A String specifying the version of the JSON-RPC protocol.
- * MUST be exactly "2.0".
- */
-export type JsonRpcVersion2 = '2.0';
-
-/**
  * The string '2.0'.
  */
 export const jsonrpc2 = '2.0' as const;
+
+/**
+ * A String specifying the version of the JSON-RPC protocol.
+ * MUST be exactly "2.0".
+ */
+export type JsonRpcVersion2 = typeof jsonrpc2;
 
 /**
  * An identifier established by the Client that MUST contain a String, Number,
