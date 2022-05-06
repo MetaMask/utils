@@ -1,27 +1,30 @@
 /**
  * A {@link ReadonlyMap} that cannot be modified after instantiation.
+ * The implementation uses an inner map hidden via a private field, and the
+ * immutability guarantee relies on it being impossible to get a reference
+ * to this map.
  */
 class FrozenMap<Key, Value> implements ReadonlyMap<Key, Value> {
-  #map: Map<Key, Value>;
+  readonly #map: Map<Key, Value>;
 
-  public entries: ReadonlyMap<Key, Value>['entries'];
+  public readonly entries: ReadonlyMap<Key, Value>['entries'];
 
-  public forEach: ReadonlyMap<Key, Value>['forEach'];
+  public readonly forEach: ReadonlyMap<Key, Value>['forEach'];
 
-  public get: ReadonlyMap<Key, Value>['get'];
+  public readonly get: ReadonlyMap<Key, Value>['get'];
 
-  public has: ReadonlyMap<Key, Value>['has'];
+  public readonly has: ReadonlyMap<Key, Value>['has'];
 
-  public keys: ReadonlyMap<Key, Value>['keys'];
+  public readonly keys: ReadonlyMap<Key, Value>['keys'];
 
-  public values: ReadonlyMap<Key, Value>['values'];
+  public readonly values: ReadonlyMap<Key, Value>['values'];
 
   public get size() {
     return this.#map.size;
   }
 
-  public get [Symbol.iterator]() {
-    return this.#map[Symbol.iterator];
+  public [Symbol.iterator]() {
+    return this.#map[Symbol.iterator]();
   }
 
   constructor(entries?: readonly (readonly [Key, Value])[] | null) {
@@ -50,26 +53,29 @@ class FrozenMap<Key, Value> implements ReadonlyMap<Key, Value> {
 
 /**
  * A {@link ReadonlySet} that cannot be modified after instantiation.
+ * The implementation uses an inner set hidden via a private field, and the
+ * immutability guarantee relies on it being impossible to get a reference
+ * to this set.
  */
 class FrozenSet<Value> implements ReadonlySet<Value> {
-  #set: Set<Value>;
+  readonly #set: Set<Value>;
 
-  public entries: ReadonlySet<Value>['entries'];
+  public readonly entries: ReadonlySet<Value>['entries'];
 
-  public forEach: ReadonlySet<Value>['forEach'];
+  public readonly forEach: ReadonlySet<Value>['forEach'];
 
-  public has: ReadonlySet<Value>['has'];
+  public readonly has: ReadonlySet<Value>['has'];
 
-  public keys: ReadonlySet<Value>['keys'];
+  public readonly keys: ReadonlySet<Value>['keys'];
 
-  public values: ReadonlySet<Value>['values'];
+  public readonly values: ReadonlySet<Value>['values'];
 
   public get size() {
     return this.#set.size;
   }
 
-  public get [Symbol.iterator]() {
-    return this.#set[Symbol.iterator];
+  public [Symbol.iterator]() {
+    return this.#set[Symbol.iterator]();
   }
 
   constructor(values?: readonly Value[] | null) {
@@ -93,14 +99,10 @@ class FrozenSet<Value> implements ReadonlySet<Value> {
   }
 }
 
-Object.freeze(FrozenSet)
-Object.freeze(FrozenSet.prototype)
+Object.freeze(FrozenSet);
+Object.freeze(FrozenSet.prototype);
 
-Object.freeze(FrozenMap)
-Object.freeze(FrozenMap.prototype)
+Object.freeze(FrozenMap);
+Object.freeze(FrozenMap.prototype);
 
-
-export {
-  FrozenMap,
-  FrozenSet,
-}
+export { FrozenMap, FrozenSet };
