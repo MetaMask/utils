@@ -7,18 +7,6 @@
 class FrozenMap<Key, Value> implements ReadonlyMap<Key, Value> {
   readonly #map: Map<Key, Value>;
 
-  public readonly entries: ReadonlyMap<Key, Value>['entries'];
-
-  public readonly forEach: ReadonlyMap<Key, Value>['forEach'];
-
-  public readonly get: ReadonlyMap<Key, Value>['get'];
-
-  public readonly has: ReadonlyMap<Key, Value>['has'];
-
-  public readonly keys: ReadonlyMap<Key, Value>['keys'];
-
-  public readonly values: ReadonlyMap<Key, Value>['values'];
-
   public get size() {
     return this.#map.size;
   }
@@ -29,15 +17,38 @@ class FrozenMap<Key, Value> implements ReadonlyMap<Key, Value> {
 
   constructor(entries?: readonly (readonly [Key, Value])[] | null) {
     this.#map = new Map<Key, Value>(entries);
-
-    this.entries = this.#map.entries.bind(this.#map);
-    this.forEach = this.#map.forEach.bind(this.#map);
-    this.get = this.#map.get.bind(this.#map);
-    this.has = this.#map.has.bind(this.#map);
-    this.keys = this.#map.keys.bind(this.#map);
-    this.values = this.#map.values.bind(this.#map);
-
     Object.freeze(this);
+  }
+
+  public entries() {
+    return this.#map.entries();
+  }
+
+  public forEach(
+    callbackfn: (value: Value, key: Key, map: this) => void,
+    thisArg?: any,
+  ): void {
+    // We have to wrap the specified callback in order to prevent it from
+    // receiving a reference to the inner map.
+    return this.#map.forEach((value: Value, key: Key, _map: unknown) =>
+      callbackfn.call(thisArg, value, key, this),
+    );
+  }
+
+  public get(key: Key) {
+    return this.#map.get(key);
+  }
+
+  public has(key: Key) {
+    return this.#map.has(key);
+  }
+
+  public keys() {
+    return this.#map.keys();
+  }
+
+  public values() {
+    return this.#map.values();
   }
 
   public toString(): string {
@@ -60,16 +71,6 @@ class FrozenMap<Key, Value> implements ReadonlyMap<Key, Value> {
 class FrozenSet<Value> implements ReadonlySet<Value> {
   readonly #set: Set<Value>;
 
-  public readonly entries: ReadonlySet<Value>['entries'];
-
-  public readonly forEach: ReadonlySet<Value>['forEach'];
-
-  public readonly has: ReadonlySet<Value>['has'];
-
-  public readonly keys: ReadonlySet<Value>['keys'];
-
-  public readonly values: ReadonlySet<Value>['values'];
-
   public get size() {
     return this.#set.size;
   }
@@ -80,14 +81,34 @@ class FrozenSet<Value> implements ReadonlySet<Value> {
 
   constructor(values?: readonly Value[] | null) {
     this.#set = new Set<Value>(values);
-
-    this.entries = this.#set.entries.bind(this.#set);
-    this.forEach = this.#set.forEach.bind(this.#set);
-    this.has = this.#set.has.bind(this.#set);
-    this.keys = this.#set.keys.bind(this.#set);
-    this.values = this.#set.values.bind(this.#set);
-
     Object.freeze(this);
+  }
+
+  public entries() {
+    return this.#set.entries();
+  }
+
+  public forEach(
+    callbackfn: (value: Value, value2: Value, set: this) => void,
+    thisArg?: any,
+  ): void {
+    // We have to wrap the specified callback in order to prevent it from
+    // receiving a reference to the inner set.
+    return this.#set.forEach((value: Value, value2: Value, _set: unknown) =>
+      callbackfn.call(thisArg, value, value2, this),
+    );
+  }
+
+  public has(value: Value) {
+    return this.#set.has(value);
+  }
+
+  public keys() {
+    return this.#set.keys();
+  }
+
+  public values() {
+    return this.#set.values();
   }
 
   public toString(): string {
@@ -99,10 +120,10 @@ class FrozenSet<Value> implements ReadonlySet<Value> {
   }
 }
 
-Object.freeze(FrozenSet);
-Object.freeze(FrozenSet.prototype);
-
 Object.freeze(FrozenMap);
 Object.freeze(FrozenMap.prototype);
+
+Object.freeze(FrozenSet);
+Object.freeze(FrozenSet.prototype);
 
 export { FrozenMap, FrozenSet };
