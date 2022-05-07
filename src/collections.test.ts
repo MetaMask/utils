@@ -4,24 +4,20 @@ describe('FrozenMap', () => {
   describe('immutability', () => {
     it('has the expected class properties', () => {
       // i.e., does not have 'delete', 'set', or 'clear'
-      const expectedProperties = new Set([
-        'constructor',
-        'entries',
-        'forEach',
-        'get',
-        'has',
-        'keys',
-        'size',
-        'values',
-        'toString',
-      ]);
-
-      const properties = Object.getOwnPropertyNames(FrozenMap.prototype);
-
-      expect(properties).toHaveLength(expectedProperties.size);
-      properties.forEach((propertyName) =>
-        expect(expectedProperties.has(propertyName)).toBe(true),
-      );
+      expect(Object.getOwnPropertyNames(FrozenMap.prototype))
+        .toMatchInlineSnapshot(`
+        Array [
+          "constructor",
+          "size",
+          "entries",
+          "forEach",
+          "get",
+          "has",
+          "keys",
+          "values",
+          "toString",
+        ]
+      `);
     });
 
     it('is frozen and cannot be mutated', () => {
@@ -95,7 +91,7 @@ describe('FrozenMap', () => {
       ]);
 
       frozenMap.forEach((value, key) => {
-        expect(expected.get(key)).toStrictEqual(value);
+        expect(value).toStrictEqual(expected.get(key));
         expected.delete(key);
       });
 
@@ -235,23 +231,19 @@ describe('FrozenSet', () => {
   describe('immutability', () => {
     it('has the expected class properties', () => {
       // i.e., does not have 'delete', 'add', or 'clear'
-      const expectedProperties = new Set([
-        'constructor',
-        'entries',
-        'forEach',
-        'has',
-        'keys',
-        'size',
-        'toString',
-        'values',
-      ]);
-
-      const properties = Object.getOwnPropertyNames(FrozenSet.prototype);
-
-      expect(properties).toHaveLength(expectedProperties.size);
-      properties.forEach((propertyName) =>
-        expect(expectedProperties.has(propertyName)).toBe(true),
-      );
+      expect(Object.getOwnPropertyNames(FrozenSet.prototype))
+        .toMatchInlineSnapshot(`
+        Array [
+          "constructor",
+          "size",
+          "entries",
+          "forEach",
+          "has",
+          "keys",
+          "values",
+          "toString",
+        ]
+      `);
     });
 
     it('is frozen and cannot be mutated', () => {
