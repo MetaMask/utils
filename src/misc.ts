@@ -92,3 +92,48 @@ export const hasProperty = (
   object: RuntimeObject,
   name: string | number | symbol,
 ): boolean => Object.hasOwnProperty.call(object, name);
+
+type CreateArrayDeepEqualParam<Element> = {
+  sort?: (valueA: Element, valueB: Element) => number;
+  isEqual?: (valueA: Element, valueB: Element) => boolean;
+};
+
+// Kudos to: https://stackoverflow.com/a/19746771
+/**
+ * Creates an array deep equality comparator. Returns `true` if the arrays have
+ * the same length and if every element exists in both arrays, and `false`
+ * otherwise. The specified arrays are not mutated, but are instead copied and
+ * sorted. Sorting and member value equality behavior can be customized.
+ *
+ * @template Element - The type of the elements of the arrays to compare.
+ * @param options - An options bag.
+ * @param options.sort - The function used to sort the arrays. Defaults to the
+ * default behavior of {@link Array.prototype.sort}.
+ * @param options.isEqual - The function used to check equality between array
+ * member values. Defaults to a referential equality check (`a === b`).
+ * @returns Whether the two arrays are deeply equal.
+ */
+export function createArrayDeepEqual<Element>({
+  sort,
+  isEqual,
+}: CreateArrayDeepEqualParam<Element> = {}): (
+  arrayA: Element[],
+  arrayB: Element[],
+) => boolean {
+  const arrayDeepEqual = (arrayA: Element[], arrayB: Element[]) => {
+    if (arrayA.length !== arrayB.length) {
+      return false;
+    }
+
+    const arrayASorted = [...arrayA].sort(sort);
+    const arrayBSorted = [...arrayB].sort(sort);
+
+    return arrayASorted.every((value, index) =>
+      isEqual
+        ? isEqual(value, arrayBSorted[index])
+        : value === arrayBSorted[index],
+    );
+  };
+
+  return arrayDeepEqual;
+}
