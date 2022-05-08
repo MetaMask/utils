@@ -19,7 +19,7 @@ export type Mutable<
   };
 
 /**
- * Useful for representing some value that _migh_ be present and / or complete.
+ * Useful for representing some value that _might_ be present and / or complete.
  *
  * @template Value - The value that might be present or complete.
  */
