@@ -113,8 +113,9 @@ export type JsonRpcResponse<Result = unknown> =
   | JsonRpcFailure;
 
 /**
- * ATTN:** Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g. `JsonRpcEngine.handle`.
+ * ATTN: Assumes that only one of the `result` and `error` properties is
+ * present on the `response`, as guaranteed by e.g.
+ * [`JsonRpcEngine.handle`](https://github.com/MetaMask/json-rpc-engine/blob/main/src/JsonRpcEngine.ts).
  *
  * Type guard to narrow a JsonRpcResponse object to a success (or failure).
  *
@@ -129,8 +130,9 @@ export function isJsonRpcSuccess<Result>(
 }
 
 /**
- * ATTN:** Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g. `JsonRpcEngine.handle`.
+ * ATTN: Assumes that only one of the `result` and `error` properties is
+ * present on the `response`, as guaranteed by e.g.
+ * [`JsonRpcEngine.handle`](https://github.com/MetaMask/json-rpc-engine/blob/main/src/JsonRpcEngine.ts).
  *
  * Type guard to narrow a JsonRpcResponse object to a failure (or success).
  *

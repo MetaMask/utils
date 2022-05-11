@@ -23,7 +23,7 @@ export type Mutable<
  *
  * @template Value - The value that might be present or complete.
  */
-export type Maybe<Value> = Partial<Value> | null | undefined;
+export type PartialOrAbsent<Value> = Partial<Value> | null | undefined;
 
 /**
  * Like {@link Array}, but always non-empty.

@@ -4,7 +4,7 @@ import {
   isObject,
   hasProperty,
   RuntimeObject,
-} from './misc';
+} from '.';
 
 describe('miscellaneous', () => {
   describe('isNonEmptyArray', () => {

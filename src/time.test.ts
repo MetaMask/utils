@@ -1,4 +1,4 @@
-import { timeSince } from './time';
+import { timeSince } from '.';
 
 describe('time utilities', () => {
   describe('timeSince', () => {

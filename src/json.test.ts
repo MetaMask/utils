@@ -4,7 +4,7 @@ import {
   JsonRpcError,
   isJsonRpcFailure,
   isValidJson,
-} from './json';
+} from '.';
 
 const getError = () => {
   const error: any = new Error('bar');
