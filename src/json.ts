@@ -79,6 +79,33 @@ export type JsonRpcNotification<Params> = {
 };
 
 /**
+ * Type guard to narrow a JSON-RPC request or notification object to a
+ * notification.
+ *
+ * @param requestOrNotification - The JSON-RPC request or notification to check.
+ * @returns Whether the specified JSON-RPC message is a notification.
+ */
+export function isJsonRpcNotification<T>(
+  requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
+): requestOrNotification is JsonRpcNotification<T> {
+  return !hasProperty(requestOrNotification, 'id');
+}
+
+/**
+ * Assertion type guard to narrow a JSON-RPC request or notification object to a
+ * notification.
+ *
+ * @param requestOrNotification - The JSON-RPC request or notification to check.
+ */
+export function assertIsJsonRpcNotification<T>(
+  requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
+): asserts requestOrNotification is JsonRpcNotification<T> {
+  if (!isJsonRpcNotification(requestOrNotification)) {
+    throw new Error('Not a JSON-RPC notification.');
+  }
+}
+
+/**
  * A successful JSON-RPC response object.
  *
  * @template Result - The type of the result.
@@ -109,10 +136,6 @@ export type JsonRpcResponse<Result = unknown> =
   | JsonRpcFailure;
 
 /**
- * ATTN: Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g.
- * [`JsonRpcEngine.handle`](https://github.com/MetaMask/json-rpc-engine/blob/main/src/JsonRpcEngine.ts).
- *
  * Type guard to narrow a JsonRpcResponse object to a success (or failure).
  *
  * @param response - The response object to check.
@@ -126,26 +149,6 @@ export function isJsonRpcSuccess<Result>(
 }
 
 /**
- * ATTN: Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g.
- * [`JsonRpcEngine.handle`](https://github.com/MetaMask/json-rpc-engine/blob/main/src/JsonRpcEngine.ts).
- *
- * Type guard to narrow a JsonRpcResponse object to a failure (or success).
- *
- * @param response - The response object to check.
- * @returns Whether the response object is a failure, i.e. has an `error`
- * property.
- */
-export function isJsonRpcFailure(
-  response: JsonRpcResponse<unknown>,
-): response is JsonRpcFailure {
-  return hasProperty(response, 'error');
-}
-
-/**
- * ATTN: Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g. `JsonRpcEngine.handle`.
- *
  * Type assertion to narrow a JsonRpcResponse object to a success (or failure).
  *
  * @param response - The response object to check.
@@ -159,9 +162,19 @@ export function assertIsJsonRpcSuccess<T>(
 }
 
 /**
- * ATTN: Assumes that only one of the `result` and `error` properties is
- * present on the `response`, as guaranteed by e.g. `JsonRpcEngine.handle`.
+ * Type guard to narrow a JsonRpcResponse object to a failure (or success).
  *
+ * @param response - The response object to check.
+ * @returns Whether the response object is a failure, i.e. has an `error`
+ * property.
+ */
+export function isJsonRpcFailure(
+  response: JsonRpcResponse<unknown>,
+): response is JsonRpcFailure {
+  return hasProperty(response, 'error');
+}
+
+/**
  * Type assertion to narrow a JsonRpcResponse object to a failure (or success).
  *
  * @param response - The response object to check.

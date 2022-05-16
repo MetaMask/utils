@@ -1,8 +1,10 @@
 import {
   assertIsJsonRpcFailure,
+  assertIsJsonRpcNotification,
   assertIsJsonRpcSuccess,
   getJsonRpcIdValidator,
   isJsonRpcFailure,
+  isJsonRpcNotification,
   isJsonRpcSuccess,
   isValidJson,
   jsonrpc2,
@@ -43,6 +45,47 @@ describe('json', () => {
     });
   });
 
+  describe('isJsonRpcNotification', () => {
+    it('identifies a JSON-RPC notification', () => {
+      expect(
+        isJsonRpcNotification({
+          jsonrpc: jsonrpc2,
+          method: 'foo',
+        }),
+      ).toBe(true);
+    });
+
+    it('identifies a JSON-RPC request', () => {
+      expect(
+        isJsonRpcNotification({
+          jsonrpc: jsonrpc2,
+          id: 1,
+          method: 'foo',
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe('assertIsJsonRpcNotification', () => {
+    it('identifies JSON-RPC notification objects', () => {
+      [
+        { jsonrpc: jsonrpc2, method: 'foo' },
+        { jsonrpc: jsonrpc2, method: 'bar', params: ['baz'] },
+      ].forEach((input) => {
+        expect(() => assertIsJsonRpcNotification(input)).not.toThrow();
+      });
+
+      [
+        { id: 1, jsonrpc: jsonrpc2, method: 'foo' },
+        { id: 1, jsonrpc: jsonrpc2, method: 'bar', params: ['baz'] },
+      ].forEach((input) => {
+        expect(() => assertIsJsonRpcNotification(input)).toThrow(
+          'Not a JSON-RPC notification.',
+        );
+      });
+    });
+  });
+
   describe('isJsonRpcSuccess', () => {
     it('identifies a successful JSON-RPC response', () => {
       expect(
@@ -62,6 +105,26 @@ describe('json', () => {
           error: getError(),
         }),
       ).toBe(false);
+    });
+  });
+
+  describe('assertIsJsonRpcSuccess', () => {
+    it('identifies JSON-RPC response objects', () => {
+      [
+        { id: 1, jsonrpc: jsonrpc2, result: 'success' },
+        { id: 1, jsonrpc: jsonrpc2, result: null },
+      ].forEach((input) => {
+        expect(() => assertIsJsonRpcSuccess(input)).not.toThrow();
+      });
+
+      [
+        { id: 1, jsonrpc: jsonrpc2, error: getError() },
+        { id: 1, jsonrpc: jsonrpc2, error: null as any },
+      ].forEach((input) => {
+        expect(() => assertIsJsonRpcSuccess(input)).toThrow(
+          'Not a successful JSON-RPC response.',
+        );
+      });
     });
   });
 
@@ -87,22 +150,8 @@ describe('json', () => {
     });
   });
 
-  describe('assertIsJsonRpcSuccess', () => {
-    it('correctly identifies JSON-RPC response objects', () => {
-      ([{ result: 'success' }, { result: null }] as any[]).forEach((input) => {
-        expect(() => assertIsJsonRpcSuccess(input)).not.toThrow();
-      });
-
-      ([{ error: new Error('foo') }, {}] as any[]).forEach((input) => {
-        expect(() => assertIsJsonRpcSuccess(input)).toThrow(
-          'Not a successful JSON-RPC response.',
-        );
-      });
-    });
-  });
-
   describe('assertIsJsonRpcFailure', () => {
-    it('correctly identifies JSON-RPC response objects', () => {
+    it('identifies JSON-RPC response objects', () => {
       ([{ error: 'failure' }, { error: null }] as any[]).forEach((input) => {
         expect(() => assertIsJsonRpcFailure(input)).not.toThrow();
       });
