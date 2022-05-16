@@ -38,10 +38,10 @@ export enum Duration {
   Year = 31_536_000_000, // Day * 365
 }
 
-const isNonnegativeInteger = (number: number) =>
+const isNonNegativeInteger = (number: number) =>
   Number.isInteger(number) && number >= 0;
 
-const assertIsNonnegativeInteger = (number: number, name: string) => {
+const assertIsNonNegativeInteger = (number: number, name: string) => {
   if (!isNonnegativeInteger(number)) {
     throw new Error(
       `"${name}" must be a non-negative integer. Received: "${number}".`,
