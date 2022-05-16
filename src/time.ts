@@ -57,7 +57,7 @@ const assertIsNonNegativeInteger = (number: number, name: string) => {
  * @returns The count multiplied by the specified duration.
  */
 export function inMilliseconds(count: number, duration: Duration): number {
-  assertIsNonnegativeInteger(count, 'count');
+  assertIsNonNegativeInteger(count, 'count');
   return count * duration;
 }
 
@@ -68,6 +68,6 @@ export function inMilliseconds(count: number, duration: Duration): number {
  * @returns The number of milliseconds elapsed since the specified timestamp.
  */
 export function timeSince(timestamp: number): number {
-  assertIsNonnegativeInteger(timestamp, 'timestamp');
+  assertIsNonNegativeInteger(timestamp, 'timestamp');
   return Date.now() - timestamp;
 }
