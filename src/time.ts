@@ -42,7 +42,7 @@ const isNonNegativeInteger = (number: number) =>
   Number.isInteger(number) && number >= 0;
 
 const assertIsNonNegativeInteger = (number: number, name: string) => {
-  if (!isNonnegativeInteger(number)) {
+  if (!isNonNegativeInteger(number)) {
     throw new Error(
       `"${name}" must be a non-negative integer. Received: "${number}".`,
     );
