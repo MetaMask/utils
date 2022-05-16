@@ -106,6 +106,32 @@ export function assertIsJsonRpcNotification<T>(
 }
 
 /**
+ * Type guard to narrow a JSON-RPC request or notification object to a request.
+ *
+ * @param requestOrNotification - The JSON-RPC request or notification to check.
+ * @returns Whether the specified JSON-RPC message is a request.
+ */
+export function isJsonRpcRequest<T>(
+  requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
+): requestOrNotification is JsonRpcRequest<T> {
+  return hasProperty(requestOrNotification, 'id');
+}
+
+/**
+ * Assertion type guard to narrow a JSON-RPC request or notification object to a
+ * request.
+ *
+ * @param requestOrNotification - The JSON-RPC request or notification to check.
+ */
+export function assertIsJsonRpcRequest<T>(
+  requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
+): asserts requestOrNotification is JsonRpcRequest<T> {
+  if (!isJsonRpcRequest(requestOrNotification)) {
+    throw new Error('Not a JSON-RPC request.');
+  }
+}
+
+/**
  * A successful JSON-RPC response object.
  *
  * @template Result - The type of the result.
