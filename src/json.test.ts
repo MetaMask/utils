@@ -4,10 +4,12 @@ import {
   assertIsJsonRpcRequest,
   assertIsJsonRpcSuccess,
   getJsonRpcIdValidator,
+  getJsonSerializableInfo,
   isJsonRpcFailure,
   isJsonRpcNotification,
   isJsonRpcRequest,
   isJsonRpcSuccess,
+  isPlainObject,
   isValidJson,
   jsonrpc2,
   JsonRpcError,
@@ -284,6 +286,44 @@ describe('json', () => {
           inputs,
         ),
       ).not.toThrow();
+    });
+  });
+
+  describe('isPlainObject', () => {
+    it('should return true for a plain object', () => {
+      const somePlainObject = {
+        someKey: 'someValue',
+      };
+
+      expect(isPlainObject(somePlainObject)).toBe(true);
+    });
+
+    it('should return false if function is passed', () => {
+      const someFunction = (someArg: string) => {
+        return someArg;
+      };
+
+      expect(isPlainObject(someFunction)).toBe(false);
+    });
+
+    it('should return false if Set object is passed', () => {
+      const someSet = new Set();
+      someSet.add('something');
+
+      expect(isPlainObject(someSet)).toBe(false);
+    });
+  });
+
+  describe('getJsonSerializableInfo', () => {
+    it('should return true for serialization and 14 for a size', () => {
+      const valueToSerialize = {
+        a: 'bc',
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        12,
+      ]);
     });
   });
 });
