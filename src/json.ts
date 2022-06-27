@@ -296,14 +296,14 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
   // eslint-disable-next-line default-case
   switch (typeof value) {
     case 'string':
-      // TODO: Check if character is ASCII (1B) or UTF-8 (2B)
-      return [true, value.length * 2 + QUOTE_LENGTH * 2];
+      return [true, calculateStringSize(value) + QUOTE_LENGTH * 2];
     case 'boolean':
       return [true, value ? TRUE_LENGTH : FALSE_LENGTH];
     case 'number':
       return [
         true,
         // Check number of digits since all digits are 1 byte
+        // TODO: This needs to be improved to handle negative and decimal numbers
         value === 0 ? ZERO_LENGTH : Math.floor(Math.log10(value) + 1),
       ];
   }
@@ -360,4 +360,34 @@ export function isPlainObject(value: unknown): value is PlainObject {
   } catch (_) {
     return false;
   }
+}
+
+/**
+ * Check if character or string is ASCII.
+ *
+ * @param value - String or character.
+ * @returns Boolean, true if value is ASCII, false if not.
+ */
+export function isASCII(value: string) {
+  // eslint-disable-next-line no-control-regex,require-unicode-regexp
+  return /^[\x00-\x7F]*$/.test(value);
+}
+
+/**
+ * Calculate string size.
+ *
+ * @param value - String value to calculate size.
+ * @returns Number of bytes used to store whole string value.
+ */
+export function calculateStringSize(value: string) {
+  let size = 0;
+  for (const character of value) {
+    if (isASCII(character)) {
+      size += 1;
+    } else {
+      size += 2;
+    }
+  }
+
+  return size;
 }

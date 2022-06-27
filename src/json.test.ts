@@ -315,14 +315,25 @@ describe('json', () => {
   });
 
   describe('getJsonSerializableInfo', () => {
-    it('should return true for serialization and 14 for a size', () => {
+    it('should return true for serialization and 10 for a size', () => {
       const valueToSerialize = {
         a: 'bc',
       };
 
       expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
         true,
-        12,
+        10,
+      ]);
+    });
+
+    it('should return true for serialization and 16 for a size when mixed UTF8 and ASCII values are used', () => {
+      const valueToSerialize = {
+        a: 'bcšečf',
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        16,
       ]);
     });
   });
