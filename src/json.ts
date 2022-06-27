@@ -275,6 +275,7 @@ const FALSE_LENGTH = 5; // false
 const ZERO_LENGTH = 1; // 0
 const QUOTE_LENGTH = 1; // "
 const COLON_LENGTH = 1; // :
+const DOT_LENGTH = 1; // :
 
 /**
  * Checks whether a value is JSON serializable and counts the total number
@@ -300,12 +301,7 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
     case 'boolean':
       return [true, value ? TRUE_LENGTH : FALSE_LENGTH];
     case 'number':
-      return [
-        true,
-        // Check number of digits since all digits are 1 byte
-        // TODO: This needs to be improved to handle negative and decimal numbers
-        value === 0 ? ZERO_LENGTH : Math.floor(Math.log10(value) + 1),
-      ];
+      return [true, calculateNumberSize(value)];
   }
 
   if (!isPlainObject(value) && !Array.isArray(value)) {
@@ -390,4 +386,71 @@ export function calculateStringSize(value: string) {
   }
 
   return size;
+}
+
+/**
+ * Calculate size of a number ofter JSON serialization.
+ *
+ * @param value - Number value to calculate size.
+ * @returns Number of bytes used to store whole number in JSON.
+ */
+export function calculateNumberSize(value: number): number {
+  if (value === 0) {
+    return ZERO_LENGTH;
+  }
+
+  let size = 0;
+  // Work with absolute (positive) numbers only
+  let absNum = value;
+  if (value < 0) {
+    absNum = Math.abs(value);
+    // Initially, count on a sign of a number (-)
+    size += 1;
+  }
+
+  // If absolute value of a number is greater than 1 and is a whole number,
+  // then perform the fastest operation to calculate its size
+  if (absNum - Math.floor(absNum) === 0) {
+    size += Math.floor(Math.log10(absNum) + 1);
+    return size;
+  }
+
+  // Work with decimal numbers
+  // First calculate the size of the whole part of a number
+  if (absNum >= 1) {
+    size += Math.floor(Math.log10(absNum) + 1);
+  } else {
+    size += ZERO_LENGTH;
+  }
+  // Then add the dot '.' size
+  size += DOT_LENGTH;
+  // Then calculate the number of decimal places
+  size += getNumberOfDecimals(absNum);
+
+  return size;
+}
+
+/**
+ * Calculate the number of decimals for a given number.
+ *
+ * @param value - Decimal number.
+ * @returns Number of decimals.
+ */
+export function getNumberOfDecimals(value: number): number {
+  if (Math.floor(value) === value) {
+    return 0;
+  }
+
+  const str = value.toString();
+
+  if (str.indexOf('e-') > -1) {
+    return parseInt(str.split('e-')[1], 10);
+  }
+
+  if (str.indexOf('.') !== -1 && str.indexOf('-') !== -1) {
+    return str.split('-')[1].length;
+  } else if (str.indexOf('.') !== -1) {
+    return str.split('.')[1].length;
+  }
+  return str.split('-')[1].length;
 }

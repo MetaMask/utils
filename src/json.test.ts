@@ -3,6 +3,7 @@ import {
   assertIsJsonRpcNotification,
   assertIsJsonRpcRequest,
   assertIsJsonRpcSuccess,
+  calculateNumberSize,
   getJsonRpcIdValidator,
   getJsonSerializableInfo,
   isJsonRpcFailure,
@@ -314,10 +315,39 @@ describe('json', () => {
     });
   });
 
+  describe('calculateNumberSize', () => {
+    it('should return 3 for a "100" number size', () => {
+      expect(calculateNumberSize(100)).toBe(3);
+    });
+
+    it('should return 4 for a "-100" number size', () => {
+      expect(calculateNumberSize(-100)).toBe(4);
+    });
+
+    it('should return 4 for a "-0.3" number size', () => {
+      expect(calculateNumberSize(-0.3)).toBe(4);
+    });
+
+    it('should return 12 for a "0.0000000005" number size', () => {
+      expect(calculateNumberSize(0.0000000005)).toBe(12);
+    });
+  });
+
   describe('getJsonSerializableInfo', () => {
     it('should return true for serialization and 10 for a size', () => {
       const valueToSerialize = {
         a: 'bc',
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        10,
+      ]);
+    });
+
+    it('should return true for serialization and 11 for a size', () => {
+      const valueToSerialize = {
+        a: 1234,
       };
 
       expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
