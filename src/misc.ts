@@ -219,16 +219,11 @@ export function getNumberOfDecimals(value: number): number {
     return 0;
   }
 
-  const str = value.toString();
+  const str = Math.abs(value).toString();
 
   if (str.indexOf('e-') > -1) {
     return parseInt(str.split('e-')[1], 10);
   }
 
-  if (str.indexOf('.') !== -1 && str.indexOf('-') !== -1) {
-    return str.split('-')[1].length;
-  } else if (str.indexOf('.') !== -1) {
-    return str.split('.')[1].length;
-  }
-  return str.split('-')[1].length;
+  return str.split('.')[1].length;
 }

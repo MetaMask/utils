@@ -7,6 +7,8 @@ import {
   isPlainObject,
   calculateNumberSize,
   isASCII,
+  calculateStringSize,
+  getNumberOfDecimals,
 } from '.';
 
 describe('miscellaneous', () => {
@@ -135,6 +137,15 @@ describe('miscellaneous', () => {
 
       expect(isPlainObject(someSet)).toBe(false);
     });
+
+    it('should return false if an exception is thrown', () => {
+      const someObject = { something: 'anything' };
+      jest.spyOn(Object, 'getPrototypeOf').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(isPlainObject(someObject)).toBe(false);
+    });
   });
 
   describe('isASCII', () => {
@@ -144,6 +155,26 @@ describe('miscellaneous', () => {
 
     it('should return false for "Š" which is not the ASCII character', () => {
       expect(isASCII('Š')).toBe(false);
+    });
+  });
+
+  describe('calculateStringSize', () => {
+    it('should return 94 for a size of ASCII string', () => {
+      const str =
+        '!"#$%&\'()*+,-./0123456789:;<=>?' +
+        '@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]' +
+        '^_`abcdefghijklmnopqrstuvwxyz{|}~';
+      expect(calculateStringSize(str)).toBe(94);
+    });
+
+    it('should return 10 for a size of UTF8 string', () => {
+      const str = 'šđćčž';
+      expect(calculateStringSize(str)).toBe(10);
+    });
+
+    it('should return 15 for a size of mixed, ASCII and UTF8 string', () => {
+      const str = 'ašbđcćdčež';
+      expect(calculateStringSize(str)).toBe(15);
     });
   });
 
@@ -174,6 +205,44 @@ describe('miscellaneous', () => {
 
     it('should return 17 for a "-9007199254740991" number size', () => {
       expect(calculateNumberSize(-9007199254740991)).toBe(17);
+    });
+
+    it('should return 1 for a "0" number size', () => {
+      expect(calculateNumberSize(0)).toBe(1);
+    });
+  });
+
+  describe('getNumberOfDecimals', () => {
+    it('should return 0 for number of decimals of "100"', () => {
+      expect(getNumberOfDecimals(100)).toBe(0);
+    });
+
+    it('should return 3 for number of decimals of "0.333"', () => {
+      expect(getNumberOfDecimals(0.333)).toBe(3);
+    });
+
+    it('should return 5 for number of decimals of "-100.88888"', () => {
+      expect(getNumberOfDecimals(-100.88888)).toBe(5);
+    });
+
+    it('should return 8 for number of decimals of "100000.00000008"', () => {
+      expect(getNumberOfDecimals(100000.00000008)).toBe(8);
+    });
+
+    it('should return 11 for number of decimals of "-0.00000000009"', () => {
+      expect(getNumberOfDecimals(-0.00000000009)).toBe(11);
+    });
+
+    it('should return 12 for number of decimals of "0.000000000001"', () => {
+      expect(getNumberOfDecimals(0.000000000001)).toBe(12);
+    });
+
+    it('should return 6 for number of decimals of "5e-6"', () => {
+      expect(getNumberOfDecimals(5e-6)).toBe(6);
+    });
+
+    it('should return 6 for number of decimals of "-5e-11"', () => {
+      expect(getNumberOfDecimals(-5e-11)).toBe(11);
     });
   });
 });
