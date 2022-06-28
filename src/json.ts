@@ -1,5 +1,11 @@
 import deepEqual from 'fast-deep-equal';
-import { hasProperty } from './misc';
+import {
+  calculateNumberSize,
+  calculateStringSize,
+  hasProperty,
+  isPlainObject,
+  JsonSize,
+} from './misc';
 
 /**
  * Any JSON-compatible value.
@@ -267,16 +273,6 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
   return isValidJsonRpcId;
 }
 
-const NULL_LENGTH = 4; // null
-const COMMA_LENGTH = 1; // ,
-const WRAPPER_LENGTH = 1; // either [ ] { }
-const TRUE_LENGTH = 4; // true
-const FALSE_LENGTH = 5; // false
-const ZERO_LENGTH = 1; // 0
-const QUOTE_LENGTH = 1; // "
-const COLON_LENGTH = 1; // :
-const DOT_LENGTH = 1; // :
-
 /**
  * Checks whether a value is JSON serializable and counts the total number
  * of bytes needed to store the serialized version of the value.
@@ -291,15 +287,15 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
   if (value === undefined) {
     return [true, 0];
   } else if (value === null) {
-    return [true, NULL_LENGTH];
+    return [true, JsonSize.NULL];
   }
 
   // eslint-disable-next-line default-case
   switch (typeof value) {
     case 'string':
-      return [true, calculateStringSize(value) + QUOTE_LENGTH * 2];
+      return [true, calculateStringSize(value) + JsonSize.QUOTE * 2];
     case 'boolean':
-      return [true, value ? TRUE_LENGTH : FALSE_LENGTH];
+      return [true, value ? JsonSize.TRUE : JsonSize.FALSE];
     case 'number':
       return [true, calculateNumberSize(value)];
   }
@@ -320,137 +316,15 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
           // Objects will have be serialized with "key": value, therefore we include the key in the calculation here
           const keySize = Array.isArray(value)
             ? 0
-            : key.length + COMMA_LENGTH + COLON_LENGTH * 2;
-          const separator = idx < arr.length - 1 ? COMMA_LENGTH : 0;
+            : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
+          const separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
           return sum + keySize + size + separator;
         },
         // Starts at 2 because the string will minimally contain {}/[]
-        WRAPPER_LENGTH * 2,
+        JsonSize.WRAPPER * 2,
       ),
     ];
   } catch (_) {
     return [false, 0];
   }
-}
-
-export type PlainObject = Record<number | string | symbol, unknown>;
-
-/**
- * Check if the value is plain object.
- *
- * @param value - Value to be checked.
- * @returns Boolean.
- */
-export function isPlainObject(value: unknown): value is PlainObject {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
-  try {
-    let proto = value;
-    while (Object.getPrototypeOf(proto) !== null) {
-      proto = Object.getPrototypeOf(proto);
-    }
-
-    return Object.getPrototypeOf(value) === proto;
-  } catch (_) {
-    return false;
-  }
-}
-
-/**
- * Check if character or string is ASCII.
- *
- * @param value - String or character.
- * @returns Boolean, true if value is ASCII, false if not.
- */
-export function isASCII(value: string) {
-  // eslint-disable-next-line no-control-regex,require-unicode-regexp
-  return /^[\x00-\x7F]*$/.test(value);
-}
-
-/**
- * Calculate string size.
- *
- * @param value - String value to calculate size.
- * @returns Number of bytes used to store whole string value.
- */
-export function calculateStringSize(value: string) {
-  let size = 0;
-  for (const character of value) {
-    if (isASCII(character)) {
-      size += 1;
-    } else {
-      size += 2;
-    }
-  }
-
-  return size;
-}
-
-/**
- * Calculate size of a number ofter JSON serialization.
- *
- * @param value - Number value to calculate size.
- * @returns Number of bytes used to store whole number in JSON.
- */
-export function calculateNumberSize(value: number): number {
-  if (value === 0) {
-    return ZERO_LENGTH;
-  }
-
-  let size = 0;
-  // Work with absolute (positive) numbers only
-  let absNum = value;
-  if (value < 0) {
-    absNum = Math.abs(value);
-    // Initially, count on a sign of a number (-)
-    size += 1;
-  }
-
-  // If absolute value of a number is greater than 1 and is a whole number,
-  // then perform the fastest operation to calculate its size
-  if (absNum - Math.floor(absNum) === 0) {
-    size += Math.floor(Math.log10(absNum) + 1);
-    return size;
-  }
-
-  // Work with decimal numbers
-  // First calculate the size of the whole part of a number
-  if (absNum >= 1) {
-    size += Math.floor(Math.log10(absNum) + 1);
-  } else {
-    size += ZERO_LENGTH;
-  }
-  // Then add the dot '.' size
-  size += DOT_LENGTH;
-  // Then calculate the number of decimal places
-  size += getNumberOfDecimals(absNum);
-
-  return size;
-}
-
-/**
- * Calculate the number of decimals for a given number.
- *
- * @param value - Decimal number.
- * @returns Number of decimals.
- */
-export function getNumberOfDecimals(value: number): number {
-  if (Math.floor(value) === value) {
-    return 0;
-  }
-
-  const str = value.toString();
-
-  if (str.indexOf('e-') > -1) {
-    return parseInt(str.split('e-')[1], 10);
-  }
-
-  if (str.indexOf('.') !== -1 && str.indexOf('-') !== -1) {
-    return str.split('-')[1].length;
-  } else if (str.indexOf('.') !== -1) {
-    return str.split('.')[1].length;
-  }
-  return str.split('-')[1].length;
 }

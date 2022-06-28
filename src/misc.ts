@@ -92,3 +92,143 @@ export const hasProperty = (
   object: RuntimeObject,
   name: string | number | symbol,
 ): boolean => Object.hasOwnProperty.call(object, name);
+
+export type PlainObject = Record<number | string | symbol, unknown>;
+
+/**
+ * Predefined sizes (in Bytes) of specific parts of JSON structure.
+ */
+export enum JsonSize {
+  NULL = 4,
+  COMMA = 1,
+  WRAPPER = 1,
+  TRUE = 4,
+  FALSE = 5,
+  ZERO = 1,
+  QUOTE = 1,
+  COLON = 1,
+  DOT = 1,
+}
+
+/**
+ * Check if the value is plain object.
+ *
+ * @param value - Value to be checked.
+ * @returns Boolean.
+ */
+export function isPlainObject(value: unknown): value is PlainObject {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  try {
+    let proto = value;
+    while (Object.getPrototypeOf(proto) !== null) {
+      proto = Object.getPrototypeOf(proto);
+    }
+
+    return Object.getPrototypeOf(value) === proto;
+  } catch (_) {
+    return false;
+  }
+}
+
+/**
+ * Check if character or string is ASCII.
+ *
+ * @param value - String or character.
+ * @returns Boolean, true if value is ASCII, false if not.
+ */
+export function isASCII(value: string) {
+  // eslint-disable-next-line no-control-regex,require-unicode-regexp
+  return /^[\x00-\x7F]*$/.test(value);
+}
+
+/**
+ * Calculate string size.
+ *
+ * @param value - String value to calculate size.
+ * @returns Number of bytes used to store whole string value.
+ */
+export function calculateStringSize(value: string) {
+  let size = 0;
+  for (const character of value) {
+    if (isASCII(character)) {
+      size += 1;
+    } else {
+      size += 2;
+    }
+  }
+
+  return size;
+}
+
+/**
+ * Calculate size of a number ofter JSON serialization.
+ *
+ * @param value - Number value to calculate size.
+ * @returns Number of bytes used to store whole number in JSON.
+ */
+export function calculateNumberSize(value: number): number {
+  if (value === 0) {
+    return JsonSize.ZERO;
+  }
+
+  let size = 0;
+  // Work with absolute (positive) numbers only
+  let absNum = value;
+  if (value < 0) {
+    absNum = Math.abs(value);
+    // Initially, count on a sign of a number (-)
+    size += 1;
+  }
+
+  // If absolute value of a number is greater than 1 and is a whole number,
+  // then perform the fastest operation to calculate its size
+  // Portion of numbers passed to this function will fall into this category,
+  // so it will not be required to do to string conversion and manipulation.
+  if (absNum - Math.floor(absNum) === 0) {
+    size += Math.floor(Math.log10(absNum) + 1);
+    return size;
+  }
+
+  // Work with decimal numbers
+  // First calculate the size of the whole part of a number
+  if (absNum >= 1) {
+    size += Math.floor(Math.log10(absNum) + 1);
+  } else {
+    // Because absolute value is less than 1, count size of a zero digit
+    size += JsonSize.ZERO;
+  }
+  // Then add the dot '.' size
+  size += JsonSize.DOT;
+  // Then calculate the number of decimal places
+  size += getNumberOfDecimals(absNum);
+
+  return size;
+}
+
+/**
+ * Calculate the number of decimals for a given number.
+ *
+ * @param value - Decimal number.
+ * @returns Number of decimals.
+ */
+export function getNumberOfDecimals(value: number): number {
+  if (Math.floor(value) === value) {
+    return 0;
+  }
+
+  const str = value.toString();
+
+  if (str.indexOf('e-') > -1) {
+    return parseInt(str.split('e-')[1], 10);
+  }
+
+  if (str.indexOf('.') !== -1 && str.indexOf('-') !== -1) {
+    return str.split('-')[1].length;
+  } else if (str.indexOf('.') !== -1) {
+    return str.split('.')[1].length;
+  }
+  return str.split('-')[1].length;
+}

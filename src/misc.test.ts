@@ -4,6 +4,9 @@ import {
   isObject,
   hasProperty,
   RuntimeObject,
+  isPlainObject,
+  calculateNumberSize,
+  isASCII,
 } from '.';
 
 describe('miscellaneous', () => {
@@ -106,6 +109,71 @@ describe('miscellaneous', () => {
       ] as any[]).forEach(([objectValue, property]) => {
         expect(hasProperty(objectValue, property)).toBe(false);
       });
+    });
+  });
+
+  describe('isPlainObject', () => {
+    it('should return true for a plain object', () => {
+      const somePlainObject = {
+        someKey: 'someValue',
+      };
+
+      expect(isPlainObject(somePlainObject)).toBe(true);
+    });
+
+    it('should return false if function is passed', () => {
+      const someFunction = (someArg: string) => {
+        return someArg;
+      };
+
+      expect(isPlainObject(someFunction)).toBe(false);
+    });
+
+    it('should return false if Set object is passed', () => {
+      const someSet = new Set();
+      someSet.add('something');
+
+      expect(isPlainObject(someSet)).toBe(false);
+    });
+  });
+
+  describe('isASCII', () => {
+    it('should return true for "A" which is the ASCII character', () => {
+      expect(isASCII('A')).toBe(true);
+    });
+
+    it('should return false for "Š" which is not the ASCII character', () => {
+      expect(isASCII('Š')).toBe(false);
+    });
+  });
+
+  describe('calculateNumberSize', () => {
+    it('should return 3 for a "100" number size', () => {
+      expect(calculateNumberSize(100)).toBe(3);
+    });
+
+    it('should return 4 for a "-100" number size', () => {
+      expect(calculateNumberSize(-100)).toBe(4);
+    });
+
+    it('should return 4 for a "-0.3" number size', () => {
+      expect(calculateNumberSize(-0.3)).toBe(4);
+    });
+
+    it('should return 7 for a "-123.45" number size', () => {
+      expect(calculateNumberSize(-123.45)).toBe(7);
+    });
+
+    it('should return 12 for a "0.0000000005" number size', () => {
+      expect(calculateNumberSize(0.0000000005)).toBe(12);
+    });
+
+    it('should return 16 for a "9007199254740991" number size', () => {
+      expect(calculateNumberSize(9007199254740991)).toBe(16);
+    });
+
+    it('should return 17 for a "-9007199254740991" number size', () => {
+      expect(calculateNumberSize(-9007199254740991)).toBe(17);
     });
   });
 });

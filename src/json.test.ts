@@ -3,14 +3,12 @@ import {
   assertIsJsonRpcNotification,
   assertIsJsonRpcRequest,
   assertIsJsonRpcSuccess,
-  calculateNumberSize,
   getJsonRpcIdValidator,
   getJsonSerializableInfo,
   isJsonRpcFailure,
   isJsonRpcNotification,
   isJsonRpcRequest,
   isJsonRpcSuccess,
-  isPlainObject,
   isValidJson,
   jsonrpc2,
   JsonRpcError,
@@ -287,49 +285,6 @@ describe('json', () => {
           inputs,
         ),
       ).not.toThrow();
-    });
-  });
-
-  describe('isPlainObject', () => {
-    it('should return true for a plain object', () => {
-      const somePlainObject = {
-        someKey: 'someValue',
-      };
-
-      expect(isPlainObject(somePlainObject)).toBe(true);
-    });
-
-    it('should return false if function is passed', () => {
-      const someFunction = (someArg: string) => {
-        return someArg;
-      };
-
-      expect(isPlainObject(someFunction)).toBe(false);
-    });
-
-    it('should return false if Set object is passed', () => {
-      const someSet = new Set();
-      someSet.add('something');
-
-      expect(isPlainObject(someSet)).toBe(false);
-    });
-  });
-
-  describe('calculateNumberSize', () => {
-    it('should return 3 for a "100" number size', () => {
-      expect(calculateNumberSize(100)).toBe(3);
-    });
-
-    it('should return 4 for a "-100" number size', () => {
-      expect(calculateNumberSize(-100)).toBe(4);
-    });
-
-    it('should return 4 for a "-0.3" number size', () => {
-      expect(calculateNumberSize(-0.3)).toBe(4);
-    });
-
-    it('should return 12 for a "0.0000000005" number size', () => {
-      expect(calculateNumberSize(0.0000000005)).toBe(12);
     });
   });
 
