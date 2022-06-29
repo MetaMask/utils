@@ -285,11 +285,14 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
  */
 export function getJsonSerializableInfo(value: unknown): [boolean, number] {
   if (value === undefined) {
+    // Return zero for undefined, since these are omitted from JSON serialization
     return [true, 0];
   } else if (value === null) {
+    // Return already specified constant size for null (special object)
     return [true, JsonSize.NULL];
   }
 
+  // Check and calculate sizes for basic types
   // eslint-disable-next-line default-case
   switch (typeof value) {
     case 'string':
@@ -300,27 +303,42 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
       return [true, calculateNumberSize(value)];
   }
 
+  // If object is not plain and cannot be serialized properly,
+  // stop here and return false for serialization
   if (!isPlainObject(value) && !Array.isArray(value)) {
     return [false, 0];
   }
 
+  // Continue object decomposition
   try {
     return [
       true,
       Object.entries(value).reduce(
         (sum, [key, nestedValue], idx, arr) => {
-          const [valid, size] = getJsonSerializableInfo(nestedValue);
+          // Recursively process next nested object or primitive type
+          // eslint-disable-next-line prefer-const
+          let [valid, size] = getJsonSerializableInfo(nestedValue);
           if (!valid) {
             throw new Error();
           }
+
+          // If the size is 0, the value is undefined and undefined in an array
+          // when serialized will be replaced with null
+          if (size === 0 && Array.isArray(value)) {
+            size = JsonSize.NULL;
+          }
+
           // Objects will have be serialized with "key": value, therefore we include the key in the calculation here
           const keySize = Array.isArray(value)
             ? 0
             : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
           const separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
-          return sum + keySize + size + separator;
+          // If the size is 0, that means the object is undefined and
+          // the rest of the object structure will be omitted
+          return size === 0 ? sum : sum + keySize + size + separator;
         },
-        // Starts at 2 because the string will minimally contain {}/[]
+        // Starts at 2 because the serialized JSON string data (plain text)
+        // will minimally contain {}/[]
         JsonSize.WRAPPER * 2,
       ),
     ];

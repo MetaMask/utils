@@ -159,12 +159,12 @@ describe('miscellaneous', () => {
   });
 
   describe('calculateStringSize', () => {
-    it('should return 94 for a size of ASCII string', () => {
+    it('should return 96 for a size of ASCII string', () => {
       const str =
         '!"#$%&\'()*+,-./0123456789:;<=>?' +
         '@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]' +
         '^_`abcdefghijklmnopqrstuvwxyz{|}~';
-      expect(calculateStringSize(str)).toBe(94);
+      expect(calculateStringSize(str)).toBe(96);
     });
 
     it('should return 10 for a size of UTF8 string', () => {

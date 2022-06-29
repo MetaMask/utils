@@ -160,6 +160,10 @@ export function calculateStringSize(value: string) {
     }
   }
 
+  // Detect characters that need backslash escape
+  const re = /\\|'/gu;
+  size += ((value || '').match(re) || []).length;
+
   return size;
 }
 

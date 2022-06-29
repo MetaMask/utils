@@ -321,5 +321,135 @@ describe('json', () => {
         16,
       ]);
     });
+
+    it('should return true for serialization and 2 for a size when only one key with undefined value is provided', () => {
+      const valueToSerialize = {
+        a: undefined,
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        2,
+      ]);
+    });
+
+    it('should return true for serialization and 25 for a size when some of the values are undefined', () => {
+      const valueToSerialize = {
+        a: undefined,
+        b: 'b',
+        c: undefined,
+        d: 'd',
+        e: undefined,
+        f: 'f',
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        25,
+      ]);
+    });
+
+    it('should return true for serialization and 17 for a size with mixed null and undefined in an array', () => {
+      const valueToSerialize = [
+        null,
+        undefined,
+        null,
+        undefined,
+        undefined,
+        undefined,
+        null,
+        null,
+        null,
+        undefined,
+      ];
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        51,
+      ]);
+    });
+
+    it('should return true for serialization and 1022 for a size of a complex nested object', () => {
+      const complexObject = {
+        data: {
+          account: {
+            __typename: 'Account',
+            registrations: [
+              {
+                __typename: 'Registration',
+                domain: {
+                  __typename: 'Domain',
+                  isMigrated: true,
+                  labelName: 'mycrypto',
+                  labelhash:
+                    '0x9a781ca0d227debc3ee76d547c960b0803a6c9f58c6d3b4722f12ede7e6ef7c9',
+                  name: 'mycrypto.eth',
+                  parent: { __typename: 'Domain', name: 'eth' },
+                },
+                expiryDate: '1754111315',
+              },
+            ],
+          },
+          moreComplexity: {
+            // numbers: [
+            //   -5e-11,
+            //   5e-9,
+            //   0.000000000001,
+            //   -0.00000000009,
+            //   100000.00000008,
+            //   -100.88888,
+            //   0.333,
+            //   1000000000000,
+            // ],
+            moreNestedObjects: {
+              nestedAgain: {
+                nestedAgain: {
+                  andAgain: {
+                    andAgain: {
+                      value: true,
+                      again: {
+                        value: false,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            differentEncodings: {
+              ascii:
+                '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
+              utf8: 'šđćčžЀЂЇЄЖФћΣΩδλ',
+              mixed: 'ABCDEFGHIJ KLMNOPQRST UVWXYZšđćč žЀЂЇЄЖФћΣΩδλ',
+            },
+            specialObjectsTypesAndValues: {
+              t: [true, true, true],
+              f: [false, false, false],
+              nulls: [null, null, null],
+              undef: undefined,
+              mixed: [
+                null,
+                undefined,
+                null,
+                undefined,
+                null,
+                true,
+                null,
+                false,
+                null,
+                undefined,
+              ],
+              inObject: {
+                valueOne: null,
+                valueTwo: undefined,
+                t: true,
+                f: false,
+              },
+            },
+          },
+        },
+      };
+
+      expect(getJsonSerializableInfo(complexObject)).toStrictEqual([true, 934]);
+    });
   });
 });
