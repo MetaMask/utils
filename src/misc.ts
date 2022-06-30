@@ -162,7 +162,7 @@ export function calculateStringSize(value: string) {
 
   // Detect characters that need backslash escape
   const re = /\\|'/gu;
-  size += ((value || '').match(re) || []).length;
+  size += (value.match(re) || []).length;
 
   return size;
 }
@@ -174,8 +174,5 @@ export function calculateStringSize(value: string) {
  * @returns Number of bytes used to store whole number in JSON.
  */
 export function calculateNumberSize(value: number): number {
-  if (value?.toString().length) {
-    return value.toString().length;
-  }
-  return 0;
+  return value.toString().length;
 }

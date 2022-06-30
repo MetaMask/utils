@@ -472,5 +472,16 @@ describe('json', () => {
         1018,
       ]);
     });
+
+    it('should return false for serialization and 0 for size when non-serializable object was provided', () => {
+      const valueToSerialize = {
+        value: new Set(),
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
   });
 });
