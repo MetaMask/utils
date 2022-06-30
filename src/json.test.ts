@@ -483,5 +483,24 @@ describe('json', () => {
         0,
       ]);
     });
+
+    it('should return false for serialization and 0 for size when non-serializable nested object was provided', () => {
+      const valueToSerialize = {
+        levelOne: {
+          levelTwo: {
+            levelThree: {
+              levelFour: {
+                levelFive: new Set(),
+              },
+            },
+          },
+        },
+      };
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
   });
 });
