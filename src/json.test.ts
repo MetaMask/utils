@@ -369,7 +369,25 @@ describe('json', () => {
       ]);
     });
 
-    it('should return true for serialization and 1022 for a size of a complex nested object', () => {
+    it('should return true for serialization and 73 for a size, for an array of numbers', () => {
+      const valueToSerialize = [
+        -5e-11,
+        5e-9,
+        0.000000000001,
+        -0.00000000009,
+        100000.00000008,
+        -100.88888,
+        0.333,
+        1000000000000,
+      ];
+
+      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+        true,
+        73,
+      ]);
+    });
+
+    it('should return true for serialization and 1018 for a size of a complex nested object', () => {
       const complexObject = {
         data: {
           account: {
@@ -391,16 +409,16 @@ describe('json', () => {
             ],
           },
           moreComplexity: {
-            // numbers: [
-            //   -5e-11,
-            //   5e-9,
-            //   0.000000000001,
-            //   -0.00000000009,
-            //   100000.00000008,
-            //   -100.88888,
-            //   0.333,
-            //   1000000000000,
-            // ],
+            numbers: [
+              -5e-11,
+              5e-9,
+              0.000000000001,
+              -0.00000000009,
+              100000.00000008,
+              -100.88888,
+              0.333,
+              1000000000000,
+            ],
             moreNestedObjects: {
               nestedAgain: {
                 nestedAgain: {
@@ -449,7 +467,10 @@ describe('json', () => {
         },
       };
 
-      expect(getJsonSerializableInfo(complexObject)).toStrictEqual([true, 934]);
+      expect(getJsonSerializableInfo(complexObject)).toStrictEqual([
+        true,
+        1018,
+      ]);
     });
   });
 });

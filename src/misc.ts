@@ -174,60 +174,8 @@ export function calculateStringSize(value: string) {
  * @returns Number of bytes used to store whole number in JSON.
  */
 export function calculateNumberSize(value: number): number {
-  if (value === 0) {
-    return JsonSize.ZERO;
+  if (value?.toString().length) {
+    return value.toString().length;
   }
-
-  let size = 0;
-  // Work with absolute (positive) numbers only
-  let absNum = value;
-  if (value < 0) {
-    absNum = Math.abs(value);
-    // Initially, count on a sign of a number (-)
-    size += 1;
-  }
-
-  // If absolute value of a number is greater than 1 and is a whole number,
-  // then perform the fastest operation to calculate its size
-  // Portion of numbers passed to this function will fall into this category,
-  // so it will not be required to do to string conversion and manipulation.
-  if (absNum - Math.floor(absNum) === 0) {
-    size += Math.floor(Math.log10(absNum) + 1);
-    return size;
-  }
-
-  // Work with decimal numbers
-  // First calculate the size of the whole part of a number
-  if (absNum >= 1) {
-    size += Math.floor(Math.log10(absNum) + 1);
-  } else {
-    // Because absolute value is less than 1, count size of a zero digit
-    size += JsonSize.ZERO;
-  }
-  // Then add the dot '.' size
-  size += JsonSize.DOT;
-  // Then calculate the number of decimal places
-  size += getNumberOfDecimals(absNum);
-
-  return size;
-}
-
-/**
- * Calculate the number of decimals for a given number.
- *
- * @param value - Decimal number.
- * @returns Number of decimals.
- */
-export function getNumberOfDecimals(value: number): number {
-  if (Math.floor(value) === value) {
-    return 0;
-  }
-
-  const str = Math.abs(value).toString();
-
-  if (str.indexOf('e-') > -1) {
-    return parseInt(str.split('e-')[1], 10);
-  }
-
-  return str.split('.')[1].length;
+  return 0;
 }
