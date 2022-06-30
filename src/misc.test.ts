@@ -175,6 +175,11 @@ describe('miscellaneous', () => {
       const str = 'ašbđcćdčež';
       expect(calculateStringSize(str)).toBe(15);
     });
+
+    it('should return 10 for a size of special characters', () => {
+      const str = '"\\\n\r\t';
+      expect(calculateStringSize(str)).toBe(10);
+    });
   });
 
   describe('calculateNumberSize', () => {

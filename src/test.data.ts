@@ -48,6 +48,7 @@ export const complexObject = {
           '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
         utf8: 'šđćčžЀЂЇЄЖФћΣΩδλ',
         mixed: 'ABCDEFGHIJ KLMNOPQRST UVWXYZšđćč žЀЂЇЄЖФћΣΩδλ',
+        specialCharacters: '"\\\n\r\t',
       },
       specialObjectsTypesAndValues: {
         t: [true, true, true],

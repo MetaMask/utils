@@ -161,7 +161,7 @@ export function calculateStringSize(value: string) {
   }
 
   // Detect characters that need backslash escape
-  const re = /\\|'/gu;
+  const re = /"|\\|\n|\r|\t/gu;
   size += (value.match(re) || []).length;
 
   return size;
