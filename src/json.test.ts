@@ -381,5 +381,18 @@ describe('json', () => {
         getJsonSerializableInfo(nonSerializableNestedObject),
       ).toStrictEqual([false, 0]);
     });
+
+    it('should return true for serialization and 0 for a size when sizing is skipped', () => {
+      expect(getJsonSerializableInfo(complexObject, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+    });
+
+    it('should return false for serialization and 0 for a size when sizing is skipped and non-serializable object was provided', () => {
+      expect(
+        getJsonSerializableInfo(nonSerializableNestedObject, true),
+      ).toStrictEqual([false, 0]);
+    });
   });
 });

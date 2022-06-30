@@ -280,27 +280,37 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
  * This function assumes the encoding of the JSON is done in UTF-8.
  *
  * @param value - A potential JSON serializable value.
+ * @param skipSizing - Skip JSON size calculation (default: false).
  * @returns A tuple containing a boolean that signals whether the value was serializable and
  * a number of bytes that it will use when serialized to JSON.
  */
-export function getJsonSerializableInfo(value: unknown): [boolean, number] {
+export function getJsonSerializableInfo(
+  value: unknown,
+  skipSizing = false,
+): [boolean, number] {
   if (value === undefined) {
     // Return zero for undefined, since these are omitted from JSON serialization
     return [true, 0];
   } else if (value === null) {
     // Return already specified constant size for null (special object)
-    return [true, JsonSize.NULL];
+    return [true, skipSizing ? 0 : JsonSize.NULL];
   }
 
   // Check and calculate sizes for basic types
   // eslint-disable-next-line default-case
   switch (typeof value) {
     case 'string':
-      return [true, calculateStringSize(value) + JsonSize.QUOTE * 2];
+      return [
+        true,
+        skipSizing ? 0 : calculateStringSize(value) + JsonSize.QUOTE * 2,
+      ];
     case 'boolean':
+      if (skipSizing) {
+        return [true, 0];
+      }
       return [true, value ? JsonSize.TRUE : JsonSize.FALSE];
     case 'number':
-      return [true, calculateNumberSize(value)];
+      return [true, skipSizing ? 0 : calculateNumberSize(value)];
   }
 
   // If object is not plain and cannot be serialized properly,
@@ -317,29 +327,38 @@ export function getJsonSerializableInfo(value: unknown): [boolean, number] {
         (sum, [key, nestedValue], idx, arr) => {
           // Recursively process next nested object or primitive type
           // eslint-disable-next-line prefer-const
-          let [valid, size] = getJsonSerializableInfo(nestedValue);
+          let [valid, size] = getJsonSerializableInfo(nestedValue, skipSizing);
           if (!valid) {
             throw new Error();
           }
 
           // If the size is 0, the value is undefined and undefined in an array
           // when serialized will be replaced with null
-          if (size === 0 && Array.isArray(value)) {
+          if (!skipSizing && size === 0 && Array.isArray(value)) {
             size = JsonSize.NULL;
           }
 
-          // Objects will have be serialized with "key": value, therefore we include the key in the calculation here
-          const keySize = Array.isArray(value)
-            ? 0
-            : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
-          const separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
+          // Objects will have be serialized with "key": value,
+          // therefore we include the key in the calculation here
+          let keySize: any;
+          if (skipSizing) {
+            keySize = 0;
+          } else {
+            keySize = Array.isArray(value)
+              ? 0
+              : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
+          }
+          let separator = 0;
+          if (!skipSizing) {
+            separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
+          }
           // If the size is 0, that means the object is undefined and
           // the rest of the object structure will be omitted
           return size === 0 ? sum : sum + keySize + size + separator;
         },
         // Starts at 2 because the serialized JSON string data (plain text)
         // will minimally contain {}/[]
-        JsonSize.WRAPPER * 2,
+        skipSizing ? 0 : JsonSize.WRAPPER * 2,
       ),
     ];
   } catch (_) {
