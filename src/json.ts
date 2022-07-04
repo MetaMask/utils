@@ -332,6 +332,10 @@ export function getJsonSerializableInfo(
             throw new Error();
           }
 
+          if (skipSizing) {
+            return 0;
+          }
+
           // If the size is 0, the value is undefined and undefined in an array
           // when serialized will be replaced with null
           if (!skipSizing && size === 0 && Array.isArray(value)) {
@@ -340,18 +344,11 @@ export function getJsonSerializableInfo(
 
           // Objects will have be serialized with "key": value,
           // therefore we include the key in the calculation here
-          let keySize: any;
-          if (skipSizing) {
-            keySize = 0;
-          } else {
-            keySize = Array.isArray(value)
-              ? 0
-              : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
-          }
-          let separator = 0;
-          if (!skipSizing) {
-            separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
-          }
+          const keySize = Array.isArray(value)
+            ? 0
+            : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
+
+          const separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
           // If the size is 0, that means the object is undefined and
           // the rest of the object structure will be omitted
           return size === 0 ? sum : sum + keySize + size + separator;
