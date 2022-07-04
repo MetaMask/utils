@@ -49,6 +49,8 @@ export const complexObject = {
         utf8: 'šđćčžЀЂЇЄЖФћΣΩδλ',
         mixed: 'ABCDEFGHIJ KLMNOPQRST UVWXYZšđćč žЀЂЇЄЖФћΣΩδλ',
         specialCharacters: '"\\\n\r\t',
+        stringWithSpecialEscapedCharacters:
+          "this\nis\nsome\"'string\r\nwith\tspecial\\escaped\tcharacters'",
       },
       specialObjectsTypesAndValues: {
         t: [true, true, true],

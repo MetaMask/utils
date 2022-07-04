@@ -358,10 +358,10 @@ describe('json', () => {
       ).toStrictEqual([true, 73]);
     });
 
-    it('should return true for serialization and 1051 for a size of a complex nested object', () => {
+    it('should return true for serialization and 1153 for a size of a complex nested object', () => {
       expect(getJsonSerializableInfo(complexObject)).toStrictEqual([
         true,
-        1051,
+        1153,
       ]);
     });
 
