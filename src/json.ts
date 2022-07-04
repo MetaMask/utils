@@ -281,8 +281,8 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
  *
  * @param value - A potential JSON serializable value.
  * @param skipSizing - Skip JSON size calculation (default: false).
- * @returns A tuple containing a boolean that signals whether the value was serializable and
- * a number of bytes that it will use when serialized to JSON.
+ * @returns A tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
+ * the value was serializable and a number of bytes that it will use when serialized to JSON.
  */
 export function getJsonSerializableInfo(
   value: unknown,
@@ -329,7 +329,9 @@ export function getJsonSerializableInfo(
           // eslint-disable-next-line prefer-const
           let [valid, size] = getJsonSerializableInfo(nestedValue, skipSizing);
           if (!valid) {
-            throw new Error();
+            throw new Error(
+              'JSON validation did not pass. Validation process stopped.',
+            );
           }
 
           if (skipSizing) {

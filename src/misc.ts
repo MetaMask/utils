@@ -114,7 +114,8 @@ export enum JsonSize {
  * Check if the value is plain object.
  *
  * @param value - Value to be checked.
- * @returns Boolean.
+ * @returns True if an object is the plain JavaScript object,
+ * false if the object is not plain (e.g. function).
  */
 export function isPlainObject(value: unknown): value is PlainObject {
   if (typeof value !== 'object' || value === null) {
@@ -137,7 +138,7 @@ export function isPlainObject(value: unknown): value is PlainObject {
  * Check if character is ASCII.
  *
  * @param character - Character.
- * @returns Boolean, true if character code is ASCII, false if not.
+ * @returns True if a character code is ASCII, false if not.
  */
 export function isASCII(character: string) {
   return character.charCodeAt(0) <= 127;
@@ -162,7 +163,7 @@ export function calculateStringSize(value: string) {
   // Detect characters that need backslash escape
   const re = /"|\\|\n|\r|\t/gu;
 
-  return size + (value.match(re) || []).length;
+  return size + (value.match(re) ?? []).length;
 }
 
 /**
