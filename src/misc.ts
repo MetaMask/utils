@@ -134,14 +134,13 @@ export function isPlainObject(value: unknown): value is PlainObject {
 }
 
 /**
- * Check if character or string is ASCII.
+ * Check if character is ASCII.
  *
- * @param value - String or character.
- * @returns Boolean, true if value is ASCII, false if not.
+ * @param character - Character.
+ * @returns Boolean, true if character code is ASCII, false if not.
  */
-export function isASCII(value: string) {
-  // eslint-disable-next-line no-control-regex,require-unicode-regexp
-  return /^[\x00-\x7F]*$/.test(value);
+export function isASCII(character: string) {
+  return character.charCodeAt(0) <= 127;
 }
 
 /**
