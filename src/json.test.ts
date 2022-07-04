@@ -394,5 +394,29 @@ describe('json', () => {
         getJsonSerializableInfo(nonSerializableNestedObject, true),
       ).toStrictEqual([false, 0]);
     });
+
+    it('should return false for serialization and 0 for a size when checking circular structure with an array', () => {
+      const arr: any[][] = [];
+      arr[0] = arr;
+      const circularStructure = {
+        // eslint-disable-next-line no-invalid-this
+        value: arr,
+      };
+      expect(getJsonSerializableInfo(circularStructure, true)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
+
+    it('should return false for serialization and 0 for a size when checking circular structure with an object', () => {
+      const circularStructure = {
+        value: {},
+      };
+      circularStructure.value = circularStructure;
+      expect(getJsonSerializableInfo(circularStructure, true)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
   });
 });
