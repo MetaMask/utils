@@ -340,8 +340,14 @@ export function getJsonSerializableInfo(
 
           // If the size is 0, the value is undefined and undefined in an array
           // when serialized will be replaced with null
-          if (!skipSizing && size === 0 && Array.isArray(value)) {
+          if (size === 0 && Array.isArray(value)) {
             size = JsonSize.Null;
+          }
+
+          // If the size is 0, that means the object is undefined and
+          // the rest of the object structure will be omitted
+          if (size === 0) {
+            return sum;
           }
 
           // Objects will have be serialized with "key": value,
@@ -351,11 +357,7 @@ export function getJsonSerializableInfo(
             : key.length + JsonSize.Comma + JsonSize.Colon * 2;
 
           const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
-          // If the size is 0, that means the object is undefined and
-          // the rest of the object structure will be omitted
-          if (size === 0) {
-            return sum;
-          }
+
           return sum + keySize + size + separator;
         },
         // Starts at 2 because the serialized JSON string data (plain text)

@@ -109,6 +109,11 @@ export enum JsonSize {
 }
 
 /**
+ * Regular expression with pattern matching for (special) escaped characters.
+ */
+export const ESCAPE_CHARACTERS_REGEXP = /"|\\|\n|\r|\t/gu;
+
+/**
  * Check if the value is plain object.
  *
  * @param value - Value to be checked.
@@ -156,10 +161,8 @@ export function calculateStringSize(value: string): number {
     return total + 2;
   }, 0);
 
-  // Detect characters that need backslash escape
-  const re = /"|\\|\n|\r|\t/gu;
-
-  return size + (value.match(re) ?? []).length;
+  // Also detect characters that need backslash escape
+  return size + (value.match(ESCAPE_CHARACTERS_REGEXP) ?? []).length;
 }
 
 /**
