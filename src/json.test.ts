@@ -399,7 +399,6 @@ describe('json', () => {
       const arr: any[][] = [];
       arr[0] = arr;
       const circularStructure = {
-        // eslint-disable-next-line no-invalid-this
         value: arr,
       };
       expect(getJsonSerializableInfo(circularStructure, true)).toStrictEqual([
