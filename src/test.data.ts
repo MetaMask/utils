@@ -75,6 +75,11 @@ export const complexObject = {
           t: true,
           f: false,
         },
+        dates: {
+          someDate: new Date(),
+          someOther: new Date(2022, 0, 2, 15, 4, 5),
+          invalidDate: new Date('bad-date-format'),
+        },
       },
     },
   },

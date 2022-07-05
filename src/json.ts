@@ -313,6 +313,22 @@ export function getJsonSerializableInfo(
       return [true, skipSizing ? 0 : calculateNumberSize(value)];
   }
 
+  // Check if value is Date and handle it since Date is
+  // specific complex object that is JSON serializable
+  if (value instanceof Date) {
+    if (skipSizing) {
+      return [true, 0];
+    }
+    const jsonSerializedDate = value.toJSON();
+    return [
+      true,
+      // Note: Invalid dates will serialize to null
+      jsonSerializedDate === null
+        ? JsonSize.Null
+        : calculateStringSize(jsonSerializedDate) + JsonSize.Quote * 2,
+    ];
+  }
+
   // If object is not plain and cannot be serialized properly,
   // stop here and return false for serialization
   if (!isPlainObject(value) && !Array.isArray(value)) {

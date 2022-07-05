@@ -358,11 +358,22 @@ describe('json', () => {
       ).toStrictEqual([true, 73]);
     });
 
-    it('should return true for serialization and 1153 for a size of a complex nested object', () => {
+    it('should return true for serialization and 1259 for a size of a complex nested object', () => {
       expect(getJsonSerializableInfo(complexObject)).toStrictEqual([
         true,
-        1153,
+        1259,
       ]);
+    });
+
+    it('should return true for serialization and 107 for a size of an object containing Date object', () => {
+      const dateObjects = {
+        dates: {
+          someDate: new Date(),
+          someOther: new Date(2022, 0, 2, 15, 4, 5),
+          invalidDate: new Date('bad-date-format'),
+        },
+      };
+      expect(getJsonSerializableInfo(dateObjects)).toStrictEqual([true, 107]);
     });
 
     it('should return false for serialization and 0 for size when non-serializable object was provided', () => {
