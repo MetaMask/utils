@@ -353,7 +353,10 @@ export function getJsonSerializableInfo(
           const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
           // If the size is 0, that means the object is undefined and
           // the rest of the object structure will be omitted
-          return size === 0 ? sum : sum + keySize + size + separator;
+          if (size === 0) {
+            return sum;
+          }
+          return sum + keySize + size + separator;
         },
         // Starts at 2 because the serialized JSON string data (plain text)
         // will minimally contain {}/[]
