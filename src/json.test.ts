@@ -417,5 +417,27 @@ describe('json', () => {
         0,
       ]);
     });
+
+    it('should return false for serialization and 0 for a size when checking object containing symbols', () => {
+      const objectContainingSymbols = {
+        mySymbol: Symbol('MySymbol'),
+      };
+      expect(getJsonSerializableInfo(objectContainingSymbols)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
+
+    it('should return false for serialization and 0 for a size when checking an array containing a function', () => {
+      const objectContainingFunction = [
+        function () {
+          return 'whatever';
+        },
+      ];
+      expect(getJsonSerializableInfo(objectContainingFunction)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
   });
 });
