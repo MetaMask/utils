@@ -99,15 +99,13 @@ export type PlainObject = Record<number | string | symbol, unknown>;
  * Predefined sizes (in Bytes) of specific parts of JSON structure.
  */
 export enum JsonSize {
-  NULL = 4,
-  COMMA = 1,
-  WRAPPER = 1,
-  TRUE = 4,
-  FALSE = 5,
-  ZERO = 1,
-  QUOTE = 1,
-  COLON = 1,
-  DOT = 1,
+  Null = 4,
+  Comma = 1,
+  Wrapper = 1,
+  True = 4,
+  False = 5,
+  Quote = 1,
+  Colon = 1,
 }
 
 /**
@@ -150,15 +148,13 @@ export function isASCII(character: string) {
  * @param value - String value to calculate size.
  * @returns Number of bytes used to store whole string value.
  */
-export function calculateStringSize(value: string) {
-  let size = 0;
-  for (const character of value) {
+export function calculateStringSize(value: string): number {
+  const size = value.split('').reduce((total, character) => {
     if (isASCII(character)) {
-      size += 1;
-    } else {
-      size += 2;
+      return total + 1;
     }
-  }
+    return total + 2;
+  }, 0);
 
   // Detect characters that need backslash escape
   const re = /"|\\|\n|\r|\t/gu;

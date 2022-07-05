@@ -279,21 +279,21 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
  *
  * This function assumes the encoding of the JSON is done in UTF-8.
  *
- * @param value - A potential JSON serializable value.
+ * @param value - Potential JSON serializable value.
  * @param skipSizing - Skip JSON size calculation (default: false).
- * @returns A tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
+ * @returns Tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
  * the value was serializable and a number of bytes that it will use when serialized to JSON.
  */
 export function getJsonSerializableInfo(
   value: unknown,
   skipSizing = false,
-): [boolean, number] {
+): [isValid: boolean, plainTextSizeInBytes: number] {
   if (value === undefined) {
     // Return zero for undefined, since these are omitted from JSON serialization
     return [true, 0];
   } else if (value === null) {
     // Return already specified constant size for null (special object)
-    return [true, skipSizing ? 0 : JsonSize.NULL];
+    return [true, skipSizing ? 0 : JsonSize.Null];
   }
 
   // Check and calculate sizes for basic types
@@ -302,13 +302,13 @@ export function getJsonSerializableInfo(
     case 'string':
       return [
         true,
-        skipSizing ? 0 : calculateStringSize(value) + JsonSize.QUOTE * 2,
+        skipSizing ? 0 : calculateStringSize(value) + JsonSize.Quote * 2,
       ];
     case 'boolean':
       if (skipSizing) {
         return [true, 0];
       }
-      return [true, value ? JsonSize.TRUE : JsonSize.FALSE];
+      return [true, value ? JsonSize.True : JsonSize.False];
     case 'number':
       return [true, skipSizing ? 0 : calculateNumberSize(value)];
   }
@@ -341,23 +341,23 @@ export function getJsonSerializableInfo(
           // If the size is 0, the value is undefined and undefined in an array
           // when serialized will be replaced with null
           if (!skipSizing && size === 0 && Array.isArray(value)) {
-            size = JsonSize.NULL;
+            size = JsonSize.Null;
           }
 
           // Objects will have be serialized with "key": value,
           // therefore we include the key in the calculation here
           const keySize = Array.isArray(value)
             ? 0
-            : key.length + JsonSize.COMMA + JsonSize.COLON * 2;
+            : key.length + JsonSize.Comma + JsonSize.Colon * 2;
 
-          const separator = idx < arr.length - 1 ? JsonSize.COMMA : 0;
+          const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
           // If the size is 0, that means the object is undefined and
           // the rest of the object structure will be omitted
           return size === 0 ? sum : sum + keySize + size + separator;
         },
         // Starts at 2 because the serialized JSON string data (plain text)
         // will minimally contain {}/[]
-        skipSizing ? 0 : JsonSize.WRAPPER * 2,
+        skipSizing ? 0 : JsonSize.Wrapper * 2,
       ),
     ];
   } catch (_) {
