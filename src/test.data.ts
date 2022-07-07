@@ -90,7 +90,9 @@ export const nonSerializableNestedObject = {
     levelTwo: {
       levelThree: {
         levelFour: {
-          levelFive: new Set(),
+          levelFive: () => {
+            return 'anything';
+          },
         },
       },
     },

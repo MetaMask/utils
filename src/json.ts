@@ -299,6 +299,8 @@ export function getJsonSerializableInfo(
   // Check and calculate sizes for basic types
   // eslint-disable-next-line default-case
   switch (typeof value) {
+    case 'function':
+      return [false, 0];
     case 'string':
       return [
         true,
@@ -313,20 +315,34 @@ export function getJsonSerializableInfo(
       return [true, skipSizing ? 0 : calculateNumberSize(value)];
   }
 
-  // Check if value is Date and handle it since Date is
-  // specific complex object that is JSON serializable
-  if (value instanceof Date) {
-    if (skipSizing) {
-      return [true, 0];
+  // Handle specific complex objects that can be serialized properly
+  try {
+    if (value instanceof Date) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      const jsonSerializedDate = value.toJSON();
+      return [
+        true,
+        // Note: Invalid dates will serialize to null
+        jsonSerializedDate === null
+          ? JsonSize.Null
+          : calculateStringSize(jsonSerializedDate) + JsonSize.Quote * 2,
+      ];
+    } else if (value instanceof Boolean) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      // eslint-disable-next-line eqeqeq
+      return [true, value == true ? JsonSize.True : JsonSize.False];
+    } else if (value instanceof Number) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      return [true, value.toString().length];
     }
-    const jsonSerializedDate = value.toJSON();
-    return [
-      true,
-      // Note: Invalid dates will serialize to null
-      jsonSerializedDate === null
-        ? JsonSize.Null
-        : calculateStringSize(jsonSerializedDate) + JsonSize.Quote * 2,
-    ];
+  } catch (_) {
+    return [false, 0];
   }
 
   // If object is not plain and cannot be serialized properly,

@@ -376,18 +376,11 @@ describe('json', () => {
       expect(getJsonSerializableInfo(dateObjects)).toStrictEqual([true, 107]);
     });
 
-    it('should return false for serialization and 0 for size when non-serializable object was provided', () => {
-      const valueToSerialize = {
-        value: new Set(),
-      };
-
-      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
-        false,
-        0,
-      ]);
-    });
-
     it('should return false for serialization and 0 for size when non-serializable nested object was provided', () => {
+      expect(
+        nonSerializableNestedObject.levelOne.levelTwo.levelThree.levelFour.levelFive(),
+      ).toStrictEqual('anything');
+
       expect(
         getJsonSerializableInfo(nonSerializableNestedObject),
       ).toStrictEqual([false, 0]);
@@ -446,6 +439,151 @@ describe('json', () => {
         },
       ];
       expect(getJsonSerializableInfo(objectContainingFunction)).toStrictEqual([
+        false,
+        0,
+      ]);
+    });
+
+    it('should return true or false for validity depending on the test scenario from ECMA TC39 (test262)', () => {
+      // This test will perform a series of validation assertions.
+      // These tests are taken from ECMA TC39 (test262) test scenarios used
+      // for testing the JSON.stringify function.
+      // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
+
+      // Value: array circular
+      const direct: any = [];
+      direct.push(direct);
+
+      expect(getJsonSerializableInfo(direct)).toStrictEqual([false, 0]);
+
+      const indirect: any = [];
+      indirect.push([[indirect]]);
+
+      expect(getJsonSerializableInfo(indirect)).toStrictEqual([false, 0]);
+
+      // Value: array proxy revoked
+      const handle = Proxy.revocable([], {});
+      handle.revoke();
+
+      expect(getJsonSerializableInfo(handle.proxy)).toStrictEqual([false, 0]);
+      expect(getJsonSerializableInfo([[[handle.proxy]]])).toStrictEqual([
+        false,
+        0,
+      ]);
+
+      // Value: array proxy
+      const arrayProxy = new Proxy([], {
+        get(_target, key) {
+          if (key === 'length') {
+            return 2;
+          }
+          return Number(key);
+        },
+      });
+
+      expect(getJsonSerializableInfo(arrayProxy, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(getJsonSerializableInfo([[arrayProxy]], true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      const arrayProxyProxy = new Proxy(arrayProxy, {});
+      expect(getJsonSerializableInfo([[arrayProxyProxy]], true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // Value: Boolean object
+      // eslint-disable-next-line no-new-wrappers
+      expect(getJsonSerializableInfo(new Boolean(true), true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(
+        // eslint-disable-next-line no-new-wrappers
+        getJsonSerializableInfo({ key: new Boolean(false) }, true),
+      ).toStrictEqual([true, 0]);
+
+      expect(
+        // eslint-disable-next-line no-new-wrappers
+        getJsonSerializableInfo(new Boolean(false)),
+      ).toStrictEqual([true, 5]);
+
+      expect(
+        // eslint-disable-next-line no-new-wrappers
+        getJsonSerializableInfo(new Boolean(true)),
+      ).toStrictEqual([true, 4]);
+
+      // Value: number negative zero
+      expect(getJsonSerializableInfo(-0, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(['-0', 0, -0], true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(getJsonSerializableInfo({ key: -0 }, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // Value: number non finite
+      expect(getJsonSerializableInfo(Infinity, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo({ key: -Infinity }, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+      expect(getJsonSerializableInfo([NaN], true)).toStrictEqual([true, 0]);
+
+      // Value: object abrupt
+      expect(
+        getJsonSerializableInfo(
+          {
+            get key() {
+              throw new Error();
+            },
+          },
+          true,
+        ),
+      ).toStrictEqual([false, 0]);
+
+      // Value: Number object
+      // eslint-disable-next-line no-new-wrappers
+      expect(getJsonSerializableInfo(new Number(3.14), true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // eslint-disable-next-line no-new-wrappers
+      expect(getJsonSerializableInfo(new Number(3.14))).toStrictEqual([
+        true,
+        4,
+      ]);
+
+      // Value: object circular
+      const directObject = { prop: {} };
+      directObject.prop = directObject;
+
+      expect(getJsonSerializableInfo(directObject, false)).toStrictEqual([
+        false,
+        0,
+      ]);
+
+      const indirectObject = {
+        p1: {
+          p2: {
+            get p3() {
+              return indirectObject;
+            },
+          },
+        },
+      };
+
+      expect(getJsonSerializableInfo(indirectObject, false)).toStrictEqual([
         false,
         0,
       ]);
