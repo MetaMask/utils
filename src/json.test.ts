@@ -587,6 +587,186 @@ describe('json', () => {
         false,
         0,
       ]);
+
+      // Value: object proxy
+      const objectProxy = new Proxy(
+        {},
+        {
+          getOwnPropertyDescriptor() {
+            return {
+              value: 1,
+              writable: true,
+              enumerable: true,
+              configurable: true,
+            };
+          },
+          get() {
+            return 1;
+          },
+          ownKeys() {
+            return ['a', 'b'];
+          },
+        },
+      );
+
+      expect(getJsonSerializableInfo(objectProxy, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(
+        getJsonSerializableInfo({ l1: { l2: objectProxy } }, true),
+      ).toStrictEqual([true, 0]);
+
+      // Value: object proxy revoked
+      const handleForObjectProxy = Proxy.revocable({}, {});
+      handleForObjectProxy.revoke();
+      expect(
+        getJsonSerializableInfo(handleForObjectProxy.proxy, true),
+      ).toStrictEqual([false, 0]);
+
+      expect(
+        getJsonSerializableInfo({ a: { b: handleForObjectProxy.proxy } }, true),
+      ).toStrictEqual([false, 0]);
+
+      // Value: primitive top level
+      expect(getJsonSerializableInfo(null, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(true, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(false, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo('str', true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(123, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(undefined, true)).toStrictEqual([true, 0]);
+
+      // Value: string escape ASCII
+      const charToJson = {
+        '"': '\\"',
+        '\\': '\\\\',
+        '\x00': '\\u0000',
+        '\x01': '\\u0001',
+        '\x02': '\\u0002',
+        '\x03': '\\u0003',
+        '\x04': '\\u0004',
+        '\x05': '\\u0005',
+        '\x06': '\\u0006',
+        '\x07': '\\u0007',
+        '\x08': '\\b',
+        '\x09': '\\t',
+        '\x0A': '\\n',
+        '\x0B': '\\u000b',
+        '\x0C': '\\f',
+        '\x0D': '\\r',
+        '\x0E': '\\u000e',
+        '\x0F': '\\u000f',
+        '\x10': '\\u0010',
+        '\x11': '\\u0011',
+        '\x12': '\\u0012',
+        '\x13': '\\u0013',
+        '\x14': '\\u0014',
+        '\x15': '\\u0015',
+        '\x16': '\\u0016',
+        '\x17': '\\u0017',
+        '\x18': '\\u0018',
+        '\x19': '\\u0019',
+        '\x1A': '\\u001a',
+        '\x1B': '\\u001b',
+        '\x1C': '\\u001c',
+        '\x1D': '\\u001d',
+        '\x1E': '\\u001e',
+        '\x1F': '\\u001f',
+      };
+
+      const chars = Object.keys(charToJson).join('');
+      const charsReversed = Object.keys(charToJson).reverse().join('');
+      const jsonChars = Object.values(charToJson).join('');
+      const jsonCharsReversed = Object.values(charToJson).reverse().join('');
+
+      expect(getJsonSerializableInfo(charToJson, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // eslint-disable-next-line guard-for-in
+      for (const char in charToJson) {
+        expect(getJsonSerializableInfo(char, true)).toStrictEqual([true, 0]);
+      }
+
+      expect(getJsonSerializableInfo(chars, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(charsReversed, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+      expect(getJsonSerializableInfo(jsonChars, true)).toStrictEqual([true, 0]);
+      expect(getJsonSerializableInfo(jsonCharsReversed, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // Value: string escape unicode
+      const stringEscapeUnicode: string[] = [
+        '\uD834',
+        '\uDF06',
+        '\uD834\uDF06',
+        '\uD834\uD834\uDF06\uD834',
+        '\uD834\uD834\uDF06\uDF06',
+        '\uDF06\uD834\uDF06\uD834',
+        '\uDF06\uD834\uDF06\uDF06',
+        '\uDF06\uD834',
+        '\uD834\uDF06\uD834\uD834',
+        '\uD834\uDF06\uD834\uDF06',
+        '\uDF06\uDF06\uD834\uD834',
+        '\uDF06\uDF06\uD834\uDF06',
+      ];
+
+      // eslint-disable-next-line guard-for-in
+      for (const strUnicode in stringEscapeUnicode) {
+        expect(getJsonSerializableInfo(strUnicode, true)).toStrictEqual([
+          true,
+          0,
+        ]);
+      }
+
+      // Value: string object
+      // eslint-disable-next-line no-new-wrappers
+      expect(getJsonSerializableInfo(new String('str'), true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // eslint-disable-next-line no-new-wrappers
+      expect(getJsonSerializableInfo(new String('str'))).toStrictEqual([
+        true,
+        5,
+      ]);
+
+      // Value: toJSON not a function
+      expect(getJsonSerializableInfo({ toJSON: null }, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(getJsonSerializableInfo({ toJSON: false }, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      expect(getJsonSerializableInfo({ toJSON: [] }, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+
+      // Value: toJSON object circular
+      const obj = {
+        toJSON() {
+          return {};
+        },
+      };
+      const circular = { prop: obj };
+
+      obj.toJSON = function () {
+        return circular;
+      };
+
+      expect(getJsonSerializableInfo(circular, true)).toStrictEqual([false, 0]);
     });
   });
 });

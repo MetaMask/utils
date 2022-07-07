@@ -340,6 +340,11 @@ export function getJsonSerializableInfo(
         return [true, 0];
       }
       return [true, value.toString().length];
+    } else if (value instanceof String) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      return [true, calculateStringSize(value.toString()) + JsonSize.Quote * 2];
     }
   } catch (_) {
     return [false, 0];
