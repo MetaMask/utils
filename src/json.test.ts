@@ -400,7 +400,7 @@ describe('json', () => {
     });
 
     it('should return false for serialization and 0 for a size when checking circular structure with an array', () => {
-      const arr: any[][] = [];
+      const arr: unknown[] = [];
       arr[0] = arr;
       const circularStructure = {
         value: arr,
@@ -451,12 +451,12 @@ describe('json', () => {
       // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
 
       // Value: array circular
-      const direct: any = [];
+      const direct: unknown[] = [];
       direct.push(direct);
 
       expect(getJsonSerializableInfo(direct)).toStrictEqual([false, 0]);
 
-      const indirect: any = [];
+      const indirect: unknown[] = [];
       indirect.push([[indirect]]);
 
       expect(getJsonSerializableInfo(indirect)).toStrictEqual([false, 0]);
