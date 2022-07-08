@@ -277,6 +277,9 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
  * Checks whether a value is JSON serializable and counts the total number
  * of bytes needed to store the serialized version of the value.
  *
+ * Important note: This function will not check for circular references.
+ * For circular reference check support, use validateJsonAndGetSize function.
+ *
  * This function assumes the encoding of the JSON is done in UTF-8.
  *
  * @param value - Potential JSON serializable value.
@@ -405,4 +408,73 @@ export function getJsonSerializableInfo(
   } catch (_) {
     return [false, 0];
   }
+}
+
+/**
+ * Check for circular structures (e.g. object referencing itself).
+ *
+ * @param objectToBeChecked - Object that potentially can have circular references.
+ * @returns True if circular structure is detected, false otherwise.
+ */
+export function isObjectContainingCircularStructure(
+  objectToBeChecked: unknown,
+): boolean {
+  if (typeof objectToBeChecked !== 'object') {
+    return false;
+  }
+  const seenObjects: unknown[] = [];
+
+  /**
+   * Internal function for detection of circular structures.
+   *
+   * @param obj - Object that needs to be checked.
+   * @returns True if circular structure is detected, false otherwise.
+   */
+  function detect(obj: unknown): boolean {
+    if (obj && typeof obj === 'object') {
+      if (seenObjects.indexOf(obj) !== -1) {
+        return true;
+      }
+      seenObjects.push(obj);
+      return Boolean(
+        Object.keys(obj).reduce((result, key) => {
+          if (result) {
+            return true;
+          }
+
+          if (typeof obj[key as keyof unknown] !== 'object') {
+            return false;
+          }
+
+          return detect(obj[key as keyof unknown]);
+        }, false),
+      );
+    }
+    return false;
+  }
+
+  return detect(objectToBeChecked);
+}
+
+/**
+ * Checks whether a value is JSON serializable and counts the total number
+ * of bytes needed to store the serialized version of the value.
+ *
+ * Note: This is a wrapper function that will do check for circular structures.
+ * This function assumes the encoding of the JSON is done in UTF-8.
+ *
+ * @param value - Potential JSON serializable value.
+ * @param skipSizing - Skip JSON size calculation (default: false).
+ * @returns Tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
+ * the value was serializable and a number of bytes that it will use when serialized to JSON.
+ */
+export function validateJsonAndGetSize(
+  value: unknown,
+  skipSizing = false,
+): [isValid: boolean, plainTextSizeInBytes: number] {
+  if (isObjectContainingCircularStructure(value)) {
+    return [false, 0];
+  }
+
+  return getJsonSerializableInfo(value, skipSizing);
 }

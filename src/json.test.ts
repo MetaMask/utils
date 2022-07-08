@@ -12,6 +12,7 @@ import {
   assertIsJsonRpcSuccess,
   getJsonRpcIdValidator,
   getJsonSerializableInfo,
+  isObjectContainingCircularStructure,
   isJsonRpcFailure,
   isJsonRpcNotification,
   isJsonRpcRequest,
@@ -19,6 +20,7 @@ import {
   isValidJson,
   jsonrpc2,
   JsonRpcError,
+  validateJsonAndGetSize,
 } from '.';
 
 const getError = () => {
@@ -399,29 +401,6 @@ describe('json', () => {
       ).toStrictEqual([false, 0]);
     });
 
-    it('should return false for serialization and 0 for a size when checking circular structure with an array', () => {
-      const arr: unknown[] = [];
-      arr[0] = arr;
-      const circularStructure = {
-        value: arr,
-      };
-      expect(getJsonSerializableInfo(circularStructure, true)).toStrictEqual([
-        false,
-        0,
-      ]);
-    });
-
-    it('should return false for serialization and 0 for a size when checking circular structure with an object', () => {
-      const circularStructure = {
-        value: {},
-      };
-      circularStructure.value = circularStructure;
-      expect(getJsonSerializableInfo(circularStructure, true)).toStrictEqual([
-        false,
-        0,
-      ]);
-    });
-
     it('should return false for serialization and 0 for a size when checking object containing symbols', () => {
       const objectContainingSymbols = {
         mySymbol: Symbol('MySymbol'),
@@ -449,17 +428,6 @@ describe('json', () => {
       // These tests are taken from ECMA TC39 (test262) test scenarios used
       // for testing the JSON.stringify function.
       // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
-
-      // Value: array circular
-      const direct: unknown[] = [];
-      direct.push(direct);
-
-      expect(getJsonSerializableInfo(direct)).toStrictEqual([false, 0]);
-
-      const indirect: unknown[] = [];
-      indirect.push([[indirect]]);
-
-      expect(getJsonSerializableInfo(indirect)).toStrictEqual([false, 0]);
 
       // Value: array proxy revoked
       const handle = Proxy.revocable([], {});
@@ -562,30 +530,6 @@ describe('json', () => {
       expect(getJsonSerializableInfo(new Number(3.14))).toStrictEqual([
         true,
         4,
-      ]);
-
-      // Value: object circular
-      const directObject = { prop: {} };
-      directObject.prop = directObject;
-
-      expect(getJsonSerializableInfo(directObject, false)).toStrictEqual([
-        false,
-        0,
-      ]);
-
-      const indirectObject = {
-        p1: {
-          p2: {
-            get p3() {
-              return indirectObject;
-            },
-          },
-        },
-      };
-
-      expect(getJsonSerializableInfo(indirectObject, false)).toStrictEqual([
-        false,
-        0,
       ]);
 
       // Value: object proxy
@@ -753,6 +697,116 @@ describe('json', () => {
         true,
         0,
       ]);
+    });
+  });
+
+  describe('isContainingCircularStructure', () => {
+    it('should return false if value passed is not an object', () => {
+      expect(
+        isObjectContainingCircularStructure('valueThatIsNotAnObject'),
+      ).toBe(false);
+    });
+
+    it('should return false for an object that does not contain any circular references', () => {
+      expect(isObjectContainingCircularStructure(complexObject)).toBe(false);
+    });
+
+    it('should return true for an object that contains circular references', () => {
+      const circularStructure = {
+        value: {},
+      };
+      circularStructure.value = circularStructure;
+      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
+    });
+
+    it('should return true for an array that contains circular references', () => {
+      const circularArray: unknown[] = [];
+      circularArray[0] = circularArray;
+      expect(isObjectContainingCircularStructure(circularArray)).toBe(true);
+    });
+
+    it('should return true for an object that contains nested circular references', () => {
+      const circularStructure = {
+        levelOne: {
+          levelTwo: {
+            levelThree: {
+              levelFour: {
+                levelFive: {},
+              },
+            },
+          },
+        },
+      };
+      circularStructure.levelOne.levelTwo.levelThree.levelFour.levelFive = circularStructure;
+      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
+    });
+
+    it('should return true for an object that contains multiple nested circular references', () => {
+      const circularStructure = {
+        levelOne: {
+          levelTwo: {
+            levelThree: {
+              levelFour: {
+                levelFive: {},
+              },
+            },
+          },
+        },
+        anotherOne: {},
+        justAnotherOne: {
+          toAnotherOne: {
+            andAnotherOne: {},
+          },
+        },
+      };
+      circularStructure.levelOne.levelTwo.levelThree.levelFour.levelFive = circularStructure;
+      circularStructure.anotherOne = circularStructure;
+      circularStructure.justAnotherOne.toAnotherOne.andAnotherOne = circularStructure;
+      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
+    });
+  });
+
+  describe('validateJsonAndGetSize', () => {
+    it('should return false for validity when circular objects are passed to the function', () => {
+      // This test will perform a series of validation assertions.
+      // These tests are taken from ECMA TC39 (test262) test scenarios used
+      // for testing the JSON.stringify function.
+      // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
+
+      // Value: array circular
+      const direct: unknown[] = [];
+      direct.push(direct);
+
+      expect(validateJsonAndGetSize(direct)).toStrictEqual([false, 0]);
+
+      const indirect: unknown[] = [];
+      indirect.push([[indirect]]);
+
+      expect(validateJsonAndGetSize(indirect)).toStrictEqual([false, 0]);
+
+      // Value: object circular
+      const directObject = { prop: {} };
+      directObject.prop = directObject;
+
+      expect(getJsonSerializableInfo(directObject, false)).toStrictEqual([
+        false,
+        0,
+      ]);
+
+      const indirectObject = {
+        p1: {
+          p2: {
+            get p3() {
+              return indirectObject;
+            },
+          },
+        },
+      };
+
+      expect(getJsonSerializableInfo(indirectObject, false)).toStrictEqual([
+        false,
+        0,
+      ]);
 
       // Value: toJSON object circular
       const obj = {
@@ -766,7 +820,11 @@ describe('json', () => {
         return circular;
       };
 
-      expect(getJsonSerializableInfo(circular, true)).toStrictEqual([false, 0]);
+      expect(validateJsonAndGetSize(circular, true)).toStrictEqual([false, 0]);
+    });
+
+    it('should return true for serialization and 1259 for a size of a complex nested object', () => {
+      expect(validateJsonAndGetSize(complexObject)).toStrictEqual([true, 1259]);
     });
   });
 });
