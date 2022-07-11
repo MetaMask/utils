@@ -11,8 +11,6 @@ import {
   assertIsJsonRpcRequest,
   assertIsJsonRpcSuccess,
   getJsonRpcIdValidator,
-  getJsonSerializableInfo,
-  isObjectContainingCircularStructure,
   isJsonRpcFailure,
   isJsonRpcNotification,
   isJsonRpcRequest,
@@ -297,13 +295,13 @@ describe('json', () => {
     });
   });
 
-  describe('getJsonSerializableInfo', () => {
+  describe('validateJsonAndGetSize', () => {
     it('should return true for serialization and 10 for a size', () => {
       const valueToSerialize = {
         a: 'bc',
       };
 
-      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+      expect(validateJsonAndGetSize(valueToSerialize)).toStrictEqual([
         true,
         10,
       ]);
@@ -314,7 +312,7 @@ describe('json', () => {
         a: 1234,
       };
 
-      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+      expect(validateJsonAndGetSize(valueToSerialize)).toStrictEqual([
         true,
         10,
       ]);
@@ -325,7 +323,7 @@ describe('json', () => {
         a: 'bcšečf',
       };
 
-      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
+      expect(validateJsonAndGetSize(valueToSerialize)).toStrictEqual([
         true,
         16,
       ]);
@@ -336,35 +334,30 @@ describe('json', () => {
         a: undefined,
       };
 
-      expect(getJsonSerializableInfo(valueToSerialize)).toStrictEqual([
-        true,
-        2,
-      ]);
+      expect(validateJsonAndGetSize(valueToSerialize)).toStrictEqual([true, 2]);
     });
 
     it('should return true for serialization and 25 for a size when some of the values are undefined', () => {
       expect(
-        getJsonSerializableInfo(objectMixedWithUndefinedValues),
+        validateJsonAndGetSize(objectMixedWithUndefinedValues),
       ).toStrictEqual([true, 25]);
     });
 
     it('should return true for serialization and 17 for a size with mixed null and undefined in an array', () => {
-      expect(
-        getJsonSerializableInfo(arrayOfMixedSpecialObjects),
-      ).toStrictEqual([true, 51]);
+      expect(validateJsonAndGetSize(arrayOfMixedSpecialObjects)).toStrictEqual([
+        true,
+        51,
+      ]);
     });
 
     it('should return true for serialization and 73 for a size, for an array of numbers', () => {
       expect(
-        getJsonSerializableInfo(arrayOfDifferentKindsOfNumbers),
+        validateJsonAndGetSize(arrayOfDifferentKindsOfNumbers),
       ).toStrictEqual([true, 73]);
     });
 
     it('should return true for serialization and 1259 for a size of a complex nested object', () => {
-      expect(getJsonSerializableInfo(complexObject)).toStrictEqual([
-        true,
-        1259,
-      ]);
+      expect(validateJsonAndGetSize(complexObject)).toStrictEqual([true, 1259]);
     });
 
     it('should return true for serialization and 107 for a size of an object containing Date object', () => {
@@ -375,7 +368,7 @@ describe('json', () => {
           invalidDate: new Date('bad-date-format'),
         },
       };
-      expect(getJsonSerializableInfo(dateObjects)).toStrictEqual([true, 107]);
+      expect(validateJsonAndGetSize(dateObjects)).toStrictEqual([true, 107]);
     });
 
     it('should return false for serialization and 0 for size when non-serializable nested object was provided', () => {
@@ -384,12 +377,12 @@ describe('json', () => {
       ).toStrictEqual('anything');
 
       expect(
-        getJsonSerializableInfo(nonSerializableNestedObject),
+        validateJsonAndGetSize(nonSerializableNestedObject),
       ).toStrictEqual([false, 0]);
     });
 
     it('should return true for serialization and 0 for a size when sizing is skipped', () => {
-      expect(getJsonSerializableInfo(complexObject, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(complexObject, true)).toStrictEqual([
         true,
         0,
       ]);
@@ -397,7 +390,7 @@ describe('json', () => {
 
     it('should return false for serialization and 0 for a size when sizing is skipped and non-serializable object was provided', () => {
       expect(
-        getJsonSerializableInfo(nonSerializableNestedObject, true),
+        validateJsonAndGetSize(nonSerializableNestedObject, true),
       ).toStrictEqual([false, 0]);
     });
 
@@ -405,7 +398,7 @@ describe('json', () => {
       const objectContainingSymbols = {
         mySymbol: Symbol('MySymbol'),
       };
-      expect(getJsonSerializableInfo(objectContainingSymbols)).toStrictEqual([
+      expect(validateJsonAndGetSize(objectContainingSymbols)).toStrictEqual([
         false,
         0,
       ]);
@@ -417,7 +410,7 @@ describe('json', () => {
           return 'whatever';
         },
       ];
-      expect(getJsonSerializableInfo(objectContainingFunction)).toStrictEqual([
+      expect(validateJsonAndGetSize(objectContainingFunction)).toStrictEqual([
         false,
         0,
       ]);
@@ -433,8 +426,8 @@ describe('json', () => {
       const handle = Proxy.revocable([], {});
       handle.revoke();
 
-      expect(getJsonSerializableInfo(handle.proxy)).toStrictEqual([false, 0]);
-      expect(getJsonSerializableInfo([[[handle.proxy]]])).toStrictEqual([
+      expect(validateJsonAndGetSize(handle.proxy)).toStrictEqual([false, 0]);
+      expect(validateJsonAndGetSize([[[handle.proxy]]])).toStrictEqual([
         false,
         0,
       ]);
@@ -449,67 +442,64 @@ describe('json', () => {
         },
       });
 
-      expect(getJsonSerializableInfo(arrayProxy, true)).toStrictEqual([
-        true,
-        0,
-      ]);
+      expect(validateJsonAndGetSize(arrayProxy, true)).toStrictEqual([true, 0]);
 
-      expect(getJsonSerializableInfo([[arrayProxy]], true)).toStrictEqual([
+      expect(validateJsonAndGetSize([[arrayProxy]], true)).toStrictEqual([
         true,
         0,
       ]);
 
       const arrayProxyProxy = new Proxy(arrayProxy, {});
-      expect(getJsonSerializableInfo([[arrayProxyProxy]], true)).toStrictEqual([
+      expect(validateJsonAndGetSize([[arrayProxyProxy]], true)).toStrictEqual([
         true,
         0,
       ]);
 
       // Value: Boolean object
       // eslint-disable-next-line no-new-wrappers
-      expect(getJsonSerializableInfo(new Boolean(true), true)).toStrictEqual([
+      expect(validateJsonAndGetSize(new Boolean(true), true)).toStrictEqual([
         true,
         0,
       ]);
 
       expect(
         // eslint-disable-next-line no-new-wrappers
-        getJsonSerializableInfo({ key: new Boolean(false) }, true),
+        validateJsonAndGetSize({ key: new Boolean(false) }, true),
       ).toStrictEqual([true, 0]);
 
       expect(
         // eslint-disable-next-line no-new-wrappers
-        getJsonSerializableInfo(new Boolean(false)),
+        validateJsonAndGetSize(new Boolean(false)),
       ).toStrictEqual([true, 5]);
 
       expect(
         // eslint-disable-next-line no-new-wrappers
-        getJsonSerializableInfo(new Boolean(true)),
+        validateJsonAndGetSize(new Boolean(true)),
       ).toStrictEqual([true, 4]);
 
       // Value: number negative zero
-      expect(getJsonSerializableInfo(-0, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(['-0', 0, -0], true)).toStrictEqual([
+      expect(validateJsonAndGetSize(-0, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(['-0', 0, -0], true)).toStrictEqual([
         true,
         0,
       ]);
 
-      expect(getJsonSerializableInfo({ key: -0 }, true)).toStrictEqual([
+      expect(validateJsonAndGetSize({ key: -0 }, true)).toStrictEqual([
         true,
         0,
       ]);
 
       // Value: number non finite
-      expect(getJsonSerializableInfo(Infinity, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo({ key: -Infinity }, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(Infinity, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize({ key: -Infinity }, true)).toStrictEqual([
         true,
         0,
       ]);
-      expect(getJsonSerializableInfo([NaN], true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize([NaN], true)).toStrictEqual([true, 0]);
 
       // Value: object abrupt
       expect(
-        getJsonSerializableInfo(
+        validateJsonAndGetSize(
           {
             get key() {
               throw new Error();
@@ -521,16 +511,13 @@ describe('json', () => {
 
       // Value: Number object
       // eslint-disable-next-line no-new-wrappers
-      expect(getJsonSerializableInfo(new Number(3.14), true)).toStrictEqual([
+      expect(validateJsonAndGetSize(new Number(3.14), true)).toStrictEqual([
         true,
         0,
       ]);
 
       // eslint-disable-next-line no-new-wrappers
-      expect(getJsonSerializableInfo(new Number(3.14))).toStrictEqual([
-        true,
-        4,
-      ]);
+      expect(validateJsonAndGetSize(new Number(3.14))).toStrictEqual([true, 4]);
 
       // Value: object proxy
       const objectProxy = new Proxy(
@@ -553,33 +540,33 @@ describe('json', () => {
         },
       );
 
-      expect(getJsonSerializableInfo(objectProxy, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(objectProxy, true)).toStrictEqual([
         true,
         0,
       ]);
 
       expect(
-        getJsonSerializableInfo({ l1: { l2: objectProxy } }, true),
+        validateJsonAndGetSize({ l1: { l2: objectProxy } }, true),
       ).toStrictEqual([true, 0]);
 
       // Value: object proxy revoked
       const handleForObjectProxy = Proxy.revocable({}, {});
       handleForObjectProxy.revoke();
       expect(
-        getJsonSerializableInfo(handleForObjectProxy.proxy, true),
+        validateJsonAndGetSize(handleForObjectProxy.proxy, true),
       ).toStrictEqual([false, 0]);
 
       expect(
-        getJsonSerializableInfo({ a: { b: handleForObjectProxy.proxy } }, true),
+        validateJsonAndGetSize({ a: { b: handleForObjectProxy.proxy } }, true),
       ).toStrictEqual([false, 0]);
 
       // Value: primitive top level
-      expect(getJsonSerializableInfo(null, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(true, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(false, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo('str', true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(123, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(undefined, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(null, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(true, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(false, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize('str', true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(123, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(undefined, true)).toStrictEqual([true, 0]);
 
       // Value: string escape ASCII
       const charToJson = {
@@ -624,23 +611,20 @@ describe('json', () => {
       const jsonChars = Object.values(charToJson).join('');
       const jsonCharsReversed = Object.values(charToJson).reverse().join('');
 
-      expect(getJsonSerializableInfo(charToJson, true)).toStrictEqual([
-        true,
-        0,
-      ]);
+      expect(validateJsonAndGetSize(charToJson, true)).toStrictEqual([true, 0]);
 
       // eslint-disable-next-line guard-for-in
       for (const char in charToJson) {
-        expect(getJsonSerializableInfo(char, true)).toStrictEqual([true, 0]);
+        expect(validateJsonAndGetSize(char, true)).toStrictEqual([true, 0]);
       }
 
-      expect(getJsonSerializableInfo(chars, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(charsReversed, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(chars, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(charsReversed, true)).toStrictEqual([
         true,
         0,
       ]);
-      expect(getJsonSerializableInfo(jsonChars, true)).toStrictEqual([true, 0]);
-      expect(getJsonSerializableInfo(jsonCharsReversed, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(jsonChars, true)).toStrictEqual([true, 0]);
+      expect(validateJsonAndGetSize(jsonCharsReversed, true)).toStrictEqual([
         true,
         0,
       ]);
@@ -663,7 +647,7 @@ describe('json', () => {
 
       // eslint-disable-next-line guard-for-in
       for (const strUnicode in stringEscapeUnicode) {
-        expect(getJsonSerializableInfo(strUnicode, true)).toStrictEqual([
+        expect(validateJsonAndGetSize(strUnicode, true)).toStrictEqual([
           true,
           0,
         ]);
@@ -671,61 +655,84 @@ describe('json', () => {
 
       // Value: string object
       // eslint-disable-next-line no-new-wrappers
-      expect(getJsonSerializableInfo(new String('str'), true)).toStrictEqual([
+      expect(validateJsonAndGetSize(new String('str'), true)).toStrictEqual([
         true,
         0,
       ]);
 
       // eslint-disable-next-line no-new-wrappers
-      expect(getJsonSerializableInfo(new String('str'))).toStrictEqual([
+      expect(validateJsonAndGetSize(new String('str'))).toStrictEqual([
         true,
         5,
       ]);
 
       // Value: toJSON not a function
-      expect(getJsonSerializableInfo({ toJSON: null }, true)).toStrictEqual([
+      expect(validateJsonAndGetSize({ toJSON: null }, true)).toStrictEqual([
         true,
         0,
       ]);
 
-      expect(getJsonSerializableInfo({ toJSON: false }, true)).toStrictEqual([
+      expect(validateJsonAndGetSize({ toJSON: false }, true)).toStrictEqual([
         true,
         0,
       ]);
 
-      expect(getJsonSerializableInfo({ toJSON: [] }, true)).toStrictEqual([
+      expect(validateJsonAndGetSize({ toJSON: [] }, true)).toStrictEqual([
         true,
         0,
       ]);
-    });
-  });
 
-  describe('isContainingCircularStructure', () => {
-    it('should return false if value passed is not an object', () => {
-      expect(
-        isObjectContainingCircularStructure('valueThatIsNotAnObject'),
-      ).toBe(false);
-    });
+      // Value: array circular
+      const direct: unknown[] = [];
+      direct.push(direct);
 
-    it('should return false for an object that does not contain any circular references', () => {
-      expect(isObjectContainingCircularStructure(complexObject)).toBe(false);
-    });
+      expect(validateJsonAndGetSize(direct)).toStrictEqual([false, 0]);
 
-    it('should return true for an object that contains circular references', () => {
-      const circularStructure = {
-        value: {},
+      const indirect: unknown[] = [];
+      indirect.push([[indirect]]);
+
+      expect(validateJsonAndGetSize(indirect)).toStrictEqual([false, 0]);
+
+      // Value: object circular
+      const directObject = { prop: {} };
+      directObject.prop = directObject;
+
+      expect(validateJsonAndGetSize(directObject, false)).toStrictEqual([
+        false,
+        0,
+      ]);
+
+      const indirectObject = {
+        p1: {
+          p2: {
+            get p3() {
+              return indirectObject;
+            },
+          },
+        },
       };
-      circularStructure.value = circularStructure;
-      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
+
+      expect(validateJsonAndGetSize(indirectObject, false)).toStrictEqual([
+        false,
+        0,
+      ]);
+
+      // Value: toJSON object circular
+      const obj = {
+        toJSON() {
+          return {};
+        },
+      };
+      const circular = { prop: obj };
+
+      obj.toJSON = function () {
+        return circular;
+      };
+
+      expect(validateJsonAndGetSize(circular, true)).toStrictEqual([false, 0]);
     });
 
-    it('should return true for an array that contains circular references', () => {
-      const circularArray: unknown[] = [];
-      circularArray[0] = circularArray;
-      expect(isObjectContainingCircularStructure(circularArray)).toBe(true);
-    });
-
-    it('should return true for an object that contains nested circular references', () => {
+    it('should return false for validation for an object that contains nested circular references', () => {
       const circularStructure = {
         levelOne: {
           levelTwo: {
@@ -738,10 +745,13 @@ describe('json', () => {
         },
       };
       circularStructure.levelOne.levelTwo.levelThree.levelFour.levelFive = circularStructure;
-      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
+      expect(validateJsonAndGetSize(circularStructure, false)).toStrictEqual([
+        false,
+        0,
+      ]);
     });
 
-    it('should return true for an object that contains multiple nested circular references', () => {
+    it('should return false for an object that contains multiple nested circular references', () => {
       const circularStructure = {
         levelOne: {
           levelTwo: {
@@ -762,69 +772,10 @@ describe('json', () => {
       circularStructure.levelOne.levelTwo.levelThree.levelFour.levelFive = circularStructure;
       circularStructure.anotherOne = circularStructure;
       circularStructure.justAnotherOne.toAnotherOne.andAnotherOne = circularStructure;
-      expect(isObjectContainingCircularStructure(circularStructure)).toBe(true);
-    });
-  });
-
-  describe('validateJsonAndGetSize', () => {
-    it('should return false for validity when circular objects are passed to the function', () => {
-      // This test will perform a series of validation assertions.
-      // These tests are taken from ECMA TC39 (test262) test scenarios used
-      // for testing the JSON.stringify function.
-      // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
-
-      // Value: array circular
-      const direct: unknown[] = [];
-      direct.push(direct);
-
-      expect(validateJsonAndGetSize(direct)).toStrictEqual([false, 0]);
-
-      const indirect: unknown[] = [];
-      indirect.push([[indirect]]);
-
-      expect(validateJsonAndGetSize(indirect)).toStrictEqual([false, 0]);
-
-      // Value: object circular
-      const directObject = { prop: {} };
-      directObject.prop = directObject;
-
-      expect(getJsonSerializableInfo(directObject, false)).toStrictEqual([
+      expect(validateJsonAndGetSize(circularStructure)).toStrictEqual([
         false,
         0,
       ]);
-
-      const indirectObject = {
-        p1: {
-          p2: {
-            get p3() {
-              return indirectObject;
-            },
-          },
-        },
-      };
-
-      expect(getJsonSerializableInfo(indirectObject, false)).toStrictEqual([
-        false,
-        0,
-      ]);
-
-      // Value: toJSON object circular
-      const obj = {
-        toJSON() {
-          return {};
-        },
-      };
-      const circular = { prop: obj };
-
-      obj.toJSON = function () {
-        return circular;
-      };
-
-      expect(validateJsonAndGetSize(circular, true)).toStrictEqual([false, 0]);
-    });
-
-    it('should return true for serialization and 1259 for a size of a complex nested object', () => {
-      expect(validateJsonAndGetSize(complexObject)).toStrictEqual([true, 1259]);
     });
   });
 });
