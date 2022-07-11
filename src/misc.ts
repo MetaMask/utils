@@ -106,6 +106,7 @@ export enum JsonSize {
   False = 5,
   Quote = 1,
   Colon = 1,
+  Date = 24,
 }
 
 /**

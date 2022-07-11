@@ -335,13 +335,12 @@ export function validateJsonAndGetSize(
         if (skipSizing) {
           return [true, 0];
         }
-        const jsonSerializedDate = value.toJSON();
         return [
           true,
           // Note: Invalid dates will serialize to null
-          jsonSerializedDate === null
+          isNaN(value.getDate())
             ? JsonSize.Null
-            : calculateStringSize(jsonSerializedDate) + JsonSize.Quote * 2,
+            : JsonSize.Date + JsonSize.Quote * 2,
         ];
       } else if (value instanceof Boolean) {
         if (skipSizing) {
