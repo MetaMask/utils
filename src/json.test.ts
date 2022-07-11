@@ -777,5 +777,42 @@ describe('json', () => {
         0,
       ]);
     });
+
+    it('should return true for validity for an object that contains same object multiple times', () => {
+      const date = new Date();
+      const testObject = {
+        value: 'whatever',
+      };
+      const objectToTest = {
+        a: date,
+        b: date,
+        c: date,
+        testOne: testObject,
+        testTwo: testObject,
+        testThree: {
+          nestedObjectTest: {
+            multipleTimes: {
+              valueOne: testObject,
+              valueTwo: testObject,
+              valueThree: testObject,
+              valueFour: testObject,
+              valueFive: date,
+              valueSix: {},
+            },
+          },
+        },
+        testFour: {},
+        testFive: {
+          something: null,
+          somethingElse: null,
+          anotherValue: null,
+        },
+      };
+
+      expect(validateJsonAndGetSize(objectToTest, true)).toStrictEqual([
+        true,
+        0,
+      ]);
+    });
   });
 });

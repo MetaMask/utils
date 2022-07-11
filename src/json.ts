@@ -286,7 +286,7 @@ export function validateJsonAndGetSize(
   jsObject: unknown,
   skipSizingProcess = false,
 ): [isValid: boolean, plainTextSizeInBytes: number] {
-  const seenObjects: unknown[] = [];
+  const seenObjects = new Set();
   /**
    * Checks whether a value is JSON serializable and counts the total number
    * of bytes needed to store the serialized version of the value.
@@ -374,10 +374,10 @@ export function validateJsonAndGetSize(
     }
 
     // Handle circular objects
-    if (seenObjects.indexOf(value) !== -1) {
+    if (seenObjects.has(value)) {
       return [false, 0];
     }
-    seenObjects.push(value);
+    seenObjects.add(value);
 
     // Continue object decomposition
     try {
@@ -396,7 +396,7 @@ export function validateJsonAndGetSize(
                 'JSON validation did not pass. Validation process stopped.',
               );
             }
-
+            seenObjects.delete(value);
             if (skipSizing) {
               return 0;
             }
