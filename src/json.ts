@@ -310,28 +310,30 @@ export function validateJsonAndGetSize(
       return [true, skipSizing ? 0 : JsonSize.Null];
     }
 
-    // Check and calculate sizes for basic types
-    // eslint-disable-next-line default-case
-    switch (typeof value) {
-      case 'function':
+    // Check and calculate sizes for basic (and some special) types
+    const typeOfValue = typeof value;
+    try {
+      if (typeOfValue === 'function') {
         return [false, 0];
-      case 'string':
+      } else if (typeOfValue === 'string' || value instanceof String) {
         return [
           true,
-          skipSizing ? 0 : calculateStringSize(value) + JsonSize.Quote * 2,
+          skipSizing
+            ? 0
+            : calculateStringSize(value as string) + JsonSize.Quote * 2,
         ];
-      case 'boolean':
+      } else if (typeOfValue === 'boolean' || value instanceof Boolean) {
         if (skipSizing) {
           return [true, 0];
         }
-        return [true, value ? JsonSize.True : JsonSize.False];
-      case 'number':
-        return [true, skipSizing ? 0 : calculateNumberSize(value)];
-    }
-
-    // Handle specific complex objects that can be serialized properly
-    try {
-      if (value instanceof Date) {
+        // eslint-disable-next-line eqeqeq
+        return [true, value == true ? JsonSize.True : JsonSize.False];
+      } else if (typeOfValue === 'number' || value instanceof Number) {
+        if (skipSizing) {
+          return [true, 0];
+        }
+        return [true, calculateNumberSize(value as number)];
+      } else if (value instanceof Date) {
         if (skipSizing) {
           return [true, 0];
         }
@@ -341,25 +343,6 @@ export function validateJsonAndGetSize(
           isNaN(value.getDate())
             ? JsonSize.Null
             : JsonSize.Date + JsonSize.Quote * 2,
-        ];
-      } else if (value instanceof Boolean) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        // eslint-disable-next-line eqeqeq
-        return [true, value == true ? JsonSize.True : JsonSize.False];
-      } else if (value instanceof Number) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        return [true, value.toString().length];
-      } else if (value instanceof String) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        return [
-          true,
-          calculateStringSize(value.toString()) + JsonSize.Quote * 2,
         ];
       }
     } catch (_) {
