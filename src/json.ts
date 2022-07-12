@@ -355,10 +355,13 @@ export function validateJsonAndGetSize(
       return [false, 0];
     }
 
-    // Handle circular objects
+    // Circular object detection (handling)
+    // Check if the same object already exists
     if (seenObjects.has(value)) {
       return [false, 0];
     }
+    // Add new object to the seen objects set
+    // Only the plain objects should be added (Primitive types are skipped)
     seenObjects.add(value);
 
     // Continue object decomposition
@@ -378,7 +381,12 @@ export function validateJsonAndGetSize(
                 'JSON validation did not pass. Validation process stopped.',
               );
             }
+
+            // Circular object detection
+            // Once a child node is visited and processed remove it from the set.
+            // This will prevent false positives with the same adjacent objects.
             seenObjects.delete(value);
+
             if (skipSizing) {
               return 0;
             }

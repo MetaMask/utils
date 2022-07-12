@@ -778,7 +778,8 @@ describe('json', () => {
       ]);
     });
 
-    it('should return true for validity for an object that contains same object multiple times', () => {
+    it('should return true for validity for an object that contains the same object multiple times', () => {
+      // This will test if false positives are removed from the circular reference detection
       const date = new Date();
       const testObject = {
         value: 'whatever',
@@ -806,6 +807,14 @@ describe('json', () => {
           something: null,
           somethingElse: null,
           anotherValue: null,
+          somethingAgain: testObject,
+          anotherOne: {
+            nested: {
+              multipleTimes: {
+                valueOne: testObject,
+              },
+            },
+          },
         },
       };
 
