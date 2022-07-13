@@ -7,10 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [2.1.0]
-### Uncategorized
-- Add JSON storage limit utilities ([#14](https://github.com/MetaMask/utils/pull/14))
-- Bump @metamask/auto-changelog from 2.6.0 to 2.6.1 ([#13](https://github.com/MetaMask/utils/pull/13))
-- Bump @metamask/auto-changelog from 2.5.0 to 2.6.0 ([#12](https://github.com/MetaMask/utils/pull/12))
+### Added
+- Add JSON storage validation and limit utilities ([#14](https://github.com/MetaMask/utils/pull/14))
+  - Adds a new function `validateJsonAndGetSize`.
 
 ## [2.0.0]
 ### Added
