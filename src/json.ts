@@ -66,7 +66,9 @@ export type JsonRpcError = {
  *
  * @template Params - The type of the params.
  */
-export type JsonRpcRequest<Params> = {
+export type JsonRpcRequest<
+  Params extends Record<string, unknown> | unknown[]
+> = {
   id: JsonRpcId;
   jsonrpc: JsonRpcVersion2;
   method: string;
@@ -78,7 +80,9 @@ export type JsonRpcRequest<Params> = {
  *
  * @template Params - The type of the params.
  */
-export type JsonRpcNotification<Params> = {
+export type JsonRpcNotification<
+  Params extends Record<string, unknown> | unknown[]
+> = {
   jsonrpc: JsonRpcVersion2;
   method: string;
   params?: Params;
@@ -91,7 +95,9 @@ export type JsonRpcNotification<Params> = {
  * @param requestOrNotification - The JSON-RPC request or notification to check.
  * @returns Whether the specified JSON-RPC message is a notification.
  */
-export function isJsonRpcNotification<T>(
+export function isJsonRpcNotification<
+  T extends Record<string, unknown> | unknown[]
+>(
   requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
 ): requestOrNotification is JsonRpcNotification<T> {
   return !hasProperty(requestOrNotification, 'id');
@@ -103,7 +109,9 @@ export function isJsonRpcNotification<T>(
  *
  * @param requestOrNotification - The JSON-RPC request or notification to check.
  */
-export function assertIsJsonRpcNotification<T>(
+export function assertIsJsonRpcNotification<
+  T extends Record<string, unknown> | unknown[]
+>(
   requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
 ): asserts requestOrNotification is JsonRpcNotification<T> {
   if (!isJsonRpcNotification(requestOrNotification)) {
@@ -117,7 +125,7 @@ export function assertIsJsonRpcNotification<T>(
  * @param requestOrNotification - The JSON-RPC request or notification to check.
  * @returns Whether the specified JSON-RPC message is a request.
  */
-export function isJsonRpcRequest<T>(
+export function isJsonRpcRequest<T extends Record<string, unknown> | unknown[]>(
   requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
 ): requestOrNotification is JsonRpcRequest<T> {
   return hasProperty(requestOrNotification, 'id');
@@ -129,7 +137,9 @@ export function isJsonRpcRequest<T>(
  *
  * @param requestOrNotification - The JSON-RPC request or notification to check.
  */
-export function assertIsJsonRpcRequest<T>(
+export function assertIsJsonRpcRequest<
+  T extends Record<string, unknown> | unknown[]
+>(
   requestOrNotification: JsonRpcNotification<T> | JsonRpcRequest<T>,
 ): asserts requestOrNotification is JsonRpcRequest<T> {
   if (!isJsonRpcRequest(requestOrNotification)) {
