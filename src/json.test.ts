@@ -203,9 +203,11 @@ describe('json', () => {
 
   describe('assertIsJsonRpcFailure', () => {
     it('identifies JSON-RPC response objects', () => {
-      ([{ error: 'failure' }, { error: null }] as any[]).forEach((input) => {
-        expect(() => assertIsJsonRpcFailure(input)).not.toThrow();
-      });
+      ([{ jsonrpc: jsonrpc2, id: 1, error: getError() }] as any[]).forEach(
+        (input) => {
+          expect(() => assertIsJsonRpcFailure(input)).not.toThrow();
+        },
+      );
 
       ([{ result: 'success' }, {}] as any[]).forEach((input) => {
         expect(() => assertIsJsonRpcFailure(input)).toThrow(
