@@ -245,7 +245,7 @@ export function assertIsJsonRpcResponse(
   response: unknown,
 ): asserts response is JsonRpcResponse<Json> {
   if (!isJsonRpcResponse(response)) {
-    throw new Error('Not a successful JSON-RPC response.');
+    throw new Error('Not a JSON-RPC response.');
   }
 }
 
