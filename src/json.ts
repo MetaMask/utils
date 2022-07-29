@@ -9,6 +9,7 @@ import {
   nullable,
   number,
   object,
+  omit,
   optional,
   record,
   string,
@@ -118,11 +119,7 @@ export type JsonRpcRequest<Params extends JsonRpcParams> = InferWithParams<
   Params
 >;
 
-export const JsonRpcNotificationStruct = object({
-  jsonrpc: JsonRpcVersionStruct,
-  method: string(),
-  params: JsonRpcParamsStruct,
-});
+export const JsonRpcNotificationStruct = omit(JsonRpcRequestStruct, ['id']);
 
 /**
  * A JSON-RPC notification object.
@@ -226,6 +223,31 @@ export const JsonRpcResponseStruct = union([
 export type JsonRpcResponse<Result extends Json> =
   | JsonRpcSuccess<Result>
   | JsonRpcFailure;
+
+/**
+ * Type guard to check if a value is a JsonRpcResponse.
+ *
+ * @param response - The object to check.
+ * @returns Whether the object is a JsonRpcResponse.
+ */
+export function isJsonRpcResponse(
+  response: unknown,
+): response is JsonRpcResponse<Json> {
+  return is(response, JsonRpcResponseStruct);
+}
+
+/**
+ * Type assertion to check if a value is a JsonRpcResponse.
+ *
+ * @param response - The response to check.
+ */
+export function assertIsJsonRpcResponse(
+  response: unknown,
+): asserts response is JsonRpcResponse<Json> {
+  if (!isJsonRpcResponse(response)) {
+    throw new Error('Not a successful JSON-RPC response.');
+  }
+}
 
 /**
  * Type guard to narrow a JsonRpcResponse object to a success (or failure).
