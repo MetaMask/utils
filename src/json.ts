@@ -196,7 +196,7 @@ export const JsonRpcSuccessStruct = object({
  */
 export type JsonRpcSuccess<Result extends Json> = Omit<
   Infer<typeof JsonRpcSuccessStruct>,
-  'success'
+  'result'
 > & {
   result: Result;
 };
