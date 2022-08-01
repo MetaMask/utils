@@ -1,17 +1,15 @@
 import {
-  arrayOfDifferentKindsOfNumbers,
-  arrayOfMixedSpecialObjects,
-  complexObject,
-  nonSerializableNestedObject,
-  objectMixedWithUndefinedValues,
-} from './test.data';
-import {
+  ARRAY_OF_DIFFRENT_KINDS_OF_NUMBERS,
+  ARRAY_OF_MIXED_SPECIAL_OBJECTS,
+  COMPLEX_OBJECT,
   JSON_FIXTURES,
   JSON_RPC_FAILURE_FIXTURES,
   JSON_RPC_NOTIFICATION_FIXTURES,
   JSON_RPC_REQUEST_FIXTURES,
   JSON_RPC_RESPONSE_FIXTURES,
   JSON_RPC_SUCCESS_FIXTURES,
+  NON_SERIALIZABLE_NESTED_OBJECT,
+  OBJECT_MIXED_WITH_UNDEFINED_VALUES,
 } from './__fixtures__';
 import {
   assertIsJsonRpcFailure,
@@ -341,25 +339,27 @@ describe('json', () => {
 
     it('should return true for serialization and 25 for a size when some of the values are undefined', () => {
       expect(
-        validateJsonAndGetSize(objectMixedWithUndefinedValues),
+        validateJsonAndGetSize(OBJECT_MIXED_WITH_UNDEFINED_VALUES),
       ).toStrictEqual([true, 25]);
     });
 
     it('should return true for serialization and 17 for a size with mixed null and undefined in an array', () => {
-      expect(validateJsonAndGetSize(arrayOfMixedSpecialObjects)).toStrictEqual([
-        true,
-        51,
-      ]);
+      expect(
+        validateJsonAndGetSize(ARRAY_OF_MIXED_SPECIAL_OBJECTS),
+      ).toStrictEqual([true, 51]);
     });
 
     it('should return true for serialization and 73 for a size, for an array of numbers', () => {
       expect(
-        validateJsonAndGetSize(arrayOfDifferentKindsOfNumbers),
+        validateJsonAndGetSize(ARRAY_OF_DIFFRENT_KINDS_OF_NUMBERS),
       ).toStrictEqual([true, 73]);
     });
 
     it('should return true for serialization and 1259 for a size of a complex nested object', () => {
-      expect(validateJsonAndGetSize(complexObject)).toStrictEqual([true, 1259]);
+      expect(validateJsonAndGetSize(COMPLEX_OBJECT)).toStrictEqual([
+        true,
+        1259,
+      ]);
     });
 
     it('should return true for serialization and 107 for a size of an object containing Date object', () => {
@@ -375,16 +375,16 @@ describe('json', () => {
 
     it('should return false for serialization and 0 for size when non-serializable nested object was provided', () => {
       expect(
-        nonSerializableNestedObject.levelOne.levelTwo.levelThree.levelFour.levelFive(),
+        NON_SERIALIZABLE_NESTED_OBJECT.levelOne.levelTwo.levelThree.levelFour.levelFive(),
       ).toStrictEqual('anything');
 
       expect(
-        validateJsonAndGetSize(nonSerializableNestedObject),
+        validateJsonAndGetSize(NON_SERIALIZABLE_NESTED_OBJECT),
       ).toStrictEqual([false, 0]);
     });
 
     it('should return true for serialization and 0 for a size when sizing is skipped', () => {
-      expect(validateJsonAndGetSize(complexObject, true)).toStrictEqual([
+      expect(validateJsonAndGetSize(COMPLEX_OBJECT, true)).toStrictEqual([
         true,
         0,
       ]);
@@ -392,7 +392,7 @@ describe('json', () => {
 
     it('should return false for serialization and 0 for a size when sizing is skipped and non-serializable object was provided', () => {
       expect(
-        validateJsonAndGetSize(nonSerializableNestedObject, true),
+        validateJsonAndGetSize(NON_SERIALIZABLE_NESTED_OBJECT, true),
       ).toStrictEqual([false, 0]);
     });
 
