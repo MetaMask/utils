@@ -1,6 +1,7 @@
 import deepEqual from 'fast-deep-equal';
 import {
   array,
+  assert,
   boolean,
   Infer,
   is,
@@ -151,8 +152,10 @@ export function isJsonRpcNotification(
 export function assertIsJsonRpcNotification(
   requestOrNotification: unknown,
 ): asserts requestOrNotification is JsonRpcNotification<JsonRpcParams> {
-  if (!isJsonRpcNotification(requestOrNotification)) {
-    throw new Error('Not a JSON-RPC notification.');
+  try {
+    assert(requestOrNotification, JsonRpcNotificationStruct);
+  } catch (error) {
+    throw new Error(`Not a JSON-RPC notification: ${error.message}.`);
   }
 }
 
@@ -177,8 +180,10 @@ export function isJsonRpcRequest(
 export function assertIsJsonRpcRequest(
   requestOrNotification: unknown,
 ): asserts requestOrNotification is JsonRpcRequest<JsonRpcParams> {
-  if (!isJsonRpcRequest(requestOrNotification)) {
-    throw new Error('Not a JSON-RPC request.');
+  try {
+    assert(requestOrNotification, JsonRpcRequestStruct);
+  } catch (error) {
+    throw new Error(`Not a JSON-RPC request: ${error.message}.`);
   }
 }
 
@@ -244,8 +249,10 @@ export function isJsonRpcResponse(
 export function assertIsJsonRpcResponse(
   response: unknown,
 ): asserts response is JsonRpcResponse<Json> {
-  if (!isJsonRpcResponse(response)) {
-    throw new Error('Not a JSON-RPC response.');
+  try {
+    assert(response, JsonRpcResponseStruct);
+  } catch (error) {
+    throw new Error(`Not a JSON-RPC response: ${error.message}.`);
   }
 }
 
@@ -269,8 +276,10 @@ export function isJsonRpcSuccess(
 export function assertIsJsonRpcSuccess(
   response: unknown,
 ): asserts response is JsonRpcSuccess<Json> {
-  if (!isJsonRpcSuccess(response)) {
-    throw new Error('Not a successful JSON-RPC response.');
+  try {
+    assert(response, JsonRpcSuccessStruct);
+  } catch (error) {
+    throw new Error(`Not a successful JSON-RPC response: ${error.message}.`);
   }
 }
 
@@ -295,8 +304,10 @@ export function isJsonRpcFailure(
 export function assertIsJsonRpcFailure(
   response: unknown,
 ): asserts response is JsonRpcFailure {
-  if (!isJsonRpcFailure(response)) {
-    throw new Error('Not a failed JSON-RPC response.');
+  try {
+    assert(response, JsonRpcFailureStruct);
+  } catch (error) {
+    throw new Error(`Not a failed JSON-RPC response: ${error.message}.`);
   }
 }
 

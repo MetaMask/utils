@@ -73,10 +73,18 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC notifications',
       (notification) => {
         expect(() => assertIsJsonRpcNotification(notification)).toThrow(
-          'Not a JSON-RPC notification.',
+          'Not a JSON-RPC notification',
         );
       },
     );
+
+    it('includes the reason in the error message', () => {
+      expect(() =>
+        assertIsJsonRpcNotification(JSON_RPC_NOTIFICATION_FIXTURES.invalid[0]),
+      ).toThrow(
+        'Not a JSON-RPC notification: At path: jsonrpc -- Expected the literal `"2.0"`, but received: undefined.',
+      );
+    });
   });
 
   describe('isJsonRpcRequest', () => {
@@ -107,10 +115,18 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC requests',
       (request) => {
         expect(() => assertIsJsonRpcRequest(request)).toThrow(
-          'Not a JSON-RPC request.',
+          'Not a JSON-RPC request',
         );
       },
     );
+
+    it('includes the reason in the error message', () => {
+      expect(() =>
+        assertIsJsonRpcRequest(JSON_RPC_REQUEST_FIXTURES.invalid[0]),
+      ).toThrow(
+        'Not a JSON-RPC request: At path: id -- Expected the value to satisfy a union of `number | string`, but received: undefined.',
+      );
+    });
   });
 
   describe('isJsonRpcSuccess', () => {
@@ -141,10 +157,18 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC success',
       (success) => {
         expect(() => assertIsJsonRpcSuccess(success)).toThrow(
-          'Not a successful JSON-RPC response.',
+          'Not a successful JSON-RPC response',
         );
       },
     );
+
+    it('includes the reason in the error message', () => {
+      expect(() =>
+        assertIsJsonRpcSuccess(JSON_RPC_SUCCESS_FIXTURES.invalid[0]),
+      ).toThrow(
+        'Not a successful JSON-RPC response: At path: id -- Expected the value to satisfy a union of `number | string`, but received: undefined.',
+      );
+    });
   });
 
   describe('isJsonRpcFailure', () => {
@@ -175,10 +199,18 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC failure',
       (failure) => {
         expect(() => assertIsJsonRpcFailure(failure)).toThrow(
-          'Not a failed JSON-RPC response.',
+          'Not a failed JSON-RPC response',
         );
       },
     );
+
+    it('includes the reason in the error message', () => {
+      expect(() =>
+        assertIsJsonRpcFailure(JSON_RPC_FAILURE_FIXTURES.invalid[0]),
+      ).toThrow(
+        'Not a failed JSON-RPC response: At path: id -- Expected the value to satisfy a union of `number | string`, but received: undefined.',
+      );
+    });
   });
 
   describe('isJsonRpcResponse', () => {
@@ -209,10 +241,18 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC response',
       (response) => {
         expect(() => assertIsJsonRpcResponse(response)).toThrow(
-          'Not a JSON-RPC response.',
+          'Not a JSON-RPC response',
         );
       },
     );
+
+    it('includes the reason in the error message', () => {
+      expect(() =>
+        assertIsJsonRpcResponse(JSON_RPC_RESPONSE_FIXTURES.invalid[0]),
+      ).toThrow(
+        'Not a JSON-RPC response: Expected the value to satisfy a union of `object | object`, but received: [object Object].',
+      );
+    });
   });
 
   describe('getJsonRpcIdValidator', () => {
