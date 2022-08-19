@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.0.1]
-### Uncategorized
-- Move @types/debug to prod dependencies ([#23](https://github.com/MetaMask/utils/pull/23))
+### Fixed
+- Promote `@types/debug` from development dependencies to production dependencies ([#23](https://github.com/MetaMask/utils/pull/23))
 
 ## [3.0.0]
 ### Added
