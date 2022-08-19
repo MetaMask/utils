@@ -7,10 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.0.0]
-### Uncategorized
+### Added
 - Add logging functions ([#20](https://github.com/MetaMask/utils/pull/20))
-- Upgrade TypeScript to 4.7 ([#21](https://github.com/MetaMask/utils/pull/21))
-- BREAKING: Improve types and type validation ([#19](https://github.com/MetaMask/utils/pull/19))
+- Add frozen collections (implemented in [#5](https://github.com/MetaMask/utils/pull/5) but exported in [#19](https://github.com/MetaMask/utils/pull/19))
+
+### Changed
+- **BREAKING:** Improve types and type validation ([#19](https://github.com/MetaMask/utils/pull/19))
+  - Various type changes have been made that might be breaking:
+    - The `JsonRpcRequest` and `JsonRpcNotification` types now include a generic constraint requiring that the `Params` type extends the `JsonRpcParams` type.
+    - The `JsonRpcSuccess` and `JsonRpcResponse` types now include a generic contraint for the `Result` type, requiring that it extends the `Json` type.
+    - Various validation functions now accept `unknown` parameters rather than specific types. This should not be breaking except that it may affect type inference for the parameters passed in.
+  - New JSON-related functions have been added:
+    - `assertIsJsonRpcResponse`
+    - `isJsonRpcResponse`
+    - `InferWithParams`
+    - `JsonRpcParams`
+  - New JSON Struct types have been added:
+    - `JsonRpcErrorStruct`
+    - `JsonRpcFailureStruct`
+    - `JsonRpcIdStruct`
+    - `JsonRpcParamsStruct`
+    - `JsonRpcRequestStruct`
+    - `JsonRpcResponseStruct`
+    - `JsonRpcSuccessStruct`
+    - `JsonRpcVersionStruct`
+    - `JsonStruct`
 
 ## [2.1.0]
 ### Added
