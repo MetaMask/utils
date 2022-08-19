@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0]
+### Uncategorized
+- Add logging functions ([#20](https://github.com/MetaMask/utils/pull/20))
+- Upgrade TypeScript to 4.7 ([#21](https://github.com/MetaMask/utils/pull/21))
+- BREAKING: Improve types and type validation ([#19](https://github.com/MetaMask/utils/pull/19))
+
 ## [2.1.0]
 ### Added
 - Add JSON storage validation and limit utilities ([#14](https://github.com/MetaMask/utils/pull/14))
@@ -23,7 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/MetaMask/utils/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/MetaMask/utils/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/MetaMask/utils/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/MetaMask/utils/releases/tag/v1.0.0
