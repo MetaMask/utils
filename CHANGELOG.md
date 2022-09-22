@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.0.2]
-### Uncategorized
-- Bump superstruct to at least 0.16.5 ([#26](https://github.com/MetaMask/utils/pull/26))
+### Fixed
+- Bump `superstruct` to ^0.16.5 ([#26](https://github.com/MetaMask/utils/pull/26))
+  - `superstruct`s 0.16.1 through 0.16.4 were not compatible with Node 14; this restores that compatibility.
 
 ## [3.0.1]
 ### Fixed
