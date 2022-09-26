@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.0.3]
-### Uncategorized
+### Fixed
 - Allow omitting params when params can be undefined ([#29](https://github.com/MetaMask/utils/pull/29))
 
 ## [3.0.2]
