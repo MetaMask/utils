@@ -239,7 +239,7 @@ export type JsonRpcSuccess<Result extends Json> = Omit<
 export const JsonRpcFailureStruct = object({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
-  error: JsonRpcErrorStruct,
+  error: JsonRpcErrorStruct as Struct<JsonRpcError>,
 });
 
 /**
