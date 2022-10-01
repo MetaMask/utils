@@ -1,5 +1,5 @@
 import { assert } from './assert';
-import { add0x } from './hex';
+import { add0x, assertIsHexString, remove0x } from './hex';
 
 /**
  * Memoized function that returns an array to be used as a lookup table for
@@ -40,12 +40,34 @@ function getPrecomputedHexValuesBuilder(): () => string[] {
 const getPrecomputedHexValues = getPrecomputedHexValuesBuilder();
 
 /**
+ * Check if a value is a `Uint8Array`.
+ *
+ * @param value - The value to check.
+ * @returns Whether the value is a `Uint8Array`.
+ */
+export function isBytes(value: unknown): value is Uint8Array {
+  return value instanceof Uint8Array;
+}
+
+/**
+ * Assert that a value is a `Uint8Array`.
+ *
+ * @param value - The value to check.
+ * @throws If the value is not a `Uint8Array`.
+ */
+export function assertIsBytes(value: unknown): asserts value is Uint8Array {
+  assert(isBytes(value), 'Value must be a Uint8Array.');
+}
+
+/**
  * Convert a `Uint8Array` to a hexadecimal string.
  *
  * @param bytes - The bytes to convert to a hexadecimal string.
  * @returns The hexadecimal string.
  */
 export function bytesToHex(bytes: Uint8Array): string {
+  assertIsBytes(bytes);
+
   const lookupTable = getPrecomputedHexValues();
   const hex = Array.prototype.map.call(bytes, (n) => lookupTable[n]).join('');
 
@@ -61,6 +83,8 @@ export function bytesToHex(bytes: Uint8Array): string {
  * @returns The bigint.
  */
 export function bytesToBigInt(bytes: Uint8Array): bigint {
+  assertIsBytes(bytes);
+
   const hex = bytesToHex(bytes);
 
   // This can catch possible regressions in the future, if we ever change the
@@ -80,6 +104,8 @@ export function bytesToBigInt(bytes: Uint8Array): bigint {
  * @throws If the resulting number is not a safe integer.
  */
 export function bytesToNumber(bytes: Uint8Array): number {
+  assertIsBytes(bytes);
+
   const number = Number(bytesToBigInt(bytes));
 
   assert(
@@ -97,5 +123,122 @@ export function bytesToNumber(bytes: Uint8Array): number {
  * @returns The string.
  */
 export function bytesToString(bytes: Uint8Array): string {
+  assertIsBytes(bytes);
+
   return new TextDecoder(undefined).decode(bytes);
+}
+
+/**
+ * Convert a hexadecimal string to a `Uint8Array`. The string can optionally be
+ * prefixed with `0x`. It accepts even and odd length strings.
+ *
+ * @param value - The hexadecimal string to convert to bytes.
+ * @returns The bytes as `Uint8Array`.
+ */
+export function hexToBytes(value: string): Uint8Array {
+  assertIsHexString(value);
+
+  // Remove the `0x` prefix if it exists, and pad the string to have an even
+  // number of characters.
+  const normalizedValue = remove0x(
+    value.length % 2 === 0 ? value : `0${value}`,
+  ).toLowerCase();
+  const bytes = new Uint8Array(normalizedValue.length / 2);
+
+  for (let i = 0; i < normalizedValue.length; i++) {
+    // While this is not the prettiest way to convert a hexadecimal string to a
+    // `Uint8Array`, it is a lot faster than using `parseInt` to convert each
+    // character.
+    const c1 = normalizedValue.charCodeAt(i * 2);
+    const c2 = normalizedValue.charCodeAt(i * 2 + 1);
+    const n1 = c1 - (c1 < 58 ? 48 : 87);
+    const n2 = c2 - (c2 < 58 ? 48 : 87);
+
+    bytes[i] = n1 * 16 + n2;
+  }
+
+  return bytes;
+}
+
+/**
+ * Convert a `bigint` to a `Uint8Array`.
+ *
+ * @param value - The bigint to convert to bytes.
+ * @returns The bytes as `Uint8Array`.
+ */
+export function bigIntToBytes(value: bigint): Uint8Array {
+  assert(typeof value === 'bigint', 'Value must be a bigint.');
+
+  const hex = value.toString(16);
+  return hexToBytes(hex);
+}
+
+/**
+ * Convert a `number` to a `Uint8Array`.
+ *
+ * @param value - The number to convert to bytes.
+ * @returns The bytes as `Uint8Array`.
+ * @throws If the number is not a safe integer.
+ */
+export function numberToBytes(value: number): Uint8Array {
+  assert(typeof value === 'number', 'Value must be a number.');
+  assert(
+    Number.isSafeInteger(value),
+    'Value is not a safe integer. Use `bigIntToBytes` instead.',
+  );
+
+  const hex = value.toString(16);
+  return hexToBytes(hex);
+}
+
+/**
+ * Convert a `string` to a UTF-8 encoded `Uint8Array`.
+ *
+ * @param value - The string to convert to bytes.
+ * @returns The bytes as `Uint8Array`.
+ */
+export function stringToBytes(value: string): Uint8Array {
+  assert(typeof value === 'string', 'Value must be a string.');
+
+  return new TextEncoder().encode(value);
+}
+
+/**
+ * Convert a byte-like value to a `Uint8Array`. The value can be a `Uint8Array`,
+ * a `bigint`, a `number`, or a `string`.
+ *
+ * If the value is a `string`, and it is prefixed with `0x`, it will be
+ * interpreted as a hexadecimal string. Otherwise, it will be interpreted as a
+ * UTF-8 string. To convert a hexadecimal string to bytes without interpreting
+ * it as a UTF-8 string, use {@link hexToBytes} instead.
+ *
+ * If the value is a `Uint8Array`, it will be returned as-is.
+ *
+ * @param value - The value to convert to bytes.
+ * @returns The bytes as `Uint8Array`.
+ */
+export function valueToBytes(
+  value: bigint | number | string | Uint8Array,
+): Uint8Array {
+  if (typeof value === 'bigint') {
+    return bigIntToBytes(value);
+  }
+
+  if (typeof value === 'number') {
+    return numberToBytes(value);
+  }
+
+  if (typeof value === 'string') {
+    if (value.startsWith('0x')) {
+      return hexToBytes(value);
+    }
+
+    return stringToBytes(value);
+  }
+
+  if (isBytes(value)) {
+    return value;
+  }
+
+  throw new Error(`Unsupported value type: "${typeof value}".`);
 }

@@ -1,14 +1,50 @@
 import {
+  assertIsBytes,
+  bigIntToBytes,
   bytesToBigInt,
   bytesToHex,
   bytesToNumber,
   bytesToString,
+  hexToBytes,
+  isBytes,
+  numberToBytes,
+  stringToBytes,
+  valueToBytes,
 } from './bytes';
 import {
   BYTES_FIXTURES,
+  INVALID_BYTES_FIXTURES,
   LARGE_BYTES_FIXTURES,
   UTF_8_BYTES_FIXTURES,
 } from './__fixtures__/bytes';
+
+describe('isBytes', () => {
+  it('returns true for a Node.js Buffer', () => {
+    expect(isBytes(Buffer.from('foo'))).toBe(true);
+  });
+
+  it('returns true for a Uint8Array', () => {
+    expect(isBytes(new Uint8Array())).toBe(true);
+  });
+
+  it.each(INVALID_BYTES_FIXTURES)('returns false for other values', (value) => {
+    expect(isBytes(value)).toBe(false);
+  });
+});
+
+describe('assertIsBytes', () => {
+  it('does not throw for a Node.js Buffer', () => {
+    expect(() => assertIsBytes(Buffer.from('foo'))).not.toThrow();
+  });
+
+  it('does not throw for a Uint8Array', () => {
+    expect(() => assertIsBytes(new Uint8Array())).not.toThrow();
+  });
+
+  it.each(INVALID_BYTES_FIXTURES)('throws for other values', (value) => {
+    expect(() => assertIsBytes(value)).toThrow('Value must be a Uint8Array.');
+  });
+});
 
 describe('bytesToHex', () => {
   it.each(BYTES_FIXTURES)(
@@ -22,6 +58,14 @@ describe('bytesToHex', () => {
     'returns a hex string from a large byte array',
     ({ bytes, hex }) => {
       expect(bytesToHex(bytes)).toBe(hex);
+    },
+  );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error for invalid byte arrays',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bytesToHex(value)).toThrow('Value must be a Uint8Array.');
     },
   );
 });
@@ -38,6 +82,14 @@ describe('bytesToBigInt', () => {
     'returns a hex string from a large byte array',
     ({ bytes, bigint }) => {
       expect(bytesToBigInt(bytes)).toBe(bigint);
+    },
+  );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error for invalid byte arrays',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bytesToBigInt(value)).toThrow('Value must be a Uint8Array.');
     },
   );
 });
@@ -58,6 +110,14 @@ describe('bytesToNumber', () => {
       );
     },
   );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error for invalid byte arrays',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bytesToNumber(value)).toThrow('Value must be a Uint8Array.');
+    },
+  );
 });
 
 describe('bytesToString', () => {
@@ -65,6 +125,157 @@ describe('bytesToString', () => {
     'returns a string from a byte array',
     ({ bytes, string }) => {
       expect(bytesToString(bytes)).toBe(string);
+    },
+  );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error for invalid byte arrays',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bytesToString(value)).toThrow('Value must be a Uint8Array.');
+    },
+  );
+});
+
+describe('hexToBytes', () => {
+  it.each(BYTES_FIXTURES)(
+    'returns a byte array from a hex string',
+    ({ bytes, hex }) => {
+      expect(hexToBytes(hex)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each(LARGE_BYTES_FIXTURES)(
+    'returns a byte array from a large hex string',
+    ({ bytes, hex }) => {
+      expect(hexToBytes(hex)).toStrictEqual(bytes);
+    },
+  );
+
+  it('supports a string with an odd length', () => {
+    expect(hexToBytes('abc')).toStrictEqual(new Uint8Array([10, 188]));
+  });
+
+  it.each([true, false, null, undefined, 0, 1, '', '0x', [], {}])(
+    'throws an error for invalid hex strings',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => hexToBytes(value)).toThrow(
+        'Value must be a hexadecimal string.',
+      );
+    },
+  );
+});
+
+describe('bigIntToBytes', () => {
+  it.each(BYTES_FIXTURES)(
+    'returns a byte array from a bigint',
+    ({ bytes, bigint }) => {
+      expect(bigIntToBytes(bigint)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each(LARGE_BYTES_FIXTURES)(
+    'returns a byte array from a large bigint',
+    ({ bytes, bigint }) => {
+      expect(bigIntToBytes(bigint)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each([true, false, null, undefined, 0, 1, '', '0x', [], {}])(
+    'throws an error for invalid bigints',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bigIntToBytes(value)).toThrow('Value must be a bigint.');
+    },
+  );
+});
+
+describe('numberToBytes', () => {
+  it.each(BYTES_FIXTURES)(
+    'returns a byte array from a number',
+    ({ bytes, number }) => {
+      expect(numberToBytes(number)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each(LARGE_BYTES_FIXTURES)(
+    'throws an error when the number is not a safe integer',
+    ({ bigint }) => {
+      expect(() => numberToBytes(Number(bigint))).toThrow(
+        'Value is not a safe integer. Use `bigIntToBytes` instead.',
+      );
+    },
+  );
+
+  it.each([
+    true,
+    false,
+    null,
+    undefined,
+    BigInt(0),
+    BigInt(1),
+    '',
+    '0x',
+    [],
+    {},
+  ])('throws an error for invalid numbers', (value) => {
+    // @ts-expect-error Invalid type.
+    expect(() => numberToBytes(value)).toThrow('Value must be a number.');
+  });
+});
+
+describe('stringToBytes', () => {
+  it.each(UTF_8_BYTES_FIXTURES)(
+    'returns a byte array from a string',
+    ({ bytes, string }) => {
+      expect(stringToBytes(string)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each([true, false, null, undefined, 0, 1, [], {}])(
+    'throws an error for invalid strings',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => stringToBytes(value)).toThrow('Value must be a string.');
+    },
+  );
+});
+
+describe('valueToBytes', () => {
+  it.each(BYTES_FIXTURES)(
+    'returns a byte array from a value',
+    ({ bigint, number, hex, bytes }) => {
+      expect(valueToBytes(bigint)).toStrictEqual(bytes);
+      expect(valueToBytes(number)).toStrictEqual(bytes);
+      expect(valueToBytes(hex)).toStrictEqual(bytes);
+      expect(valueToBytes(bytes)).toBe(bytes);
+    },
+  );
+
+  it.each(LARGE_BYTES_FIXTURES)(
+    'returns a byte array from a large value',
+    ({ bigint, hex, bytes }) => {
+      expect(valueToBytes(bigint)).toStrictEqual(bytes);
+      expect(valueToBytes(hex)).toStrictEqual(bytes);
+      expect(valueToBytes(bytes)).toBe(bytes);
+    },
+  );
+
+  it.each(UTF_8_BYTES_FIXTURES)(
+    'returns a byte array from a string',
+    ({ bytes, string }) => {
+      expect(valueToBytes(string)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error when the value cannot be converted to bytes',
+    (value) => {
+      // @ts-expect-error Invalid value.
+      expect(() => valueToBytes(value)).toThrow(
+        /Unsupported value type: ".+"\./u,
+      );
     },
   );
 });

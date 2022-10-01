@@ -7,28 +7,46 @@ export const BYTES_FIXTURES = [
     bigint: BigInt(0),
   },
   {
-    bytes: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-    hex: '0x00000000000000000000000000000000',
-    number: 0,
-    bigint: BigInt(0),
-  },
-  {
-    bytes: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-    hex: '0x00000000000000000000000000000001',
+    bytes: new Uint8Array([1]),
+    hex: '0x01',
     number: 1,
     bigint: BigInt(1),
   },
   {
-    bytes: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
-    hex: '0x00000000000000000000000000000100',
+    bytes: new Uint8Array([1, 0]),
+    hex: '0x0100',
     number: 256,
     bigint: BigInt('256'),
   },
   {
-    bytes: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0]),
-    hex: '0x00000000000000000000000000010000',
+    bytes: new Uint8Array([1, 0, 0]),
+    hex: '0x010000',
     number: 65536,
     bigint: BigInt('65536'),
+  },
+  {
+    bytes: new Uint8Array([255, 255, 255, 255]),
+    hex: '0xffffffff',
+    number: 4294967295,
+    bigint: BigInt('4294967295'),
+  },
+  {
+    bytes: new Uint8Array([34, 147, 16, 131]),
+    hex: '0x22931083',
+    number: 580063363,
+    bigint: BigInt('580063363'),
+  },
+  {
+    bytes: new Uint8Array([194, 39, 113, 31]),
+    hex: '0xc227711f',
+    number: 3257364767,
+    bigint: BigInt('3257364767'),
+  },
+  {
+    bytes: new Uint8Array([127, 255, 237, 162]),
+    hex: '0x7fffeda2',
+    number: 2147478946,
+    bigint: BigInt('2147478946'),
   },
 ];
 
@@ -118,4 +136,15 @@ export const UTF_8_BYTES_FIXTURES = [
     ]),
     string: 'abc😀😀',
   },
+];
+
+export const INVALID_BYTES_FIXTURES = [
+  true,
+  false,
+  null,
+  undefined,
+  {},
+  [],
+  new Uint16Array(),
+  new Int8Array(),
 ];
