@@ -5,6 +5,7 @@ import {
   bytesToHex,
   bytesToNumber,
   bytesToString,
+  concatBytes,
   hexToBytes,
   isBytes,
   numberToBytes,
@@ -278,4 +279,18 @@ describe('valueToBytes', () => {
       );
     },
   );
+});
+
+describe('concatBytes', () => {
+  it('returns a byte array from multiple byte arrays', () => {
+    expect(
+      concatBytes([new Uint8Array([1]), new Uint8Array([2])]),
+    ).toStrictEqual(Uint8Array.from([1, 2]));
+  });
+
+  it('returns a byte array from multiple byte arrays and values', () => {
+    expect(
+      concatBytes([new Uint8Array([1]), 2, BigInt(3), '4', '0x5']),
+    ).toStrictEqual(Uint8Array.from([1, 2, 3, 52, 5]));
+  });
 });

@@ -1,6 +1,8 @@
 import { assert } from './assert';
 import { add0x, assertIsHexString, remove0x } from './hex';
 
+export type Bytes = bigint | number | string | Uint8Array;
+
 /**
  * Memoized function that returns an array to be used as a lookup table for
  * converting bytes to hexadecimal values.
@@ -140,9 +142,9 @@ export function hexToBytes(value: string): Uint8Array {
 
   // Remove the `0x` prefix if it exists, and pad the string to have an even
   // number of characters.
-  const normalizedValue = remove0x(
-    value.length % 2 === 0 ? value : `0${value}`,
-  ).toLowerCase();
+  const strippedValue = remove0x(value).toLowerCase();
+  const normalizedValue =
+    strippedValue.length % 2 === 0 ? strippedValue : `0${strippedValue}`;
   const bytes = new Uint8Array(normalizedValue.length / 2);
 
   for (let i = 0; i < normalizedValue.length; i++) {
@@ -217,9 +219,7 @@ export function stringToBytes(value: string): Uint8Array {
  * @param value - The value to convert to bytes.
  * @returns The bytes as `Uint8Array`.
  */
-export function valueToBytes(
-  value: bigint | number | string | Uint8Array,
-): Uint8Array {
+export function valueToBytes(value: Bytes): Uint8Array {
   if (typeof value === 'bigint') {
     return bigIntToBytes(value);
   }
@@ -241,4 +241,25 @@ export function valueToBytes(
   }
 
   throw new Error(`Unsupported value type: "${typeof value}".`);
+}
+
+/**
+ * Concatenate multiple byte-like values into a single `Uint8Array`. The values
+ * can be `Uint8Array`, `bigint`, `number`, or `string`. This uses
+ * {@link valueToBytes} under the hood to convert each value to bytes. Refer to
+ * the documentation of that function for more information.
+ *
+ * @param values - The values to concatenate.
+ * @returns The concatenated bytes as `Uint8Array`.
+ */
+export function concatBytes(values: Bytes[]): Uint8Array {
+  return values.map(valueToBytes).reduce((previousValue, currentValue) => {
+    // While we could simply spread the values into an array and use
+    // `Uint8Array.from`, that is a lot slower than using `Uint8Array.set`.
+    const bytes = new Uint8Array(previousValue.length + currentValue.length);
+    bytes.set(previousValue);
+    bytes.set(currentValue, previousValue.length);
+
+    return bytes;
+  }, new Uint8Array(0));
 }
