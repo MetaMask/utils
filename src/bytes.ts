@@ -146,7 +146,7 @@ export function hexToBytes(value: string): Uint8Array {
     strippedValue.length % 2 === 0 ? strippedValue : `0${strippedValue}`;
   const bytes = new Uint8Array(normalizedValue.length / 2);
 
-  for (let i = 0; i < normalizedValue.length; i++) {
+  for (let i = 0; i < bytes.length; i++) {
     // While this is not the prettiest way to convert a hexadecimal string to a
     // `Uint8Array`, it is a lot faster than using `parseInt` to convert each
     // character.
