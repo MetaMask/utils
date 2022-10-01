@@ -34,6 +34,7 @@ export function add0x(hex: string): string {
   if (hex.startsWith('0x')) {
     return hex;
   }
+
   return `0x${hex}`;
 }
 
@@ -48,5 +49,6 @@ export function remove0x(hex: string): string {
   if (hex.startsWith('0x')) {
     return hex.substring(2);
   }
+
   return hex;
 }
