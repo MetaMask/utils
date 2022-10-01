@@ -71,9 +71,13 @@ export function bytesToHex(bytes: Uint8Array): string {
   assertIsBytes(bytes);
 
   const lookupTable = getPrecomputedHexValues();
-  const hex = Array.prototype.map.call(bytes, (n) => lookupTable[n]).join('');
+  const hex = new Array(bytes.length);
 
-  return add0x(hex);
+  for (let i = 0; i < bytes.length; i++) {
+    hex[i] = lookupTable[bytes[i]];
+  }
+
+  return add0x(hex.join(''));
 }
 
 /**
@@ -88,11 +92,6 @@ export function bytesToBigInt(bytes: Uint8Array): bigint {
   assertIsBytes(bytes);
 
   const hex = bytesToHex(bytes);
-
-  // This can catch possible regressions in the future, if we ever change the
-  // implementation of `bytesToHex` to return a string without the `0x` prefix.
-  assert(hex.startsWith('0x'), 'Hex string must start with "0x".');
-
   return BigInt(hex);
 }
 
@@ -108,14 +107,14 @@ export function bytesToBigInt(bytes: Uint8Array): bigint {
 export function bytesToNumber(bytes: Uint8Array): number {
   assertIsBytes(bytes);
 
-  const number = Number(bytesToBigInt(bytes));
+  const bigint = bytesToBigInt(bytes);
 
   assert(
-    Number.isSafeInteger(number),
+    bigint <= BigInt(Number.MAX_SAFE_INTEGER),
     'Number is not a safe integer. Use `bytesToBigInt` instead.',
   );
 
-  return number;
+  return Number(bigint);
 }
 
 /**

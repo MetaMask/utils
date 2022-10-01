@@ -62,6 +62,10 @@ describe('bytesToHex', () => {
     },
   );
 
+  it('adds a 0x-prefix to the string', () => {
+    expect(bytesToHex(new Uint8Array([0, 1, 2])).startsWith('0x')).toBe(true);
+  });
+
   it.each(INVALID_BYTES_FIXTURES)(
     'throws an error for invalid byte arrays',
     (value) => {
