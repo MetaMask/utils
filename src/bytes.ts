@@ -239,7 +239,7 @@ export function valueToBytes(value: Bytes): Uint8Array {
     return value;
   }
 
-  throw new Error(`Unsupported value type: "${typeof value}".`);
+  throw new TypeError(`Unsupported value type: "${typeof value}".`);
 }
 
 /**
