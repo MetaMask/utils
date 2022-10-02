@@ -260,7 +260,8 @@ export function signedBigIntToBytes(
     'Byte length is too small to represent the given value.',
   );
 
-  // To avoid mutating the original value, we copy it here.
+  // ESLint doesn't like mutating function parameters, so to avoid having to
+  // disable the rule, we create a new variable.
   let numberValue = value;
   const bytes = new Uint8Array(byteLength);
 
