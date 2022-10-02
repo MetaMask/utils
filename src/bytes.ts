@@ -1,6 +1,13 @@
 import { assert } from './assert';
 import { add0x, assertIsHexString, remove0x } from './hex';
 
+// '0'.charCodeAt(0) === 48
+const HEX_MINIMUM_NUMBER_CHARACTER = 48;
+
+// '9'.charCodeAt(0) === 57
+const HEX_MAXIMUM_NUMBER_CHARACTER = 58;
+const HEX_CHARACTER_OFFSET = 87;
+
 export type Bytes = bigint | number | string | Uint8Array;
 
 /**
@@ -152,8 +159,16 @@ export function hexToBytes(value: string): Uint8Array {
     // character.
     const c1 = normalizedValue.charCodeAt(i * 2);
     const c2 = normalizedValue.charCodeAt(i * 2 + 1);
-    const n1 = c1 - (c1 < 58 ? 48 : 87);
-    const n2 = c2 - (c2 < 58 ? 48 : 87);
+    const n1 =
+      c1 -
+      (c1 < HEX_MAXIMUM_NUMBER_CHARACTER
+        ? HEX_MINIMUM_NUMBER_CHARACTER
+        : HEX_CHARACTER_OFFSET);
+    const n2 =
+      c2 -
+      (c2 < HEX_MAXIMUM_NUMBER_CHARACTER
+        ? HEX_MINIMUM_NUMBER_CHARACTER
+        : HEX_CHARACTER_OFFSET);
 
     bytes[i] = n1 * 16 + n2;
   }
@@ -252,13 +267,23 @@ export function valueToBytes(value: Bytes): Uint8Array {
  * @returns The concatenated bytes as `Uint8Array`.
  */
 export function concatBytes(values: Bytes[]): Uint8Array {
-  return values.map(valueToBytes).reduce((previousValue, currentValue) => {
+  const normalizedValues = new Array(values.length);
+  let byteLength = 0;
+
+  for (let i = 0; i < values.length; i++) {
+    const value = valueToBytes(values[i]);
+
+    normalizedValues[i] = value;
+    byteLength += value.length;
+  }
+
+  const bytes = new Uint8Array(byteLength);
+  for (let i = 0, offset = 0; i < normalizedValues.length; i++) {
     // While we could simply spread the values into an array and use
     // `Uint8Array.from`, that is a lot slower than using `Uint8Array.set`.
-    const bytes = new Uint8Array(previousValue.length + currentValue.length);
-    bytes.set(previousValue);
-    bytes.set(currentValue, previousValue.length);
+    bytes.set(normalizedValues[i], offset);
+    offset += normalizedValues[i].length;
+  }
 
-    return bytes;
-  }, new Uint8Array(0));
+  return bytes;
 }
