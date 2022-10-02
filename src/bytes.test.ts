@@ -19,6 +19,7 @@ import {
   INVALID_BYTES_FIXTURES,
   LARGE_BYTES_FIXTURES,
   TWOS_COMPLEMENT_BYTES_FIXTURES,
+  UPPER_CASE_HEX_FIXTURES,
   UTF_8_BYTES_FIXTURES,
 } from './__fixtures__/bytes';
 
@@ -174,6 +175,13 @@ describe('hexToBytes', () => {
 
   it.each(LARGE_BYTES_FIXTURES)(
     'returns a byte array from a large hex string',
+    ({ bytes, hex }) => {
+      expect(hexToBytes(hex)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each(UPPER_CASE_HEX_FIXTURES)(
+    'returns a byte array from an upper case hex string',
     ({ bytes, hex }) => {
       expect(hexToBytes(hex)).toStrictEqual(bytes);
     },

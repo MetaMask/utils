@@ -79,12 +79,14 @@ describe('add0x', () => {
 
   it('does not add a 0x-prefix if it is already present', () => {
     expect(add0x('0x12345')).toBe('0x12345');
+    expect(add0x('0X12345')).toBe('0X12345');
   });
 });
 
 describe('remove0x', () => {
   it('removes a 0x-prefix from a string', () => {
     expect(remove0x('0x12345')).toBe('12345');
+    expect(remove0x('0X12345')).toBe('12345');
   });
 
   it('does not remove a 0x-prefix if it is not present', () => {

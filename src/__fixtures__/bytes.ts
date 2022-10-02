@@ -113,6 +113,27 @@ export const LARGE_BYTES_FIXTURES = [
   },
 ];
 
+export const UPPER_CASE_HEX_FIXTURES = [
+  {
+    // 32 random bytes with uppercase characters.
+    // prettier-ignore
+    bytes: new Uint8Array([128, 166, 63, 33, 255, 253, 81, 50, 185, 159, 64, 5, 201, 96, 173, 113, 231, 157, 20, 253, 171, 196, 59, 83, 97, 52, 162, 30, 233, 162, 62, 137]),
+    hex: '0x80A63F21fffd5132B99F4005c960aD71E79D14FDaBc43B536134A21ee9A23e89',
+  },
+  {
+    // 32 random bytes with uppercase characters.
+    // prettier-ignore
+    bytes: new Uint8Array([24, 59, 190, 155, 44, 45, 70, 12, 94, 71, 218, 198, 156, 6, 95, 55, 151, 93, 217, 212, 57, 56, 209, 106, 70, 72, 78, 228, 108, 104, 250, 76]),
+    hex: '0x183bBe9B2C2D460C5E47daC69c065F37975DD9d43938D16a46484eE46c68fa4c',
+  },
+  {
+    // 32 random bytes with uppercase characters.
+    // prettier-ignore
+    bytes: new Uint8Array([162, 34, 67, 251, 133, 170, 184, 203, 91, 211, 174, 71, 165, 215, 28, 168, 27, 18, 2, 91, 57, 222, 62, 54, 119, 204, 228, 207, 105, 230, 166, 107]),
+    hex: '0XA22243fb85AaB8cb5bd3aE47A5D71cA81B12025b39dE3e3677CcE4cF69e6a66b',
+  },
+];
+
 export const UTF_8_BYTES_FIXTURES = [
   {
     bytes: new Uint8Array([0x61, 0x62, 0x63]),

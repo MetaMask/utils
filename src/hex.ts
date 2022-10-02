@@ -31,7 +31,7 @@ export function assertIsHexString(value: unknown): asserts value is string {
  * @returns The prefixed hexadecimal string.
  */
 export function add0x(hex: string): string {
-  if (hex.startsWith('0x')) {
+  if (hex.startsWith('0x') || hex.startsWith('0X')) {
     return hex;
   }
 
@@ -46,7 +46,7 @@ export function add0x(hex: string): string {
  * @returns The un-prefixed hexadecimal string.
  */
 export function remove0x(hex: string): string {
-  if (hex.startsWith('0x')) {
+  if (hex.startsWith('0x') || hex.startsWith('0X')) {
     return hex.substring(2);
   }
 
