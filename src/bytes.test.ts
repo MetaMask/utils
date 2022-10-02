@@ -194,6 +194,12 @@ describe('bigIntToBytes', () => {
       expect(() => bigIntToBytes(value)).toThrow('Value must be a bigint.');
     },
   );
+
+  it('throws for negative bigints', () => {
+    expect(() => bigIntToBytes(BigInt(-1))).toThrow(
+      'Value must be a non-negative bigint.',
+    );
+  });
 });
 
 describe('numberToBytes', () => {
@@ -227,6 +233,12 @@ describe('numberToBytes', () => {
   ])('throws an error for invalid numbers', (value) => {
     // @ts-expect-error Invalid type.
     expect(() => numberToBytes(value)).toThrow('Value must be a number.');
+  });
+
+  it('throws for negative numbers', () => {
+    expect(() => numberToBytes(-1)).toThrow(
+      'Value must be a non-negative number.',
+    );
   });
 });
 

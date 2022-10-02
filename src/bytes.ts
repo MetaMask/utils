@@ -184,6 +184,7 @@ export function hexToBytes(value: string): Uint8Array {
  */
 export function bigIntToBytes(value: bigint): Uint8Array {
   assert(typeof value === 'bigint', 'Value must be a bigint.');
+  assert(value >= BigInt(0), 'Value must be a non-negative bigint.');
 
   const hex = value.toString(16);
   return hexToBytes(hex);
@@ -198,6 +199,7 @@ export function bigIntToBytes(value: bigint): Uint8Array {
  */
 export function numberToBytes(value: number): Uint8Array {
   assert(typeof value === 'number', 'Value must be a number.');
+  assert(value >= 0, 'Value must be a non-negative number.');
   assert(
     Number.isSafeInteger(value),
     'Value is not a safe integer. Use `bigIntToBytes` instead.',
