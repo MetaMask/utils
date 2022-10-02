@@ -91,6 +91,8 @@ export function bytesToHex(bytes: Uint8Array): string {
  * Convert a `Uint8Array` to a `bigint`.
  *
  * To convert a `Uint8Array` to a `number` instead, use {@link bytesToNumber}.
+ * To convert a two's complement encoded `Uint8Array` to a `bigint`, use
+ * {@link bytesToSignedBigInt}.
  *
  * @param bytes - The bytes to convert to a `bigint`.
  * @returns The `bigint`.
@@ -105,6 +107,9 @@ export function bytesToBigInt(bytes: Uint8Array): bigint {
 /**
  * Convert a `Uint8Array` to a signed `bigint`. This assumes that the bytes are
  * encoded in two's complement.
+ *
+ * To convert a `Uint8Array` to an unsigned `bigint` instead, use
+ * {@link bytesToBigInt}.
  *
  * @see https://en.wikipedia.org/wiki/Two%27s_complement
  * @param bytes - The bytes to convert to a signed `bigint`.
@@ -199,6 +204,9 @@ export function hexToBytes(value: string): Uint8Array {
 /**
  * Convert a `bigint` to a `Uint8Array`.
  *
+ * This assumes that the `bigint` is an unsigned integer. To convert a signed
+ * `bigint` instead, use {@link signedBigIntToBytes}.
+ *
  * @param value - The bigint to convert to bytes.
  * @returns The bytes as `Uint8Array`.
  */
@@ -227,12 +235,17 @@ function bigIntFits(value: bigint, bytes: number): boolean {
 }
 
 /**
- * Convert a signed `bigint` to a `Uint8Array`.
+ * Convert a signed `bigint` to a `Uint8Array`. This uses two's complement
+ * encoding to represent negative numbers.
  *
+ * To convert an unsigned `bigint` to a `Uint8Array` instead, use
+ * {@link bigIntToBytes}.
+ *
+ * @see https://en.wikipedia.org/wiki/Two%27s_complement
  * @param value - The number to convert to bytes.
- * @param byteLength - The length of the resulting `Uint8Array`. If the number is
- * larger than the maximum value that can be represented by the given length, an
- * error is thrown.
+ * @param byteLength - The length of the resulting `Uint8Array`. If the number
+ * is larger than the maximum value that can be represented by the given length,
+ * an error is thrown.
  * @returns The bytes as `Uint8Array`.
  */
 export function signedBigIntToBytes(
@@ -299,6 +312,9 @@ export function stringToBytes(value: string): Uint8Array {
  * interpreted as a hexadecimal string. Otherwise, it will be interpreted as a
  * UTF-8 string. To convert a hexadecimal string to bytes without interpreting
  * it as a UTF-8 string, use {@link hexToBytes} instead.
+ *
+ * If the value is a `bigint`, it is assumed to be unsigned. To convert a signed
+ * `bigint` to bytes, use {@link signedBigIntToBytes} instead.
  *
  * If the value is a `Uint8Array`, it will be returned as-is.
  *
