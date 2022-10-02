@@ -148,3 +148,76 @@ export const INVALID_BYTES_FIXTURES = [
   new Uint16Array(),
   new Int8Array(),
 ];
+
+export const TWOS_COMPLEMENT_BYTES_FIXTURES = [
+  {
+    bytes: new Uint8Array([0x00]),
+    bigint: BigInt(0),
+    length: 1,
+  },
+  {
+    bytes: new Uint8Array([0x01]),
+    bigint: BigInt(1),
+    length: 1,
+  },
+  {
+    bytes: new Uint8Array([0x7f]),
+    bigint: BigInt(127),
+    length: 1,
+  },
+  {
+    bytes: new Uint8Array([0x80]),
+    bigint: BigInt(-128),
+    length: 1,
+  },
+  {
+    bytes: new Uint8Array([0xff]),
+    bigint: BigInt(-1),
+    length: 1,
+  },
+  {
+    bytes: new Uint8Array([0x01, 0x00]),
+    bigint: BigInt(256),
+    length: 2,
+  },
+  {
+    bytes: new Uint8Array([0x80, 0x00]),
+    bigint: BigInt(-32768),
+    length: 2,
+  },
+  {
+    bytes: new Uint8Array([0xff, 0xff]),
+    bigint: BigInt(-1),
+    length: 2,
+  },
+  {
+    bytes: new Uint8Array([0x01, 0x00, 0x00]),
+    bigint: BigInt(65536),
+    length: 3,
+  },
+  {
+    bytes: new Uint8Array([0x80, 0x00, 0x00]),
+    bigint: BigInt(-8388608),
+    length: 3,
+  },
+  {
+    bytes: new Uint8Array([0xff, 0xff, 0xff]),
+    bigint: BigInt(-1),
+    length: 3,
+  },
+  {
+    bytes: new Uint8Array([0x01, 0x00, 0x00, 0x00]),
+    bigint: BigInt(16777216),
+    length: 4,
+  },
+  {
+    bytes: new Uint8Array([0x80, 0x00, 0x00, 0x00]),
+    bigint: BigInt(-2147483648),
+    length: 4,
+  },
+  {
+    bytes: new Uint8Array([0xff, 0xff, 0xff, 0xff]),
+    bigint: BigInt(-1),
+    length: 4,
+  },
+];

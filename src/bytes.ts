@@ -103,6 +103,26 @@ export function bytesToBigInt(bytes: Uint8Array): bigint {
 }
 
 /**
+ * Convert a `Uint8Array` to a signed `bigint`. This assumes that the bytes are
+ * encoded in two's complement.
+ *
+ * @see https://en.wikipedia.org/wiki/Two%27s_complement
+ * @param bytes - The bytes to convert to a signed `bigint`.
+ * @returns The signed `bigint`.
+ */
+export function bytesToSignedBigInt(bytes: Uint8Array): bigint {
+  assertIsBytes(bytes);
+
+  let value = BigInt(0);
+  for (const byte of bytes) {
+    // eslint-disable-next-line no-bitwise
+    value = (value << BigInt(8)) + BigInt(byte);
+  }
+
+  return BigInt.asIntN(bytes.length * 8, value);
+}
+
+/**
  * Convert a `Uint8Array` to a `number`.
  *
  * To convert a `Uint8Array` to a `bigint` instead, use {@link bytesToBigInt}.
@@ -188,6 +208,56 @@ export function bigIntToBytes(value: bigint): Uint8Array {
 
   const hex = value.toString(16);
   return hexToBytes(hex);
+}
+
+/**
+ * Check if a `bigint` fits in a certain number of bytes.
+ *
+ * @param value - The `bigint` to check.
+ * @param bytes - The number of bytes.
+ * @returns Whether the `bigint` fits in the number of bytes.
+ */
+function bigIntFits(value: bigint, bytes: number): boolean {
+  assert(bytes > 0);
+
+  /* eslint-disable no-bitwise */
+  const mask = value >> BigInt(31);
+  return !(((~value & mask) + (value & ~mask)) >> BigInt(bytes * 8 + ~0));
+  /* eslint-enable no-bitwise */
+}
+
+/**
+ * Convert a signed `bigint` to a `Uint8Array`.
+ *
+ * @param value - The number to convert to bytes.
+ * @param byteLength - The length of the resulting `Uint8Array`. If the number is
+ * larger than the maximum value that can be represented by the given length, an
+ * error is thrown.
+ * @returns The bytes as `Uint8Array`.
+ */
+export function signedBigIntToBytes(
+  value: bigint,
+  byteLength: number,
+): Uint8Array {
+  assert(typeof value === 'bigint', 'Value must be a bigint.');
+  assert(typeof byteLength === 'number', 'Byte length must be a number.');
+  assert(byteLength > 0, 'Byte length must be greater than 0.');
+  assert(
+    bigIntFits(value, byteLength),
+    'Byte length is too small to represent the given value.',
+  );
+
+  // To avoid mutating the original value, we copy it here.
+  let numberValue = value;
+  const bytes = new Uint8Array(byteLength);
+
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = Number(BigInt.asUintN(8, numberValue));
+    // eslint-disable-next-line no-bitwise
+    numberValue >>= BigInt(8);
+  }
+
+  return bytes.reverse();
 }
 
 /**

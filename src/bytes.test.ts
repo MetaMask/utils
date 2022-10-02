@@ -4,11 +4,13 @@ import {
   bytesToBigInt,
   bytesToHex,
   bytesToNumber,
+  bytesToSignedBigInt,
   bytesToString,
   concatBytes,
   hexToBytes,
   isBytes,
   numberToBytes,
+  signedBigIntToBytes,
   stringToBytes,
   valueToBytes,
 } from './bytes';
@@ -16,6 +18,7 @@ import {
   BYTES_FIXTURES,
   INVALID_BYTES_FIXTURES,
   LARGE_BYTES_FIXTURES,
+  TWOS_COMPLEMENT_BYTES_FIXTURES,
   UTF_8_BYTES_FIXTURES,
 } from './__fixtures__/bytes';
 
@@ -95,6 +98,25 @@ describe('bytesToBigInt', () => {
     (value) => {
       // @ts-expect-error Invalid type.
       expect(() => bytesToBigInt(value)).toThrow('Value must be a Uint8Array.');
+    },
+  );
+});
+
+describe('bytesToSignedBigInt', () => {
+  it.each(TWOS_COMPLEMENT_BYTES_FIXTURES)(
+    'returns a signed bigint from a byte array',
+    ({ bytes, bigint }) => {
+      expect(bytesToSignedBigInt(bytes)).toBe(bigint);
+    },
+  );
+
+  it.each(INVALID_BYTES_FIXTURES)(
+    'throws an error for invalid byte arrays',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => bytesToSignedBigInt(value)).toThrow(
+        'Value must be a Uint8Array.',
+      );
     },
   );
 });
@@ -198,6 +220,72 @@ describe('bigIntToBytes', () => {
   it('throws for negative bigints', () => {
     expect(() => bigIntToBytes(BigInt(-1))).toThrow(
       'Value must be a non-negative bigint.',
+    );
+  });
+});
+
+describe('signedBigIntToBytes', () => {
+  it.each(TWOS_COMPLEMENT_BYTES_FIXTURES)(
+    'returns a byte array from a signed bigint',
+    ({ bytes, bigint, length }) => {
+      expect(signedBigIntToBytes(bigint, length)).toStrictEqual(bytes);
+    },
+  );
+
+  it.each([true, false, null, undefined, 0, 1, '', '0x', [], {}])(
+    'throws an error for invalid bigints',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => signedBigIntToBytes(value, 1)).toThrow(
+        'Value must be a bigint.',
+      );
+    },
+  );
+
+  it.each([true, false, null, undefined, '', '0x', [], {}])(
+    'throws an error for invalid lengths',
+    (value) => {
+      // @ts-expect-error Invalid type.
+      expect(() => signedBigIntToBytes(BigInt(1), value)).toThrow(
+        'Byte length must be a number.',
+      );
+    },
+  );
+
+  it('throws for byte lengths that are less than 1', () => {
+    expect(() => signedBigIntToBytes(BigInt(1), 0)).toThrow(
+      'Byte length must be greater than 0.',
+    );
+  });
+
+  it.each([
+    {
+      bigint: BigInt(128),
+      length: 1,
+    },
+    {
+      bigint: BigInt(65536),
+      length: 2,
+    },
+    {
+      bigint: BigInt(2147483648),
+      length: 4,
+    },
+    {
+      bigint: BigInt(-129),
+      length: 1,
+    },
+    {
+      bigint: BigInt(-65537),
+      length: 2,
+    },
+    {
+      bigint: BigInt(-2147483649),
+      length: 4,
+    },
+  ])('throws if the byte length is too small', ({ bigint, length }) => {
+    expect(() => signedBigIntToBytes(bigint, length)).toThrow(
+      'Byte length is too small to represent the given value.',
     );
   });
 });
