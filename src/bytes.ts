@@ -92,8 +92,8 @@ export function bytesToHex(bytes: Uint8Array): string {
  *
  * To convert a `Uint8Array` to a `number` instead, use {@link bytesToNumber}.
  *
- * @param bytes - The bytes to convert to a bigint.
- * @returns The bigint.
+ * @param bytes - The bytes to convert to a `bigint`.
+ * @returns The `bigint`.
  */
 export function bytesToBigInt(bytes: Uint8Array): bigint {
   assertIsBytes(bytes);
