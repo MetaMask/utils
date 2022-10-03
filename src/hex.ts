@@ -1,7 +1,7 @@
 import { is, pattern, string } from 'superstruct';
 import { assert } from './assert';
 
-const HexStruct = pattern(string(), /^(?:0x)?[0-9a-f]+$/iu);
+export const HexStruct = pattern(string(), /^(?:0x)?[0-9a-f]+$/iu);
 
 /**
  * Check if a string is a valid hex string.
@@ -31,8 +31,12 @@ export function assertIsHexString(value: unknown): asserts value is string {
  * @returns The prefixed hexadecimal string.
  */
 export function add0x(hex: string): string {
-  if (hex.startsWith('0x') || hex.startsWith('0X')) {
+  if (hex.startsWith('0x')) {
     return hex;
+  }
+
+  if (hex.startsWith('0X')) {
+    return `0x${hex.substring(2)}`;
   }
 
   return `0x${hex}`;

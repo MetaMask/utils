@@ -159,7 +159,7 @@ export function bytesToNumber(bytes: Uint8Array): number {
 export function bytesToString(bytes: Uint8Array): string {
   assertIsBytes(bytes);
 
-  return new TextDecoder(undefined).decode(bytes);
+  return new TextDecoder().decode(bytes);
 }
 
 /**

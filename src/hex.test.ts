@@ -79,7 +79,7 @@ describe('add0x', () => {
 
   it('does not add a 0x-prefix if it is already present', () => {
     expect(add0x('0x12345')).toBe('0x12345');
-    expect(add0x('0X12345')).toBe('0X12345');
+    expect(add0x('0X12345')).toBe('0x12345');
   });
 });
 
