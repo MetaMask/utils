@@ -42,8 +42,9 @@ export type BytesLike = Infer<typeof BytesLikeStruct>;
  *
  * - If the value is a number, it is returned as-is.
  * - If the value is a `bigint`, it is converted to a number.
- * - If the value is a string, it is parsed as a number
- * - If the value is a hex string (starts with "0x"), it is parsed as a number.
+ * - If the value is a string, it is interpreted as a decimal number.
+ * - If the value is a hex string (i.e., it starts with "0x"), it is
+ * interpreted as a hexadecimal number.
  *
  * This validates that the value is a number-like value, and that the resulting
  * number is not `NaN` or `Infinity`.
@@ -86,9 +87,10 @@ export function createNumber(value: NumberLike): number {
  *
  * - If the value is a number, it is converted to a `bigint`.
  * - If the value is a `bigint`, it is returned as-is.
- * - If the value is a string, it is parsed as a `bigint`
- * - If the value is a hex string (starts with "0x"), it is parsed as a
- * `bigint`.
+ * - If the value is a string, it is interpreted as a decimal number and
+ * converted to a `bigint`.
+ * - If the value is a hex string (i.e., it starts with "0x"), it is
+ * interpreted as a hexadecimal number and converted to a `bigint`.
  *
  * @example
  * ```typescript
@@ -121,8 +123,8 @@ export function createBigInt(value: NumberLike): bigint {
  * Create a byte array from a bytes-like value.
  *
  * - If the value is a byte array, it is returned as-is.
- * - If the value is a hex string (starts with "0x"), it is parsed as a byte
- * array.
+ * - If the value is a hex string (i.e., it starts with "0x"), it is interpreted
+ * as a hexadecimal number and converted to a byte array.
  * - If the value is a string, it is interpreted as a UTF-8 string and converted
  * to a byte array.
  * - If the value is a number, it is converted to a byte array.
@@ -156,7 +158,8 @@ export function createBytes(value: BytesLike): Uint8Array {
 /**
  * Create a hexadecimal string from a bytes-like value.
  *
- * - If the value is a hex string, it is returned as-is.
+ * - If the value is a hex string, it is returned as-is (with the "0x" prefix
+ * added if it is missing).
  * - If the value is a string, it is interpreted as a UTF-8 string and converted
  * to a hex string.
  * - If the value is a `Uint8Array`, it is converted to a hex string.
