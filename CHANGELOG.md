@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0]
+### Uncategorized
+- Extract build-only TypeScript config ([#35](https://github.com/MetaMask/utils/pull/35))
+- Add util functions for encoding and decoding bytes ([#34](https://github.com/MetaMask/utils/pull/34))
+- Bump Yarn to v3 and patch jest-worker ([#36](https://github.com/MetaMask/utils/pull/36))
+- Add assertion utils ([#33](https://github.com/MetaMask/utils/pull/33))
+- Make JSON-RPC error `data` property optional ([#31](https://github.com/MetaMask/utils/pull/31))
+- Fix typo in README ([#28](https://github.com/MetaMask/utils/pull/28))
+
 ## [3.0.3]
 ### Fixed
 - Allow omitting JSON-RPC params when params can be undefined ([#29](https://github.com/MetaMask/utils/pull/29))
@@ -63,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v3.0.3...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/MetaMask/utils/compare/v3.0.3...v3.1.0
 [3.0.3]: https://github.com/MetaMask/utils/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/MetaMask/utils/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/MetaMask/utils/compare/v3.0.0...v3.0.1
