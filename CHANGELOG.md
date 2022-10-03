@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.1.0]
-### Uncategorized
-- Extract build-only TypeScript config ([#35](https://github.com/MetaMask/utils/pull/35))
-- Add util functions for encoding and decoding bytes ([#34](https://github.com/MetaMask/utils/pull/34))
-- Bump Yarn to v3 and patch jest-worker ([#36](https://github.com/MetaMask/utils/pull/36))
+### Added
 - Add assertion utils ([#33](https://github.com/MetaMask/utils/pull/33))
+- Add util functions for encoding and decoding bytes ([#34](https://github.com/MetaMask/utils/pull/34))
+
+### Fixed
 - Make JSON-RPC error `data` property optional ([#31](https://github.com/MetaMask/utils/pull/31))
+- Don't include test files in dist folder ([#35](https://github.com/MetaMask/utils/pull/35))
 - Fix typo in README ([#28](https://github.com/MetaMask/utils/pull/28))
 
 ## [3.0.3]
