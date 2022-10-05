@@ -6,7 +6,7 @@ import {
 } from './__fixtures__';
 import { createBigInt, createBytes, createHex, createNumber } from './coercers';
 import { add0x } from './hex';
-import { bytesToBigInt, bytesToHex, hexToBytes } from './bytes';
+import { bytesToHex, hexToBytes } from './bytes';
 
 describe('createNumber', () => {
   it.each(POSITIVE_INTEGERS)(
@@ -35,6 +35,11 @@ describe('createNumber', () => {
       expect(createNumber(value.toString(10))).toBe(value);
     },
   );
+
+  it('handles -0', () => {
+    expect(createNumber('-0')).toBe(-0);
+    expect(createNumber(BigInt('-0'))).toBe(0);
+  });
 
   it('throws if the result is not finite', () => {
     expect(() => createNumber(Infinity)).toThrow(
@@ -84,6 +89,11 @@ describe('createBigInt', () => {
       );
     },
   );
+
+  it('handles -0', () => {
+    expect(createBigInt('-0')).toBe(BigInt(0));
+    expect(createBigInt(-0)).toBe(BigInt(0));
+  });
 });
 
 describe('createHex', () => {
@@ -93,12 +103,11 @@ describe('createHex', () => {
       const bytes = hexToBytes(value);
 
       expect(createHex(value)).toBe(value);
-      expect(createHex(bytesToBigInt(bytes))).toBe(value);
       expect(createHex(bytesToHex(bytes))).toBe(value);
     },
   );
 
-  it.each([true, false, null, undefined, NaN, {}, []])(
+  it.each([true, false, null, undefined, NaN, {}, [], '', '11ff'])(
     'throws if the value is not a bytes-like value',
     (value) => {
       // @ts-expect-error Invalid type.
@@ -107,6 +116,11 @@ describe('createHex', () => {
       );
     },
   );
+
+  it('handles empty byte arrays', () => {
+    expect(createHex('0x')).toBe('0x');
+    expect(createHex(new Uint8Array())).toBe('0x');
+  });
 });
 
 describe('createBytes', () => {
@@ -116,12 +130,11 @@ describe('createBytes', () => {
       const bytes = hexToBytes(value);
 
       expect(createBytes(value)).toStrictEqual(bytes);
-      expect(createBytes(bytesToBigInt(bytes))).toStrictEqual(bytes);
       expect(createBytes(bytesToHex(bytes))).toStrictEqual(bytes);
     },
   );
 
-  it.each([true, false, null, undefined, NaN, {}, []])(
+  it.each([true, false, null, undefined, NaN, {}, [], '', '11ff'])(
     'throws if the value is not a bytes-like value',
     (value) => {
       // @ts-expect-error Invalid type.
@@ -130,4 +143,9 @@ describe('createBytes', () => {
       );
     },
   );
+
+  it('handles empty byte arrays', () => {
+    expect(createBytes('0x')).toStrictEqual(new Uint8Array());
+    expect(createBytes(new Uint8Array())).toStrictEqual(new Uint8Array());
+  });
 });

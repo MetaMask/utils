@@ -1,5 +1,5 @@
 import { assert } from './assert';
-import { add0x, assertIsHexString, remove0x } from './hex';
+import { add0x, assertIsHexString, Hex, remove0x } from './hex';
 
 // '0'.charCodeAt(0) === 48
 const HEX_MINIMUM_NUMBER_CHARACTER = 48;
@@ -74,8 +74,12 @@ export function assertIsBytes(value: unknown): asserts value is Uint8Array {
  * @param bytes - The bytes to convert to a hexadecimal string.
  * @returns The hexadecimal string.
  */
-export function bytesToHex(bytes: Uint8Array): string {
+export function bytesToHex(bytes: Uint8Array): Hex {
   assertIsBytes(bytes);
+
+  if (bytes.length === 0) {
+    return '0x';
+  }
 
   const lookupTable = getPrecomputedHexValues();
   const hex = new Array(bytes.length);
@@ -166,10 +170,17 @@ export function bytesToString(bytes: Uint8Array): string {
  * Convert a hexadecimal string to a `Uint8Array`. The string can optionally be
  * prefixed with `0x`. It accepts even and odd length strings.
  *
+ * If the value is "0x", an empty `Uint8Array` is returned.
+ *
  * @param value - The hexadecimal string to convert to bytes.
  * @returns The bytes as `Uint8Array`.
  */
 export function hexToBytes(value: string): Uint8Array {
+  // "0x" is often used as empty byte array.
+  if (value?.toLowerCase?.() === '0x') {
+    return new Uint8Array();
+  }
+
   assertIsHexString(value);
 
   // Remove the `0x` prefix if it exists, and pad the string to have an even

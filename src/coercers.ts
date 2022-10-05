@@ -9,30 +9,22 @@ import {
   StructError,
   union,
 } from 'superstruct';
-import { add0x, HexStruct, isHexString } from './hex';
+import { Hex, StrictHexStruct } from './hex';
 import { assert } from './assert';
-import { bytesToHex, valueToBytes } from './bytes';
+import { bytesToHex, hexToBytes } from './bytes';
 
-const NumberLikeStruct = union([number(), bigint(), string()]);
+const NumberLikeStruct = union([number(), bigint(), string(), StrictHexStruct]);
 const NumberCoercer = coerce(number(), NumberLikeStruct, Number);
 const BigIntCoercer = coerce(bigint(), NumberLikeStruct, BigInt);
 
-const BytesLikeStruct = union([
-  string(),
-  instance(Uint8Array),
-  bigint(),
-  number(),
-]);
-
+const BytesLikeStruct = union([StrictHexStruct, instance(Uint8Array)]);
 const BytesCoercer = coerce(
   instance(Uint8Array),
-  BytesLikeStruct,
-  valueToBytes,
+  union([StrictHexStruct]),
+  hexToBytes,
 );
 
-const HexCoercer = coerce(HexStruct, BytesLikeStruct, (value) => {
-  return bytesToHex(valueToBytes(value));
-});
+const HexCoercer = coerce(StrictHexStruct, instance(Uint8Array), bytesToHex);
 
 export type NumberLike = Infer<typeof NumberLikeStruct>;
 export type BytesLike = Infer<typeof BytesLikeStruct>;
@@ -125,24 +117,24 @@ export function createBigInt(value: NumberLike): bigint {
  * - If the value is a byte array, it is returned as-is.
  * - If the value is a hex string (i.e., it starts with "0x"), it is interpreted
  * as a hexadecimal number and converted to a byte array.
- * - If the value is a string, it is interpreted as a UTF-8 string and converted
- * to a byte array.
- * - If the value is a number, it is converted to a byte array.
- * - If the value is a `bigint`, it is converted to a byte array.
  *
  * @example
  * ```typescript
  * const value = createBytes('0x010203');
  * console.log(value); // Uint8Array [ 1, 2, 3 ]
  *
- * const otherValue = createBytes('Hello, world!');
- * console.log(otherValue); // Uint8Array [ 72, 101, ... ]
+ * const otherValue = createBytes('0x010203');
+ * console.log(otherValue); // Uint8Array [ 1, 2, 3 ]
  * ```
  * @param value - The value to create the byte array from.
  * @returns The created byte array.
  * @throws If the value is not a bytes-like value.
  */
 export function createBytes(value: BytesLike): Uint8Array {
+  if (typeof value === 'string' && value.toLowerCase() === '0x') {
+    return new Uint8Array();
+  }
+
   try {
     return create(value, BytesCoercer);
   } catch (error) {
@@ -158,29 +150,28 @@ export function createBytes(value: BytesLike): Uint8Array {
 /**
  * Create a hexadecimal string from a bytes-like value.
  *
- * - If the value is a hex string, it is returned as-is (with the "0x" prefix
- * added if it is missing).
- * - If the value is a string, it is interpreted as a UTF-8 string and converted
- * to a hex string.
+ * - If the value is a hex string (i.e., it starts with "0x"), it is returned
+ * as-is.
  * - If the value is a `Uint8Array`, it is converted to a hex string.
- * - If the value is a number, it is converted to a hex string.
- * - If the value is a `bigint`, it is converted to a hex string.
  *
  * @example
  * ```typescript
  * const value = createHex(new Uint8Array([1, 2, 3]));
  * console.log(value); // '0x010203'
  *
- * const otherValue = createHex('Hello, world!');
- * console.log(otherValue); // '0x48656c6c6f2c20776f726c6421'
+ * const otherValue = createHex('0x010203');
+ * console.log(otherValue); // '0x010203'
  * ```
  * @param value - The value to create the hex string from.
  * @returns The created hex string.
  * @throws If the value is not a bytes-like value.
  */
-export function createHex(value: BytesLike): string {
-  if (isHexString(value)) {
-    return add0x(value);
+export function createHex(value: BytesLike): Hex {
+  if (
+    (value instanceof Uint8Array && value.length === 0) ||
+    (typeof value === 'string' && value.toLowerCase() === '0x')
+  ) {
+    return '0x';
   }
 
   try {
