@@ -321,6 +321,10 @@ export function stringToBytes(value: string): Uint8Array {
  * Convert a byte-like value to a `Uint8Array`. The value can be a `Uint8Array`,
  * a `bigint`, a `number`, or a `string`.
  *
+ * This will attempt to guess the type of the value based on its type and
+ * contents. For more control over the conversion, use the more specific
+ * conversion functions, such as {@link hexToBytes} or {@link stringToBytes}.
+ *
  * If the value is a `string`, and it is prefixed with `0x`, it will be
  * interpreted as a hexadecimal string. Otherwise, it will be interpreted as a
  * UTF-8 string. To convert a hexadecimal string to bytes without interpreting
