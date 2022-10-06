@@ -7,8 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.2.0]
-### Uncategorized
-- Add tests for `Json` and `Hex` type ([#42](https://github.com/MetaMask/utils/pull/42))
+### Added
 - Add `PendingJsonRpcResponse` type ([#43](https://github.com/MetaMask/utils/pull/43))
 - Add utils for converting between numbers and hex ([#41](https://github.com/MetaMask/utils/pull/41))
 - Add coercion utils ([#38](https://github.com/MetaMask/utils/pull/38))
