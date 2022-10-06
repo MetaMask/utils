@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 import { expectAssignable, expectNotAssignable } from 'tsd';
-import type { Json } from '../src';
+import type { Json } from '.';
 
 // Valid Json:
 

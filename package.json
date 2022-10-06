@@ -24,7 +24,7 @@
     "prepublishOnly": "yarn build:clean && yarn lint && yarn test",
     "test": "yarn test:source && yarn test:types",
     "test:source": "jest",
-    "test:types": "tsd test-d --typings \"json.test-d.ts\" --files \"**/*.test-d.ts\"",
+    "test:types": "tsd",
     "test:watch": "jest --watch"
   },
   "resolutions": {
@@ -76,5 +76,8 @@
     "allowScripts": {
       "@lavamoat/preinstall-always-fail": false
     }
+  },
+  "tsd": {
+    "directory": "src"
   }
 }
