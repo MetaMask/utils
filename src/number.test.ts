@@ -70,7 +70,7 @@ describe('hexToNumber', () => {
     },
   );
 
-  it.each([true, false, null, undefined, 0, 1, '', [], {}])(
+  it.each([true, false, null, undefined, 0, 1, '', [], {}, BigInt(1)])(
     'throws if the value is not a hexadecimal string',
     (value) => {
       // @ts-expect-error Invalid type.
@@ -89,7 +89,7 @@ describe('hexToBigInt', () => {
     },
   );
 
-  it.each([true, false, null, undefined, 0, 1, '', [], {}])(
+  it.each([true, false, null, undefined, 0, 1, '', [], {}, BigInt(1)])(
     'throws if the value is not a hexadecimal string',
     (value) => {
       // @ts-expect-error Invalid type.
