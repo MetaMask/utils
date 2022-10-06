@@ -230,15 +230,13 @@ export const PendingJsonRpcResponseStruct = object({
 
 /**
  * A JSON-RPC response object that has not yet been resolved.
- *
- * Note that TypeScript infers `unknown | undefined` as `unknown`, meaning that
- * the `result` and `error` fields are not optional. To make them optional, we
- * use the `OptionalField` helper, to explicitly make them optional.
  */
-export type PendingJsonRpcResponse = OptionalField<
+export type PendingJsonRpcResponse<Result extends Json> = Omit<
   Infer<typeof PendingJsonRpcResponseStruct>,
   'result'
->;
+> & {
+  result?: Result;
+};
 
 export const JsonRpcSuccessStruct = object({
   id: JsonRpcIdStruct,
@@ -291,7 +289,7 @@ export type JsonRpcResponse<Result extends Json> =
  */
 export function isPendingJsonRpcResponse(
   response: unknown,
-): response is PendingJsonRpcResponse {
+): response is PendingJsonRpcResponse<Json> {
   return is(response, PendingJsonRpcResponseStruct);
 }
 
@@ -304,7 +302,7 @@ export function isPendingJsonRpcResponse(
  */
 export function assertIsPendingJsonRpcResponse(
   response: unknown,
-): asserts response is PendingJsonRpcResponse {
+): asserts response is PendingJsonRpcResponse<Json> {
   try {
     assert(response, PendingJsonRpcResponseStruct);
   } catch (error) {
