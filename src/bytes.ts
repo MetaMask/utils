@@ -403,6 +403,8 @@ export function concatBytes(values: Bytes[]): Uint8Array {
  * unexpected behavior when the {@link Uint8Array} is a view of a larger
  * {@link ArrayBuffer}, e.g., when using {@link Uint8Array.subarray}.
  *
+ * This function also supports Node.js {@link Buffer}s.
+ *
  * @example
  * ```typescript
  * const bytes = new Uint8Array([1, 2, 3]);
@@ -412,16 +414,17 @@ export function concatBytes(values: Bytes[]): Uint8Array {
  * const dataView = createDataView(bytes);
  * ```
  * @param bytes - The bytes to create the {@link DataView} from.
- * @param byteOffset - The offset of the first byte to read. Defaults to
- * `bytes.byteOffset`.
- * @param byteLength - The length of the bytes to read. Defaults to
- * `bytes.byteLength`.
  * @returns The {@link DataView}.
  */
-export function createDataView(
-  bytes: Uint8Array,
-  byteOffset = bytes.byteOffset,
-  byteLength = bytes.byteLength,
-): DataView {
-  return new DataView(bytes.buffer, byteOffset, byteLength);
+export function createDataView(bytes: Uint8Array): DataView {
+  if (typeof Buffer !== 'undefined' && bytes instanceof Buffer) {
+    const buffer = bytes.buffer.slice(
+      bytes.byteOffset,
+      bytes.byteOffset + bytes.byteLength,
+    );
+
+    return new DataView(buffer);
+  }
+
+  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 }
