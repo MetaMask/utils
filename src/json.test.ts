@@ -163,7 +163,7 @@ describe('json', () => {
     );
 
     it.each(JSON_RPC_SUCCESS_FIXTURES.invalid)(
-      'returns false for an invalid JSON-RPC success (%p)',
+      'returns false for an invalid JSON-RPC success',
       (success) => {
         expect(isJsonRpcSuccess(success)).toBe(false);
       },
