@@ -35,7 +35,7 @@ function isErrorWithMessage(error: unknown): error is { message: string } {
 }
 
 export const JsonStruct = define<Json>('Json', (value) => {
-  const [isValid] = validateJsonAndGetSize(value);
+  const [isValid] = validateJsonAndGetSize(value, true);
   return isValid;
 });
 
