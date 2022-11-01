@@ -600,6 +600,12 @@ describe('json', () => {
       ]);
     });
 
+    it('returns true for serialization and 37 for a size when checking an array', () => {
+      expect(
+        validateJsonAndGetSize(['foo', 'bar', null, ['foo', 'bar', null]]),
+      ).toStrictEqual([true, 37]);
+    });
+
     it('should return true or false for validity depending on the test scenario from ECMA TC39 (test262)', () => {
       // This test will perform a series of validation assertions.
       // These tests are taken from ECMA TC39 (test262) test scenarios used

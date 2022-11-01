@@ -587,18 +587,6 @@ export function validateJsonAndGetSize(
               return 0;
             }
 
-            // If the size is 0, the value is undefined and undefined in an array
-            // when serialized will be replaced with null
-            if (size === 0 && Array.isArray(value)) {
-              size = JsonSize.Null;
-            }
-
-            // If the size is 0, that means the object is undefined and
-            // the rest of the object structure will be omitted
-            if (size === 0) {
-              return sum;
-            }
-
             // Objects will have be serialized with "key": value,
             // therefore we include the key in the calculation here
             const keySize = Array.isArray(value)
