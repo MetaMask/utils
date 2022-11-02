@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.3.0]
-### Uncategorized
+### Added
 - Add more assertion utils ([#49](https://github.com/MetaMask/utils/pull/49))
-- Update JSON validation logic ([#47](https://github.com/MetaMask/utils/pull/47))
 - Add JSON-RPC error validation functions ([#46](https://github.com/MetaMask/utils/pull/46))
 - Add convenience function for creating a `DataView` ([#45](https://github.com/MetaMask/utils/pull/45))
+
+### Fixed
+- Update JSON validation logic ([#47](https://github.com/MetaMask/utils/pull/47))
 
 ## [3.2.0]
 ### Added
