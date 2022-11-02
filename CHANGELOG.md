@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0]
+### Uncategorized
+- Add more assertion utils ([#49](https://github.com/MetaMask/utils/pull/49))
+- Update JSON validation logic ([#47](https://github.com/MetaMask/utils/pull/47))
+- Add JSON-RPC error validation functions ([#46](https://github.com/MetaMask/utils/pull/46))
+- Add convenience function for creating a `DataView` ([#45](https://github.com/MetaMask/utils/pull/45))
+
 ## [3.2.0]
 ### Added
 - Add `PendingJsonRpcResponse` type ([#43](https://github.com/MetaMask/utils/pull/43))
@@ -79,7 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/MetaMask/utils/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/MetaMask/utils/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/MetaMask/utils/compare/v3.0.3...v3.1.0
 [3.0.3]: https://github.com/MetaMask/utils/compare/v3.0.2...v3.0.3
