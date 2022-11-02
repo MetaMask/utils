@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Update JSON validation logic ([#47](https://github.com/MetaMask/utils/pull/47))
+  - Validation would previously allow for `undefined` values, which is not a standard JSON type
 
 ## [3.2.0]
 ### Added
