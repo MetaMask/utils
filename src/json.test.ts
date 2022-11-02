@@ -78,7 +78,7 @@ describe('json', () => {
       'throws an error for invalid JSON-RPC notifications',
       (notification) => {
         expect(() => assertIsJsonRpcNotification(notification)).toThrow(
-          'Not a JSON-RPC notification',
+          'Invalid JSON-RPC notification',
         );
       },
     );
@@ -87,7 +87,7 @@ describe('json', () => {
       expect(() =>
         assertIsJsonRpcNotification(JSON_RPC_NOTIFICATION_FIXTURES.invalid[0]),
       ).toThrow(
-        'Not a JSON-RPC notification: At path: jsonrpc -- Expected the literal `"2.0"`, but received: undefined.',
+        'Invalid JSON-RPC notification: At path: jsonrpc -- Expected the literal `"2.0"`, but received: undefined.',
       );
     });
 
@@ -98,7 +98,7 @@ describe('json', () => {
 
       expect(() =>
         assertIsJsonRpcNotification(JSON_RPC_NOTIFICATION_FIXTURES.invalid[0]),
-      ).toThrow('Not a JSON-RPC notification: oops');
+      ).toThrow('Invalid JSON-RPC notification: oops');
     });
   });
 

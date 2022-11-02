@@ -22,6 +22,7 @@ import {
   isPlainObject,
   JsonSize,
 } from './misc';
+import { AssertionErrorConstructor, assertStruct } from './assert';
 
 /**
  * Type guard for determining whether the given value is an error object with a
@@ -151,33 +152,36 @@ export type JsonRpcNotification<Params extends JsonRpcParams> = InferWithParams<
 >;
 
 /**
- * Type guard to narrow a {@link JsonRpcRequest} or
- * {@link JsonRpcNotification} object to a {@link JsonRpcNotification}.
+ * Check if the given value is a valid {@link JsonRpcNotification} object.
  *
- * @param requestOrNotification - The JSON-RPC request or notification to check.
- * @returns Whether the specified JSON-RPC message is a notification.
+ * @param value - The value to check.
+ * @returns Whether the given value is a valid {@link JsonRpcNotification}
+ * object.
  */
 export function isJsonRpcNotification(
-  requestOrNotification: unknown,
-): requestOrNotification is JsonRpcNotification<JsonRpcParams> {
-  return is(requestOrNotification, JsonRpcNotificationStruct);
+  value: unknown,
+): value is JsonRpcNotification<JsonRpcParams> {
+  return is(value, JsonRpcNotificationStruct);
 }
 
 /**
- * Assertion type guard to narrow a {@link JsonRpcRequest} or
- * {@link JsonRpcNotification} object to a {@link JsonRpcNotification}.
+ * Assert that the given value is a valid {@link JsonRpcNotification} object.
  *
- * @param requestOrNotification - The JSON-RPC request or notification to check.
+ * @param value - The value to check.
+ * @param ErrorWrapper - The error class to throw if the assertion fails.
+ * Defaults to {@link AssertionError}.
+ * @throws If the given value is not a valid {@link JsonRpcNotification} object.
  */
 export function assertIsJsonRpcNotification(
-  requestOrNotification: unknown,
-): asserts requestOrNotification is JsonRpcNotification<JsonRpcParams> {
-  try {
-    assert(requestOrNotification, JsonRpcNotificationStruct);
-  } catch (error) {
-    const message = isErrorWithMessage(error) ? error.message : error;
-    throw new Error(`Not a JSON-RPC notification: ${message}.`);
-  }
+  value: unknown,
+  ErrorWrapper?: AssertionErrorConstructor,
+): asserts value is JsonRpcNotification<JsonRpcParams> {
+  assertStruct(
+    value,
+    JsonRpcNotificationStruct,
+    'Invalid JSON-RPC notification',
+    ErrorWrapper,
+  );
 }
 
 /**
