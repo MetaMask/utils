@@ -877,7 +877,7 @@ __metadata:
     prettier-plugin-packagejson: ^2.2.11
     rimraf: ^3.0.2
     stdio-mock: ^1.2.0
-    superstruct: ^0.16.5
+    superstruct: ^0.16.7
     ts-jest: ^28.0.8
     tsd: ^0.24.1
     typedoc: ^0.23.10
@@ -5781,17 +5781,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"superstruct@npm:0.16.5":
-  version: 0.16.5
-  resolution: "superstruct@npm:0.16.5"
-  checksum: 9f843c38695b584a605ae9b028629de18a85bd0dca0e9449b4ab98bb7b9ac3d82599870acbab9fbd2ee454c6b187af7e61562e252dfadabd974191ab4ab2e3ce
-  languageName: node
-  linkType: hard
-
-"superstruct@patch:superstruct@npm%3A0.16.5#./.yarn/patches/superstruct-npm-0.16.5-ddced4ae86.patch::locator=%40metamask%2Futils%40workspace%3A.":
-  version: 0.16.5
-  resolution: "superstruct@patch:superstruct@npm%3A0.16.5#./.yarn/patches/superstruct-npm-0.16.5-ddced4ae86.patch::version=0.16.5&hash=01978c&locator=%40metamask%2Futils%40workspace%3A."
-  checksum: 4d47b10b792d7795e570ec39718713a54783f1e4ae6c93d47f14072c8651fab3145f94b974f62e33be26b8bf3da966e0e5d3ee8ea9e7f901c4b57248fbf08b63
+"superstruct@npm:^0.16.7":
+  version: 0.16.7
+  resolution: "superstruct@npm:0.16.7"
+  checksum: c8c855ff6945da8a41048c6d236de7b1af5d4d9c31742b3ee54d65647c31597488620281f65e095d5efc9e2fbdaad529b8c8f2506c12569d428467c835a21477
   languageName: node
   linkType: hard
 
