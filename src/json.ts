@@ -15,13 +15,13 @@ import {
   union,
   unknown,
 } from 'superstruct';
+import { AssertionErrorConstructor, assertStruct } from './assert';
 import {
   calculateNumberSize,
   calculateStringSize,
   isPlainObject,
   JsonSize,
 } from './misc';
-import { AssertionErrorConstructor, assertStruct } from './assert';
 
 export const JsonStruct = define<Json>('Json', (value) => {
   const [isValid] = validateJsonAndGetSize(value, true);
@@ -99,7 +99,10 @@ export type JsonRpcError = OptionalField<
   'data'
 >;
 
-export const JsonRpcParamsStruct = optional(union([object(), array()]));
+export const JsonRpcParamsStruct = optional<
+  Record<string, Json> | Json[],
+  null
+>(union([object(), array()]) as Struct<Record<string, Json> | Json[], null>);
 
 export type JsonRpcParams = Infer<typeof JsonRpcParamsStruct>;
 
