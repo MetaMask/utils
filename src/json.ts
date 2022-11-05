@@ -498,21 +498,43 @@ export function validateJsonAndGetSize(
   skipSizingProcess = false,
 ): [isValid: boolean, plainTextSizeInBytes: number] {
   const seenObjects = new Set();
+
+  /**
+   * Get the value as it would be serialized by {@link JSON.stringify}. This
+   * checks if the value has a `toJSON` method and calls it if so.
+   *
+   * @param value - The value to get the JSON serializable value of.
+   * @returns The JSON serializable value of the given value.
+   */
+  function getJsonValue(value: unknown) {
+    const optionalToJson = value as { toJSON?: () => unknown };
+
+    // Note: We cannot use `hasProperty` here, because the value isn't
+    // guaranteed to be an object.
+    if (optionalToJson?.toJSON && typeof optionalToJson.toJSON === 'function') {
+      return optionalToJson.toJSON();
+    }
+
+    return value;
+  }
+
   /**
    * Checks whether a value is JSON serializable and counts the total number
    * of bytes needed to store the serialized version of the value.
    *
    * This function assumes the encoding of the JSON is done in UTF-8.
    *
-   * @param value - Potential JSON serializable value.
+   * @param rawValue - Potential JSON serializable value.
    * @param skipSizing - Skip JSON size calculation (default: false).
    * @returns Tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
    * the value was serializable and a number of bytes that it will use when serialized to JSON.
    */
   function getJsonSerializableInfo(
-    value: unknown,
+    rawValue: unknown,
     skipSizing: boolean,
   ): [isValid: boolean, plainTextSizeInBytes: number] {
+    const value = getJsonValue(rawValue);
+
     if (value === undefined) {
       return [false, 0];
     } else if (value === null) {
@@ -522,41 +544,26 @@ export function validateJsonAndGetSize(
 
     // Check and calculate sizes for basic (and some special) types
     const typeOfValue = typeof value;
-    try {
-      if (typeOfValue === 'function') {
-        return [false, 0];
-      } else if (typeOfValue === 'string' || value instanceof String) {
-        return [
-          true,
-          skipSizing
-            ? 0
-            : calculateStringSize(value as string) + JsonSize.Quote * 2,
-        ];
-      } else if (typeOfValue === 'boolean' || value instanceof Boolean) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        // eslint-disable-next-line eqeqeq
-        return [true, value == true ? JsonSize.True : JsonSize.False];
-      } else if (typeOfValue === 'number' || value instanceof Number) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        return [true, calculateNumberSize(value as number)];
-      } else if (value instanceof Date) {
-        if (skipSizing) {
-          return [true, 0];
-        }
-        return [
-          true,
-          // Note: Invalid dates will serialize to null
-          isNaN(value.getDate())
-            ? JsonSize.Null
-            : JsonSize.Date + JsonSize.Quote * 2,
-        ];
-      }
-    } catch (_) {
+    if (typeOfValue === 'function') {
       return [false, 0];
+    } else if (typeOfValue === 'string' || value instanceof String) {
+      return [
+        true,
+        skipSizing
+          ? 0
+          : calculateStringSize(value as string) + JsonSize.Quote * 2,
+      ];
+    } else if (typeOfValue === 'boolean' || value instanceof Boolean) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      // eslint-disable-next-line eqeqeq
+      return [true, value == true ? JsonSize.True : JsonSize.False];
+    } else if (typeOfValue === 'number' || value instanceof Number) {
+      if (skipSizing) {
+        return [true, 0];
+      }
+      return [true, calculateNumberSize(value as number)];
     }
 
     // If object is not plain and cannot be serialized properly,
@@ -575,51 +582,49 @@ export function validateJsonAndGetSize(
     seenObjects.add(value);
 
     // Continue object decomposition
-    try {
-      return [
-        true,
-        Object.entries(value).reduce(
-          (sum, [key, nestedValue], idx, arr) => {
-            // Recursively process next nested object or primitive type
-            // eslint-disable-next-line prefer-const
-            let [valid, size] = getJsonSerializableInfo(
-              nestedValue,
-              skipSizing,
+    return [
+      true,
+      Object.entries(value).reduce(
+        (sum, [key, nestedValue], idx, arr) => {
+          // Recursively process next nested object or primitive type
+          // eslint-disable-next-line prefer-const
+          let [valid, size] = getJsonSerializableInfo(nestedValue, skipSizing);
+
+          if (!valid) {
+            throw new Error(
+              'JSON validation did not pass. Validation process stopped.',
             );
-            if (!valid) {
-              throw new Error(
-                'JSON validation did not pass. Validation process stopped.',
-              );
-            }
+          }
 
-            // Circular object detection
-            // Once a child node is visited and processed remove it from the set.
-            // This will prevent false positives with the same adjacent objects.
-            seenObjects.delete(value);
+          // Circular object detection
+          // Once a child node is visited and processed remove it from the set.
+          // This will prevent false positives with the same adjacent objects.
+          seenObjects.delete(value);
 
-            if (skipSizing) {
-              return 0;
-            }
+          if (skipSizing) {
+            return 0;
+          }
 
-            // Objects will have be serialized with "key": value,
-            // therefore we include the key in the calculation here
-            const keySize = Array.isArray(value)
-              ? 0
-              : key.length + JsonSize.Comma + JsonSize.Colon * 2;
+          // Objects will have be serialized with "key": value,
+          // therefore we include the key in the calculation here
+          const keySize = Array.isArray(value)
+            ? 0
+            : key.length + JsonSize.Comma + JsonSize.Colon * 2;
 
-            const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
+          const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
 
-            return sum + keySize + size + separator;
-          },
-          // Starts at 2 because the serialized JSON string data (plain text)
-          // will minimally contain {}/[]
-          skipSizing ? 0 : JsonSize.Wrapper * 2,
-        ),
-      ];
-    } catch (_) {
-      return [false, 0];
-    }
+          return sum + keySize + size + separator;
+        },
+        // Starts at 2 because the serialized JSON string data (plain text)
+        // will minimally contain {}/[]
+        skipSizing ? 0 : JsonSize.Wrapper * 2,
+      ),
+    ];
   }
 
-  return getJsonSerializableInfo(jsObject, skipSizingProcess);
+  try {
+    return getJsonSerializableInfo(jsObject, skipSizingProcess);
+  } catch (_) {
+    return [false, 0];
+  }
 }

@@ -1064,5 +1064,42 @@ describe('json', () => {
         0,
       ]);
     });
+
+    it('handles `toJSON` with objects', () => {
+      const object = {
+        foo: 'bar',
+      };
+
+      Object.defineProperty(object, 'toJSON', {
+        value: () => ({ foo: 'bar', baz: 'qux' }),
+        enumerable: false,
+      });
+
+      expect(validateJsonAndGetSize(object)).toStrictEqual([true, 25]);
+    });
+
+    it('handles `toJSON` with arrays', () => {
+      const array = ['foo', 'bar'];
+
+      Object.defineProperty(array, 'toJSON', {
+        value: () => ['foo', 'bar', 'baz', 'qux'],
+        enumerable: false,
+      });
+
+      expect(validateJsonAndGetSize(array)).toStrictEqual([true, 25]);
+    });
+
+    it('handles `toJSON` with other values', () => {
+      // Please don't do this in your code.
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = () => 'foo bar baz';
+
+      expect(validateJsonAndGetSize('bar')).toStrictEqual([true, 13]);
+
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = undefined;
+    });
   });
 });
