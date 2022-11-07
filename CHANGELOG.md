@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.3.1]
-### Uncategorized
-- Cast JsonRPC to Json ([#51](https://github.com/MetaMask/utils/pull/51))
+### Fixed
+- Json superstruct struct can now be cast to Json type ([#51](https://github.com/MetaMask/utils/pull/51))
 
 ## [3.3.0]
 ### Added
