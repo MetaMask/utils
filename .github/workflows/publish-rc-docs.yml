@@ -7,7 +7,7 @@ on:
 jobs:
   get-release-version:
     name: Get release version
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       release-version: ${{ steps.release-name.outputs.RELEASE_VERSION }}
     steps:
