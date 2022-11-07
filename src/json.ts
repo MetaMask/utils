@@ -27,7 +27,7 @@ import {
 export const JsonStruct = define<Json>('Json', (value) => {
   const [isValid] = validateJsonAndGetSize(value, true);
   if (!isValid) {
-    return 'Expected valid JSON value';
+    return 'Expected a valid JSON-serializable value';
   }
   return true;
 });

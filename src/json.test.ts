@@ -40,7 +40,7 @@ describe('json', () => {
     it('returns error message', () => {
       const [error] = validate(undefined, JsonStruct);
       assert(error !== undefined);
-      expect(error.message).toStrictEqual('Expected valid JSON value');
+      expect(error.message).toStrictEqual('Expected a valid JSON-serializable value');
     });
   });
 
