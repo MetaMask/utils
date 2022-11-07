@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.3.1]
 ### Fixed
-- Json RPC params are now properly castable to Json type ([#51](https://github.com/MetaMask/utils/pull/51))
+- JSON-RPC parameters are now properly cast to Json upon validation ([#51](https://github.com/MetaMask/utils/pull/51))
 
 ## [3.3.0]
 ### Added
