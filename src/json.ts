@@ -10,6 +10,7 @@ import {
   object,
   omit,
   optional,
+  record,
   string,
   Struct,
   union,
@@ -25,7 +26,10 @@ import {
 
 export const JsonStruct = define<Json>('Json', (value) => {
   const [isValid] = validateJsonAndGetSize(value, true);
-  return isValid;
+  if (!isValid) {
+    return 'Expected valid JSON value';
+  }
+  return true;
 });
 
 /**
@@ -99,11 +103,9 @@ export type JsonRpcError = OptionalField<
   'data'
 >;
 
-export const JsonRpcParamsStruct = optional<
-  Record<string, Json> | Json[],
-  null
->(union([object(), array()]) as Struct<Record<string, Json> | Json[], null>);
-
+export const JsonRpcParamsStruct = optional(
+  union([record(string(), JsonStruct), array(JsonStruct)]),
+);
 export type JsonRpcParams = Infer<typeof JsonRpcParamsStruct>;
 
 export const JsonRpcRequestStruct = object({
