@@ -24,10 +24,11 @@ import {
   isPlainObject,
   JsonSize,
 } from './misc';
+import { arrayFromEntries, objectFromEntries } from './object';
 
 export const JsonStruct = define<Json>('Json', (value) => {
-  const [isValid] = validateJsonAndGetSize(value, true);
-  if (!isValid) {
+  const { valid } = validateJsonAndGetSize(value, true);
+  if (!valid) {
     return 'Expected a valid JSON-serializable value';
   }
   return true;
@@ -484,6 +485,24 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
   return isValidJsonRpcId;
 }
 
+export type ValidatedJson =
+  | {
+      valid: true;
+      result: Json;
+      size: number;
+    }
+  | {
+      valid: false;
+      result: undefined;
+      size: 0;
+    };
+
+const INVALID_JSON: ValidatedJson = {
+  valid: false,
+  result: undefined,
+  size: 0,
+};
+
 /**
  * Checks whether a value is JSON serializable and counts the total number
  * of bytes needed to store the serialized version of the value.
@@ -496,7 +515,7 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
 export function validateJsonAndGetSize(
   jsObject: unknown,
   skipSizingProcess = false,
-): [isValid: boolean, plainTextSizeInBytes: number] {
+): ValidatedJson {
   const seenObjects = new Set();
 
   /**
@@ -532,99 +551,157 @@ export function validateJsonAndGetSize(
   function getJsonSerializableInfo(
     rawValue: unknown,
     skipSizing: boolean,
-  ): [isValid: boolean, plainTextSizeInBytes: number] {
+  ): ValidatedJson {
     const value = getJsonValue(rawValue);
 
     if (value === undefined) {
-      return [false, 0];
+      return INVALID_JSON;
     } else if (value === null) {
       // Return already specified constant size for null (special object)
-      return [true, skipSizing ? 0 : JsonSize.Null];
+      return {
+        valid: true,
+        result: value,
+        size: skipSizing ? 0 : JsonSize.Null,
+      };
     }
 
     // Check and calculate sizes for basic (and some special) types
-    const typeOfValue = typeof value;
-    if (typeOfValue === 'function') {
-      return [false, 0];
-    } else if (typeOfValue === 'string' || value instanceof String) {
-      return [
-        true,
-        skipSizing
+    if (typeof value === 'function') {
+      return INVALID_JSON;
+    } else if (typeof value === 'string' || value instanceof String) {
+      return {
+        valid: true,
+        // An instance of `String` is not assignable to our `Json` type.
+        result: String(value),
+        size: skipSizing
           ? 0
-          : calculateStringSize(value as string) + JsonSize.Quote * 2,
-      ];
-    } else if (typeOfValue === 'boolean' || value instanceof Boolean) {
+          : calculateStringSize(String(value)) + JsonSize.Quote * 2,
+      };
+    } else if (typeof value === 'boolean' || value instanceof Boolean) {
       if (skipSizing) {
-        return [true, 0];
+        return {
+          valid: true,
+          // An instance of `Boolean` is not assignable to our `Json` type.
+          // eslint-disable-next-line eqeqeq
+          result: value == true,
+          size: 0,
+        };
       }
-      // eslint-disable-next-line eqeqeq
-      return [true, value == true ? JsonSize.True : JsonSize.False];
-    } else if (typeOfValue === 'number' || value instanceof Number) {
+
+      return {
+        valid: true,
+        // An instance of `Boolean` is not assignable to our `Json` type.
+        // eslint-disable-next-line eqeqeq
+        result: value == true,
+        // eslint-disable-next-line eqeqeq
+        size: value == true ? JsonSize.True : JsonSize.False,
+      };
+    } else if (typeof value === 'number' || value instanceof Number) {
       if (skipSizing) {
-        return [true, 0];
+        return {
+          valid: true,
+          // An instance of `Number` is not assignable to our `Json` type.
+          result: Number(value),
+          size: 0,
+        };
       }
-      return [true, calculateNumberSize(value as number)];
+
+      return {
+        valid: true,
+        // An instance of `Number` is not assignable to our `Json` type.
+        result: Number(value),
+        size: calculateNumberSize(Number(value)),
+      };
     }
 
     // If object is not plain and cannot be serialized properly,
     // stop here and return false for serialization
     if (!isPlainObject(value) && !Array.isArray(value)) {
-      return [false, 0];
+      return INVALID_JSON;
     }
 
     // Circular object detection (handling)
     // Check if the same object already exists
     if (seenObjects.has(value)) {
-      return [false, 0];
+      return INVALID_JSON;
     }
+
     // Add new object to the seen objects set
     // Only the plain objects should be added (Primitive types are skipped)
     seenObjects.add(value);
 
     // Continue object decomposition
-    return [
-      true,
-      Object.entries(value).reduce(
-        (sum, [key, nestedValue], idx, arr) => {
-          // Recursively process next nested object or primitive type
-          // eslint-disable-next-line prefer-const
-          let [valid, size] = getJsonSerializableInfo(nestedValue, skipSizing);
+    const parsedObject = Object.entries(value).reduce<{
+      size: number;
+      entries: [string, any][];
+    }>(
+      (validatedValue, [key, nestedValue], index, entries) => {
+        // Recursively process next nested object or primitive type
+        const { valid, size, result } = getJsonSerializableInfo(
+          nestedValue,
+          skipSizing,
+        );
 
-          if (!valid) {
-            throw new Error(
-              'JSON validation did not pass. Validation process stopped.',
-            );
-          }
+        if (!valid) {
+          throw new Error(
+            'JSON validation did not pass. Validation process stopped.',
+          );
+        }
 
-          // Circular object detection
-          // Once a child node is visited and processed remove it from the set.
-          // This will prevent false positives with the same adjacent objects.
-          seenObjects.delete(value);
+        // Circular object detection
+        // Once a child node is visited and processed remove it from the set.
+        // This will prevent false positives with the same adjacent objects.
+        seenObjects.delete(value);
 
-          if (skipSizing) {
-            return 0;
-          }
+        const newEntries = [
+          ...validatedValue.entries,
+          [key, result] as [string, any],
+        ];
 
-          // Objects will have be serialized with "key": value,
-          // therefore we include the key in the calculation here
-          const keySize = Array.isArray(value)
-            ? 0
-            : key.length + JsonSize.Comma + JsonSize.Colon * 2;
+        if (skipSizing) {
+          return {
+            size: 0,
+            entries: newEntries,
+          };
+        }
 
-          const separator = idx < arr.length - 1 ? JsonSize.Comma : 0;
+        // Objects will have be serialized with "key": value,
+        // therefore we include the key in the calculation here
+        const keySize = Array.isArray(value)
+          ? 0
+          : key.length + JsonSize.Comma + JsonSize.Colon * 2;
 
-          return sum + keySize + size + separator;
-        },
+        const separator = index < entries.length - 1 ? JsonSize.Comma : 0;
+
+        return {
+          size: validatedValue.size + keySize + size + separator,
+          entries: newEntries,
+        };
+      },
+      {
         // Starts at 2 because the serialized JSON string data (plain text)
-        // will minimally contain {}/[]
-        skipSizing ? 0 : JsonSize.Wrapper * 2,
-      ),
-    ];
+        // will minimally contain {}/[].
+        size: skipSizing ? 0 : JsonSize.Wrapper * 2,
+        entries: [],
+      },
+    );
+
+    // `Object.fromEntries` does not create arrays, so we check if the original
+    // value was an array and return an array if so.
+    const newValue = Array.isArray(value)
+      ? arrayFromEntries(parsedObject.entries)
+      : objectFromEntries(parsedObject.entries);
+
+    return {
+      valid: true,
+      result: newValue,
+      size: parsedObject.size,
+    };
   }
 
   try {
     return getJsonSerializableInfo(jsObject, skipSizingProcess);
   } catch (_) {
-    return [false, 0];
+    return INVALID_JSON;
   }
 }
