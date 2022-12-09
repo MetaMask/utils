@@ -556,7 +556,7 @@ describe('json', () => {
       ).toStrictEqual([true, 73]);
     });
 
-    it('should return true for serialization and 1288 for a size of a complex nested object', () => {
+    it('should return true for serialization and 1280 for a size of a complex nested object', () => {
       expect(validateJsonAndGetSize(COMPLEX_OBJECT)).toStrictEqual([
         true,
         1280,
