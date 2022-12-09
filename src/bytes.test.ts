@@ -26,7 +26,6 @@ import {
 
 describe('isBytes', () => {
   it('returns true for a Node.js Buffer', () => {
-    // eslint-disable-next-line no-restricted-globals
     expect(isBytes(Buffer.from('foo'))).toBe(true);
   });
 
@@ -41,7 +40,6 @@ describe('isBytes', () => {
 
 describe('assertIsBytes', () => {
   it('does not throw for a Node.js Buffer', () => {
-    // eslint-disable-next-line no-restricted-globals
     expect(() => assertIsBytes(Buffer.from('foo'))).not.toThrow();
   });
 
@@ -460,7 +458,6 @@ describe('createDataView', () => {
 
   describe('Node.js Buffer', () => {
     it('returns a DataView from a byte array', () => {
-      // eslint-disable-next-line no-restricted-globals
       const dataView = createDataView(Buffer.from([1, 2, 3]));
 
       expect(dataView).toBeInstanceOf(DataView);
@@ -470,7 +467,6 @@ describe('createDataView', () => {
     });
 
     it('returns a DataView from a subarray of a byte array', () => {
-      // eslint-disable-next-line no-restricted-globals
       const original = Buffer.from([1, 2, 3, 4, 5]);
       const subset = original.subarray(1, 4);
 
@@ -485,7 +481,6 @@ describe('createDataView', () => {
     });
 
     it('returns a DataView from a slice of a byte array', () => {
-      // eslint-disable-next-line no-restricted-globals
       const original = Buffer.from([1, 2, 3, 4, 5]);
       const subset = original.slice(1, 4);
 
