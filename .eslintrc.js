@@ -29,5 +29,11 @@ module.exports = {
     },
   ],
 
-  ignorePatterns: ['!.eslintrc.js', '!.prettierrc.js', 'dist/', 'docs/'],
+  ignorePatterns: [
+    '!.eslintrc.js',
+    '!.prettierrc.js',
+    'dist/',
+    'docs/',
+    '.yarn/',
+  ],
 };
