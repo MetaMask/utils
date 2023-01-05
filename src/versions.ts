@@ -1,4 +1,7 @@
 import {
+  gt as gtSemver,
+  gtr as gtrSemver,
+  satisfies as satisfiesSemver,
   valid as validSemVerVersion,
   validRange as validSemVerRange,
 } from 'semver';
@@ -120,4 +123,45 @@ export function assertIsSemVerRange(
   range: unknown,
 ): asserts range is SemVerRange {
   assertStruct(range, VersionRangeStruct);
+}
+
+/**
+ * Checks whether a SemVer version is greater than another.
+ *
+ * @param version1 - The left-hand version.
+ * @param version2 - The right-hand version.
+ * @returns `version1 > version2`.
+ */
+export function gtVersion(
+  version1: SemVerVersion,
+  version2: SemVerVersion,
+): boolean {
+  return gtSemver(version1, version2);
+}
+
+/**
+ * Checks whether a SemVer version is greater than all possibilities in a range.
+ *
+ * @param version - A SemvVer version.
+ * @param range - The range to check against.
+ * @returns `version > range`.
+ */
+export function gtRange(version: SemVerVersion, range: SemVerRange): boolean {
+  return gtrSemver(version, range);
+}
+
+/**
+ * Returns whether a SemVer version satisfies a SemVer range.
+ *
+ * @param version - The SemVer version to check.
+ * @param versionRange - The SemVer version range to check against.
+ * @returns Whether the version satisfied the version range.
+ */
+export function satisfiesVersionRange(
+  version: SemVerVersion,
+  versionRange: SemVerRange,
+): boolean {
+  return satisfiesSemver(version, versionRange, {
+    includePrerelease: true,
+  });
 }
