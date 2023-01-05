@@ -7,17 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.4.0]
-### Uncategorized
-- Add versions and checksums ([#67](https://github.com/MetaMask/utils/pull/67))
-- Bump @metamask/eslint-config-jest from 11.0.0 to 11.1.0 ([#66](https://github.com/MetaMask/utils/pull/66))
-- Bump @metamask/eslint-config-typescript from 11.0.2 to 11.1.0 ([#65](https://github.com/MetaMask/utils/pull/65))
-- Bump @metamask/eslint-config-nodejs from 11.0.1 to 11.1.0 ([#64](https://github.com/MetaMask/utils/pull/64))
-- Bump @metamask/eslint-config from 11.0.2 to 11.1.0 ([#63](https://github.com/MetaMask/utils/pull/63))
-- Bump @metamask/eslint-config from 11.0.1 to 11.0.2 ([#61](https://github.com/MetaMask/utils/pull/61))
-- Bump @metamask/eslint-config-typescript from 11.0.0 to 11.0.2 ([#62](https://github.com/MetaMask/utils/pull/62))
-- Bump ESLint configs and related dependencies ([#60](https://github.com/MetaMask/utils/pull/60))
-- Use latest workflow from module template ([#48](https://github.com/MetaMask/utils/pull/48))
-- JSON RPC types now have default Params value ([#54](https://github.com/MetaMask/utils/pull/54))
+### Added
+- Add types and utility functions for validating versions and checksums ([#67](https://github.com/MetaMask/utils/pull/67))
+
+### Fixed
+- JSON RPC types now have a default Params value ([#54](https://github.com/MetaMask/utils/pull/54))
 
 ## [3.3.1]
 ### Fixed
