@@ -1,6 +1,6 @@
 import { is, size, string } from 'superstruct';
 
-import { base64, Base64Opts } from './base64';
+import { base64, Base64Options } from './base64';
 
 describe('base64', () => {
   it.each([
@@ -20,7 +20,7 @@ describe('base64', () => {
       'abcdefghijklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVXYZ01234567890-_',
       { characterSet: 'base64url' },
     ] as const,
-  ] as [string, Base64Opts | undefined][])(
+  ] as [string, Base64Options | undefined][])(
     'validates valid base64',
     (value, opts) => {
       const struct = base64(string(), opts);
@@ -48,7 +48,7 @@ describe('base64', () => {
       'abcdefghijklmnopqrstuvwxyzABCDEFGHJIKLMNOPQRSTUVXYZ01234567890+/',
       { characterSet: 'base64url' },
     ],
-  ] as [string, Base64Opts | undefined][])(
+  ] as [string, Base64Options | undefined][])(
     "doesn't validate invalid base64",
     (value, opts) => {
       const struct = base64(string(), opts);

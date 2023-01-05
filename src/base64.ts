@@ -2,7 +2,7 @@ import { pattern, Struct } from 'superstruct';
 
 import { assert } from './assert';
 
-export type Base64Opts = {
+export type Base64Options = {
   /**
    * Is the `=` padding at the end required or not.
    *
@@ -23,15 +23,15 @@ export type Base64Opts = {
  * Ensure that a provided string-based struct is valid base64.
  *
  * @param struct - The string based struct.
- * @param opts - Optional options to specialize base64 validation. See {@link Base64Opts} documentation.
+ * @param options - Optional options to specialize base64 validation. See {@link Base64Options} documentation.
  * @returns A superstruct validating base64.
  */
 export const base64 = <T extends string, S>(
   struct: Struct<T, S>,
-  opts: Base64Opts = {},
+  options: Base64Options = {},
 ) => {
-  const paddingRequired = opts.paddingRequired ?? false;
-  const characterSet = opts.characterSet ?? 'base64';
+  const paddingRequired = options.paddingRequired ?? false;
+  const characterSet = options.characterSet ?? 'base64';
 
   let letters: string;
   if (characterSet === 'base64') {
