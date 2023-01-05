@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add types and utility functions for validating versions and checksums ([#67](https://github.com/MetaMask/utils/pull/67))
 
 ### Fixed
-- JSON RPC types now have a default Params value ([#54](https://github.com/MetaMask/utils/pull/54))
+- JSON-RPC types now have a default generic `Params` value ([#54](https://github.com/MetaMask/utils/pull/54))
 
 ## [3.3.1]
 ### Fixed
