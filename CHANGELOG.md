@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - JSON-RPC types now have a default generic `Params` value ([#54](https://github.com/MetaMask/utils/pull/54))
 
-
 ## [3.3.1]
 ### Fixed
 - JSON-RPC parameters are now properly cast to Json upon validation ([#51](https://github.com/MetaMask/utils/pull/51))
