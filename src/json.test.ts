@@ -2,6 +2,7 @@ import { validate, assert as superstructAssert } from 'superstruct';
 
 import {
   assert,
+  assertIsJson,
   assertIsJsonRpcError,
   assertIsJsonRpcFailure,
   assertIsJsonRpcNotification,
@@ -9,6 +10,7 @@ import {
   assertIsJsonRpcResponse,
   assertIsJsonRpcSuccess,
   assertIsPendingJsonRpcResponse,
+  createJson,
   getJsonRpcIdValidator,
   isJsonRpcError,
   isJsonRpcFailure,
@@ -52,7 +54,9 @@ describe('json', () => {
     it('returns error message', () => {
       const [error] = validate(undefined, JsonStruct);
       assert(error !== undefined);
-      expect(error.message).toBe('Expected a valid JSON-serializable value');
+      expect(error.message).toBe(
+        'The value must be one of: null, boolean, number, string, JSON array, or JSON object',
+      );
     });
   });
 
@@ -71,6 +75,170 @@ describe('json', () => {
         expect(isValidJson(value)).toBe(false);
       },
     );
+  });
+
+  describe('assertIsJson', () => {
+    it.each(JSON_FIXTURES.valid)(
+      'does not throw an error for valid JSON',
+      (value) => {
+        expect(() => assertIsJson(value)).not.toThrow();
+      },
+    );
+
+    it.each(JSON_FIXTURES.invalid)(
+      'throws an error for invalid JSON',
+      (value) => {
+        expect(() => assertIsJson(value)).toThrow(
+          'Invalid JSON-serializable value: The value must be one of: null, boolean, number, string, JSON array, or JSON object.',
+        );
+      },
+    );
+  });
+
+  describe('createJson', () => {
+    it.each(JSON_FIXTURES.valid)(
+      'creates a JSON-serializable value and returns the parsed value',
+      (value) => {
+        expect(createJson(value)).toStrictEqual(value);
+      },
+    );
+
+    it.each(JSON_FIXTURES.invalid)(
+      'throws an error for invalid JSON',
+      (value) => {
+        expect(() => createJson(value)).toThrow(
+          'Invalid JSON-serializable value: The value must be one of: null, boolean, number, string, JSON array, or JSON object.',
+        );
+      },
+    );
+
+    it('handles `toJSON` with objects', () => {
+      const object = {
+        foo: 'bar',
+      };
+
+      const value = { foo: 'bar', baz: 'qux' };
+
+      Object.defineProperty(object, 'toJSON', {
+        value: () => value,
+        enumerable: false,
+      });
+
+      expect(createJson(object)).toStrictEqual(value);
+    });
+
+    it('handles `toJSON` with arrays', () => {
+      const array = ['foo', 'bar'];
+      const value = ['foo', 'bar', 'baz', 'qux'];
+
+      Object.defineProperty(array, 'toJSON', {
+        value: () => value,
+        enumerable: false,
+      });
+
+      expect(createJson(array)).toStrictEqual(value);
+    });
+
+    it('handles `toJSON` with other values', () => {
+      // Please don't do this in your code.
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = () => 'foo bar baz';
+
+      expect(createJson('bar')).toBe('foo bar baz');
+
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = undefined;
+    });
+
+    it('handles `toJSON` in nested objects', () => {
+      // Please don't do this in your code.
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = () => 'foo bar baz';
+
+      const object = {
+        foo: 'bar',
+      };
+
+      const value = { foo: 'bar', baz: 'qux' };
+
+      Object.defineProperty(object, 'toJSON', {
+        value: () => value,
+        enumerable: false,
+      });
+
+      const nestedObject = {
+        foo: object,
+        bar: {
+          baz: object,
+          qux: [
+            {
+              quux: [[[object]]],
+            },
+          ],
+        },
+      };
+
+      expect(createJson(nestedObject)).toStrictEqual({
+        foo: {
+          foo: 'foo bar baz',
+          baz: 'foo bar baz',
+        },
+        bar: {
+          baz: {
+            foo: 'foo bar baz',
+            baz: 'foo bar baz',
+          },
+          qux: [
+            {
+              quux: [
+                [
+                  [
+                    {
+                      foo: 'foo bar baz',
+                      baz: 'foo bar baz',
+                    },
+                  ],
+                ],
+              ],
+            },
+          ],
+        },
+      });
+
+      // @ts-expect-error `toJSON` is not a function.
+      // eslint-disable-next-line no-extend-native
+      String.prototype.toJSON = undefined;
+    });
+
+    it('validates that the value is within the maximum size', () => {
+      const value = 'foo';
+
+      expect(() => createJson(value, 2)).toThrow(
+        `Invalid JSON-serializable value: The provided JSON value exceeds the maximum size (5 bytes > 2 bytes).`,
+      );
+    });
+
+    it('checks the size of the value returned by `toJSON`', () => {
+      // 13 bytes
+      const object = {
+        foo: 'bar',
+      };
+
+      // 25 bytes
+      const value = { foo: 'bar', baz: 'qux' };
+
+      Object.defineProperty(object, 'toJSON', {
+        value: () => value,
+        enumerable: false,
+      });
+
+      expect(() => createJson(object, 13)).toThrow(
+        'Invalid JSON-serializable value: The provided JSON value exceeds the maximum size (25 bytes > 13 bytes).',
+      );
+    });
   });
 
   describe('isJsonRpcNotification', () => {

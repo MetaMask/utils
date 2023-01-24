@@ -29,8 +29,9 @@ import { arrayFromEntries, objectFromEntries } from './object';
 export const JsonStruct = define<Json>('Json', (value) => {
   const { valid } = validateJsonAndGetSize(value, true);
   if (!valid) {
-    return 'Expected a valid JSON-serializable value';
+    return 'The value must be one of: null, boolean, number, string, JSON array, or JSON object';
   }
+
   return true;
 });
 
@@ -49,11 +50,69 @@ export type Json =
  * Check if the given value is a valid {@link Json} value, i.e., a value that is
  * serializable to JSON.
  *
+ * In order to validate the size of the value, use {@link createJson} with the
+ * `maxSize` option instead.
+ *
  * @param value - The value to check.
  * @returns Whether the value is a valid {@link Json} value.
  */
 export function isValidJson(value: unknown): value is Json {
   return is(value, JsonStruct);
+}
+
+/**
+ * Assert that the given value is a valid {@link Json} value, i.e., a value that
+ * is serializable to JSON.
+ *
+ * In order to validate the size of the value, use {@link createJson} with the
+ * `maxSize` option instead.
+ *
+ * @param value - The value to check.
+ * @param ErrorWrapper - The error class to throw if the assertion fails.
+ * Defaults to {@link AssertionError}.
+ * @throws {ErrorWrapper} If the value is not a valid {@link Json} value.
+ */
+export function assertIsJson(
+  value: unknown,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ErrorWrapper?: AssertionErrorConstructor,
+): asserts value is Json {
+  assertStruct(
+    value,
+    JsonStruct,
+    'Invalid JSON-serializable value',
+    ErrorWrapper,
+  );
+}
+
+/**
+ * Validate that the given value is a valid {@link Json} value, and return the
+ * processed value.
+ *
+ * If a `maxSize` is provided, the value will be validated against the given
+ * maximum size, and an error will be thrown if the value exceeds the maximum
+ * size.
+ *
+ * @param value - The value to validate.
+ * @param maxSize - The maximum size of the value, in bytes.
+ * @returns The validated, processed value.
+ */
+export function createJson(value: unknown, maxSize?: number): Json {
+  const { valid, result, size } = validateJsonAndGetSize(value, !maxSize);
+
+  if (!valid) {
+    throw new Error(
+      'Invalid JSON-serializable value: The value must be one of: null, boolean, number, string, JSON array, or JSON object.',
+    );
+  }
+
+  if (maxSize && size > maxSize) {
+    throw new Error(
+      `Invalid JSON-serializable value: The provided JSON value exceeds the maximum size (${size} bytes > ${maxSize} bytes).`,
+    );
+  }
+
+  return result;
 }
 
 /**
