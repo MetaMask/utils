@@ -485,7 +485,7 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
   return isValidJsonRpcId;
 }
 
-export type ValidatedJson =
+export type JsonValidationResult =
   | {
       valid: true;
       result: Json;
@@ -497,7 +497,7 @@ export type ValidatedJson =
       size: 0;
     };
 
-const INVALID_JSON: ValidatedJson = {
+const INVALID_JSON: JsonValidationResult = {
   valid: false,
   result: undefined,
   size: 0,
@@ -509,13 +509,12 @@ const INVALID_JSON: ValidatedJson = {
  *
  * @param jsObject - Potential JSON serializable object.
  * @param skipSizingProcess - Skip JSON size calculation (default: false).
- * @returns Tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
- * the value was serializable and a number of bytes that it will use when serialized to JSON.
+ * @returns A {@link JsonValidationResult} object.
  */
 export function validateJsonAndGetSize(
   jsObject: unknown,
   skipSizingProcess = false,
-): ValidatedJson {
+): JsonValidationResult {
   const seenObjects = new Set();
 
   /**
@@ -545,13 +544,12 @@ export function validateJsonAndGetSize(
    *
    * @param rawValue - Potential JSON serializable value.
    * @param skipSizing - Skip JSON size calculation (default: false).
-   * @returns Tuple [isValid, plainTextSizeInBytes] containing a boolean that signals whether
-   * the value was serializable and a number of bytes that it will use when serialized to JSON.
+   * @returns A {@link JsonValidationResult} object.
    */
   function getJsonSerializableInfo(
     rawValue: unknown,
     skipSizing: boolean,
-  ): ValidatedJson {
+  ): JsonValidationResult {
     const value = getJsonValue(rawValue);
 
     if (value === undefined) {
