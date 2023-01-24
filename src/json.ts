@@ -654,20 +654,11 @@ export function validateJsonAndGetSize(
         size: value == true ? JsonSize.True : JsonSize.False,
       };
     } else if (typeof value === 'number' || value instanceof Number) {
-      if (skipSizing) {
-        return {
-          valid: true,
-          // An instance of `Number` is not assignable to our `Json` type.
-          result: Number(value),
-          size: 0,
-        };
-      }
-
       return {
         valid: true,
         // An instance of `Number` is not assignable to our `Json` type.
         result: Number(value),
-        size: calculateNumberSize(Number(value)),
+        size: skipSizing ? 0 : calculateNumberSize(Number(value)),
       };
     }
 
