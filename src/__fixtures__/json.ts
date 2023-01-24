@@ -1186,6 +1186,7 @@ const OBJECT_PROXY = new Proxy(
   },
 );
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export const CHARACTER_MAP = {
   '"': '\\"',
   '\\': '\\\\',
@@ -1237,6 +1238,7 @@ export const ESCAPED_STRINGS = [
   '\uDF06\uDF06\uD834\uD834',
   '\uDF06\uDF06\uD834\uDF06',
 ];
+/* eslint-enable @typescript-eslint/naming-convention */
 
 const DIRECT_CIRCULAR_REFERENCE_ARRAY: unknown[] = [];
 DIRECT_CIRCULAR_REFERENCE_ARRAY.push(DIRECT_CIRCULAR_REFERENCE_ARRAY);
@@ -1341,6 +1343,7 @@ export const JSON_VALIDATION_FIXTURES = [
     value: {
       data: {
         account: {
+          /* eslint-disable @typescript-eslint/naming-convention */
           __typename: 'Account',
           registrations: [
             {
@@ -1357,6 +1360,7 @@ export const JSON_VALIDATION_FIXTURES = [
               expiryDate: '1754111315',
             },
           ],
+          /* eslint-enable @typescript-eslint/naming-convention */
         },
         moreComplexity: {
           numbers: [
