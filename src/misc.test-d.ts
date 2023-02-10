@@ -1,6 +1,6 @@
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
-import { isObject, hasProperty, RuntimeObject } from '.';
+import { isObject, hasProperty, RuntimeObject, ValidPropertyType } from '.';
 
 //=============================================================================
 // isObject
@@ -36,6 +36,20 @@ if (isObject(unknownObject)) {
   expectNotAssignable<Record<'foo', unknown>>(unknownObject);
 }
 
+// An object is accepted after `hasProperty` is used to prove that it has the required property.
+if (isObject(unknownObject) && hasProperty(unknownObject, 'foo')) {
+  expectAssignable<Record<'foo', unknown>>(unknownObject);
+}
+
+// An object is accepted after `hasProperty` is used to prove that it has all required properties.
+if (
+  isObject(unknownObject) &&
+  hasProperty(unknownObject, 'foo') &&
+  hasProperty(unknownObject, 'bar')
+) {
+  expectAssignable<Record<'foo' | 'bar', unknown>>(unknownObject);
+}
+
 // An object is not accepted after `hasProperty` has only been used to establish that some required properties exist.
 if (isObject(unknownObject) && hasProperty(unknownObject, 'foo')) {
   expectNotAssignable<Record<'foo' | 'bar', unknown>>(unknownObject);
@@ -46,6 +60,32 @@ const overlappingTypesExample = { foo: 'foo', baz: 'baz' };
 if (hasProperty(overlappingTypesExample, 'foo')) {
   expectAssignable<Record<'baz', unknown>>(overlappingTypesExample);
 }
+
+//=============================================================================
+// ValidPropertyType
+//=============================================================================
+
+// Valid properties:
+
+expectAssignable<ValidPropertyType>('a');
+
+expectAssignable<ValidPropertyType>(1);
+
+expectAssignable<ValidPropertyType>(Symbol('a'));
+
+// Invalid properties:
+
+expectNotAssignable<ValidPropertyType>(null);
+
+expectNotAssignable<ValidPropertyType>(undefined);
+
+expectNotAssignable<ValidPropertyType>({});
+
+expectNotAssignable<ValidPropertyType>([]);
+
+expectNotAssignable<ValidPropertyType>(() => {
+  // no-op
+});
 
 //=============================================================================
 // RuntimeObject

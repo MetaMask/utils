@@ -32,10 +32,14 @@ export type PartialOrAbsent<Value> = Partial<Value> | null | undefined;
 export type NonEmptyArray<Element> = [Element, ...Element[]];
 
 /**
- * A JavaScript object that is not `null`, a function, or an array. The object
- * can still be an instance of a class.
+ * Any type that can be used as the name of an object property.
  */
-export type RuntimeObject = Record<number | string | symbol, unknown>;
+export type ValidPropertyType = string | number | symbol;
+
+/**
+ * A JavaScript object that is not `null`, a function, or an array.
+ */
+export type RuntimeObject = Record<ValidPropertyType, unknown>;
 
 //
 // Type Guards
@@ -80,17 +84,21 @@ export function isObject(value: unknown): value is RuntimeObject {
 //
 
 /**
- * An alias for {@link Object.hasOwnProperty}.
+ * A type guard for ensuring an object has a property.
  *
- * @param object - The object to check.
+ * @param objectToCheck - The object to check.
  * @param name - The property name to check for.
  * @returns Whether the specified object has an own property with the specified
  * name, regardless of whether it is enumerable or not.
  */
-export const hasProperty = (
-  object: RuntimeObject,
-  name: string | number | symbol,
-): boolean => Object.hasOwnProperty.call(object, name);
+export const hasProperty = <
+  ObjectToCheck extends RuntimeObject,
+  Property extends ValidPropertyType,
+>(
+  objectToCheck: ObjectToCheck,
+  name: Property,
+): objectToCheck is ObjectToCheck & Record<Property, unknown> =>
+  Object.hasOwnProperty.call(objectToCheck, name);
 
 export type PlainObject = Record<number | string | symbol, unknown>;
 
