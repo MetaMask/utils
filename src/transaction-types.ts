@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-nodejs-modules
-import { Buffer } from 'buffer';
+/* eslint-disable no-restricted-globals */
 
 export type Address = `0x${string}` | Buffer;
 
