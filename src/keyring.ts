@@ -1,8 +1,7 @@
-import type { Transaction } from '@ethereumjs/tx';
-
-import type { Eip1024EncryptedData } from './encryption';
+import type { Eip1024EncryptedData } from './encryption-types';
 import { Hex } from './hex';
 import { Json } from './json';
+import type { Transaction } from './transaction-types';
 
 /**
  * A Keyring class.
