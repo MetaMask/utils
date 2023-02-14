@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
+import { Hex } from './hex';
 
-export type Address = `0x${string}` | Buffer;
+export type Address = Hex | Buffer;
 
 export type Transaction = {
   /**
