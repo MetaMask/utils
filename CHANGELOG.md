@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [4.0.0]
-### Uncategorized
-- Improve compatibility of `hasProperty` ([#80](https://github.com/MetaMask/utils/pull/80))
-- Improve the `hasProperty` function ([#79](https://github.com/MetaMask/utils/pull/79))
-- Add tests for misc types and type guards ([#78](https://github.com/MetaMask/utils/pull/78))
-- Bump json5 from 1.0.1 to 1.0.2 ([#77](https://github.com/MetaMask/utils/pull/77))
-- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#76](https://github.com/MetaMask/utils/pull/76))
-- BREAKING: Handle `toJSON` in JSON validation and sizing ([#52](https://github.com/MetaMask/utils/pull/52))
+### Added
+- `assertIsJson` was added to help with verifying that a piece of data is serializable as JSON ([#52](https://github.com/MetaMask/utils/pull/52))
+- `createJson` was added to validate a value and convert it to JSON in one call ([#52](https://github.com/MetaMask/utils/pull/52))
+  - The value is converted by calling the value's `toJSON` method, if one exists.
+
+### Changed
+- **BREAKING:** `validateJsonAndGetSize` will now use `toJSON` (if it exists) to serialize each value ([#52](https://github.com/MetaMask/utils/pull/52))
+  - Effectively this changes the meaning of this validation; it now tests that the value _can_ be serialized, rather than testing that it's already in a serializable state.
+- **BREAKING:** `validateJsonAndGetSize` now returns an object rather than a tuple ([#52](https://github.com/MetaMask/utils/pull/52))
+  - Previously it returned `[isValid, plainTextSizeInBytes]`. Now it returns `{ valid, result, size }`
+- Improve the `hasProperty` function ([#79](https://github.com/MetaMask/utils/pull/79), [#80](https://github.com/MetaMask/utils/pull/80))
+  - This function now acts as a type guard, informing TypeScript that the property exists.
+  - The function is now compatible with more types of objects, such as Errors and class instances.
 
 ## [3.4.1]
 ### Fixed
