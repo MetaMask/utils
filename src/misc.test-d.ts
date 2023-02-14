@@ -1,6 +1,6 @@
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
-import { isObject, hasProperty, RuntimeObject, ValidPropertyType } from '.';
+import { isObject, hasProperty, RuntimeObject } from './misc';
 
 //=============================================================================
 // isObject
@@ -60,32 +60,6 @@ const overlappingTypesExample = { foo: 'foo', baz: 'baz' };
 if (hasProperty(overlappingTypesExample, 'foo')) {
   expectAssignable<Record<'baz', unknown>>(overlappingTypesExample);
 }
-
-//=============================================================================
-// ValidPropertyType
-//=============================================================================
-
-// Valid properties:
-
-expectAssignable<ValidPropertyType>('a');
-
-expectAssignable<ValidPropertyType>(1);
-
-expectAssignable<ValidPropertyType>(Symbol('a'));
-
-// Invalid properties:
-
-expectNotAssignable<ValidPropertyType>(null);
-
-expectNotAssignable<ValidPropertyType>(undefined);
-
-expectNotAssignable<ValidPropertyType>({});
-
-expectNotAssignable<ValidPropertyType>([]);
-
-expectNotAssignable<ValidPropertyType>(() => {
-  // no-op
-});
 
 //=============================================================================
 // RuntimeObject

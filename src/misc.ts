@@ -32,14 +32,9 @@ export type PartialOrAbsent<Value> = Partial<Value> | null | undefined;
 export type NonEmptyArray<Element> = [Element, ...Element[]];
 
 /**
- * Any type that can be used as the name of an object property.
- */
-export type ValidPropertyType = string | number | symbol;
-
-/**
  * A JavaScript object that is not `null`, a function, or an array.
  */
-export type RuntimeObject = Record<ValidPropertyType, unknown>;
+export type RuntimeObject = Record<PropertyKey, unknown>;
 
 //
 // Type Guards
@@ -93,7 +88,7 @@ export function isObject(value: unknown): value is RuntimeObject {
  */
 export const hasProperty = <
   ObjectToCheck extends RuntimeObject,
-  Property extends ValidPropertyType,
+  Property extends PropertyKey,
 >(
   objectToCheck: ObjectToCheck,
   name: Property,
