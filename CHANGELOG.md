@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0]
+### Uncategorized
+- Improve compatibility of `hasProperty` ([#80](https://github.com/MetaMask/utils/pull/80))
+- Improve the `hasProperty` function ([#79](https://github.com/MetaMask/utils/pull/79))
+- Add tests for misc types and type guards ([#78](https://github.com/MetaMask/utils/pull/78))
+- Bump json5 from 1.0.1 to 1.0.2 ([#77](https://github.com/MetaMask/utils/pull/77))
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#76](https://github.com/MetaMask/utils/pull/76))
+- BREAKING: Handle `toJSON` in JSON validation and sizing ([#52](https://github.com/MetaMask/utils/pull/52))
+
 ## [3.4.1]
 ### Fixed
 - Bump `superstruct` to `^1.0.3` ([#71](https://github.com/MetaMask/utils/pull/71))
@@ -104,7 +113,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v3.4.1...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/MetaMask/utils/compare/v3.4.1...v4.0.0
 [3.4.1]: https://github.com/MetaMask/utils/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/MetaMask/utils/compare/v3.3.1...v3.4.0
 [3.3.1]: https://github.com/MetaMask/utils/compare/v3.3.0...v3.3.1
