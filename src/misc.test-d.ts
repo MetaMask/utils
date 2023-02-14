@@ -1,9 +1,4 @@
-import {
-  expectAssignable,
-  expectError,
-  expectNotAssignable,
-  expectType,
-} from 'tsd';
+import { expectAssignable, expectNotAssignable, expectType } from 'tsd';
 
 import { isObject, hasProperty, RuntimeObject } from './misc';
 
@@ -71,8 +66,8 @@ const exampleErrorWithCode = new Error('test');
 // @ts-ignore
 exampleErrorWithCode.code = 999;
 
-// Establish that trying to check for a custom property on an error results in faulre
-expectError(exampleErrorWithCode.code);
+// Establish that trying to check for a custom property on an error results in failure
+expectNotAssignable<{ code: any }>(exampleErrorWithCode);
 
 // Using custom Error property is allowed after checking with `hasProperty`
 if (hasProperty(exampleErrorWithCode, 'code')) {
