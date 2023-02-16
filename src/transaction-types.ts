@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import { Address, Hex } from './hex';
+import { Hex } from './hex';
 
 export type Transaction = (LegacyTx | EIP2930Tx | EIP1559Tx) & Signature;
 
@@ -37,14 +37,14 @@ export type LegacyTx = {
   /**
    * The address of the sender, that will be signing the transaction
    */
-  from: Address;
+  from: Hex | Buffer;
 
   /**
    * The receiving address.
    * If an externally-owned account, the transaction will transfer value.
    * If a contract account, the transaction will execute the contract code.
    */
-  to: Address;
+  to: Hex | Buffer;
 
   /**
    * Arbitrary data.

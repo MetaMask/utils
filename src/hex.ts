@@ -5,8 +5,6 @@ import { assert } from './assert';
 
 export type Hex = `0x${string}`;
 
-export type Address = Hex | Buffer;
-
 export const HexStruct = pattern(string(), /^(?:0x)?[0-9a-f]+$/iu);
 export const StrictHexStruct = pattern(string(), /^0x[0-9a-f]+$/iu) as Struct<
   Hex,
