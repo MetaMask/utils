@@ -7,14 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.5.0]
-### Uncategorized
-- Revert "BREAKING: Handle `toJSON` in JSON validation and sizing (#52)" ([#52](https://github.com/MetaMask/utils/pull/52))
-- Improve compatibility of `hasProperty` ([#80](https://github.com/MetaMask/utils/pull/80))
-- Improve the `hasProperty` function ([#79](https://github.com/MetaMask/utils/pull/79))
-- Add tests for misc types and type guards ([#78](https://github.com/MetaMask/utils/pull/78))
-- Bump json5 from 1.0.1 to 1.0.2 ([#77](https://github.com/MetaMask/utils/pull/77))
-- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#76](https://github.com/MetaMask/utils/pull/76))
-- BREAKING: Handle `toJSON` in JSON validation and sizing ([#52](https://github.com/MetaMask/utils/pull/52))
+### Changed
+- Improve the `hasProperty` function ([#79](https://github.com/MetaMask/utils/pull/79), [#80](https://github.com/MetaMask/utils/pull/80))
+  - This function now acts as a type guard, informing TypeScript that the property exists.
+  - The function is now compatible with more types of objects, such as Errors and class instances.
 
 ## [3.4.1]
 ### Fixed
