@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { is, pattern, string, Struct } from 'superstruct';
 
 import { assert } from './assert';
