@@ -26,7 +26,7 @@ export type Signature = {
 };
 
 /**
- * Ethereum Legacy Transaction (Type-0)
+ * Ethereum Legacy Transaction
  * Reference: https://ethereum.org/en/developers/docs/transactions/
  */
 export type LegacyTx = {
