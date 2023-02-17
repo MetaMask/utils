@@ -27,7 +27,7 @@ export type Signature = {
    * Recovery identifier. It can be either 0x1b or 0x1c
    * 1 byte long sequence
    */
-  v?: Bytes;
+  yParity?: Bytes;
 };
 
 /**
