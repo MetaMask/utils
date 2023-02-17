@@ -38,7 +38,7 @@ export type BaseTransaction = {
    * Sequentially incrementing counter which indicates the transaction
    * number from the account
    */
-  nonce: bigint | string | number | Buffer;
+  nonce: Bytes;
 
   /**
    * The address of the sender, that will be signing the transaction
