@@ -55,7 +55,7 @@ export type BaseTransaction = {
   /**
    * The amount of Ether sent.
    */
-  value: bigint | string | number | Buffer;
+  value: Bytes;
 
   /**
    * Maximum amount of gas units that this transaction can consume.
