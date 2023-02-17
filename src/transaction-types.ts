@@ -43,7 +43,7 @@ export type BaseTransaction = {
   /**
    * The address of the sender, that will be signing the transaction
    */
-  from: Hex | Buffer;
+  from: Hex | Uint8Array;
 
   /**
    * The receiving address.
