@@ -50,7 +50,7 @@ export type BaseTransaction = {
    * If an externally-owned account, the transaction will transfer value.
    * If a contract account, the transaction will execute the contract code.
    */
-  to: Hex | Buffer;
+  to: Hex | Uint8Array;
 
   /**
    * The amount of Ether sent.
