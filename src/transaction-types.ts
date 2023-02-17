@@ -68,6 +68,9 @@ export type BaseTransaction = {
   data?: Buffer;
 };
 
+/**
+ * Typed Ethereum Transaction
+ */
 export type TypedTransaction = BaseTransaction & {
   /**
    * Transaction type.
