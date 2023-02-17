@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-globals */
+import { Bytes } from './bytes';
 import { Hex } from './hex';
 
 export type Transaction = (LegacyTx | EIP2930Tx | EIP1559Tx) & Signature;
@@ -8,20 +9,20 @@ export type Signature = {
    * EC signature parameter
    * 32 bytes long sequence.
    */
-  r?: bigint | string | number | Buffer;
+  r?: Bytes;
 
   /**
    * EC signature parameter
    * Signature proof.
    * 32 bytes long sequence
    */
-  s?: bigint | string | number | Buffer;
+  s?: Bytes;
 
   /**
    * Recovery identifier. It can be either 0x1b or 0x1c
    * 1 byte long sequence
    */
-  v?: bigint | string | number | Buffer;
+  v?: Bytes;
 };
 
 /**
