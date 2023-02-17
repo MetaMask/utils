@@ -60,7 +60,7 @@ export type BaseTransaction = {
   /**
    * Maximum amount of gas units that this transaction can consume.
    */
-  gasLimit: bigint | string | number | Buffer;
+  gasLimit: Bytes;
 
   /**
    * Arbitrary data.
