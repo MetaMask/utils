@@ -1,7 +1,7 @@
 import type { Eip1024EncryptedData } from './encryption-types';
 import { Hex } from './hex';
 import { Json } from './json';
-import type { Transaction } from './transaction-types';
+import type { Transaction, SignedTransaction } from './transaction-types';
 
 /**
  * A Keyring class.
@@ -131,13 +131,13 @@ export type Keyring<State extends Json> = {
    * @param address - The address of the account to use for signing.
    * @param transaction - The transaction to sign.
    * @param options - Signing options; differs between keyrings.
-   * @returns The signed tranasction.
+   * @returns The signed transaction.
    */
   signTransaction?(
     address: Hex,
     transaction: Transaction,
     options?: Record<string, unknown>,
-  ): Promise<Transaction>;
+  ): Promise<SignedTransaction>;
 
   /**
    * Sign a message. This is equivalent to an older version of the the
