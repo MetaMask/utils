@@ -2,7 +2,12 @@
 import { Bytes } from './bytes';
 import { Hex } from './hex';
 
-export type Transaction = (LegacyTx | EIP2930Tx | EIP1559Tx) & Signature;
+export type Transaction = (
+  | LegacyTransaction
+  | EIP2930Transaction
+  | EIP1559Transaction
+) &
+  Signature;
 
 export type Signature = {
   /**
@@ -29,7 +34,7 @@ export type Signature = {
  * Ethereum Legacy Transaction
  * Reference: https://ethereum.org/en/developers/docs/transactions/
  */
-export type LegacyTx = {
+export type LegacyTransaction = {
   /**
    * Sequentially incrementing counter which indicates the transaction
    * number from the account
@@ -77,7 +82,7 @@ export type LegacyTx = {
  * EIP-2930 Transaction: Optional Access Lists
  * Reference: https://eips.ethereum.org/EIPS/eip-2930
  */
-export type EIP2930Tx = {
+export type EIP2930Transaction = {
   /**
    * Transaction chain ID
    */
@@ -89,14 +94,14 @@ export type EIP2930Tx = {
   accessList?:
     | { address: Hex; storageKeys: Hex[] }[]
     | { address: Buffer; storageKeys: Buffer[] }[];
-} & LegacyTx;
+} & LegacyTransaction;
 
 /**
  * EIP-1559 Transaction: Fee market change for ETH 1.0 chain (Type-2)
  *
  * Reference: https://eips.ethereum.org/EIPS/eip-1559
  */
-export type EIP1559Tx = {
+export type EIP1559Transaction = {
   /**
    * Maximum fee to give to the miner
    */
@@ -112,4 +117,4 @@ export type EIP1559Tx = {
    * Not necessary for EIP-1559 transactions.
    */
   gasPrice?: never | null | undefined;
-} & EIP2930Tx;
+} & LegacyTransaction;
