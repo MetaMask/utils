@@ -86,7 +86,7 @@ export type LegacyTransaction = BaseTransaction & {
   /**
    * Transaction's gas price.
    */
-  gasPrice: bigint | string | number | Buffer | null;
+  gasPrice: Bytes | null;
 };
 
 /**
