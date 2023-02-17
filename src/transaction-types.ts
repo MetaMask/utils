@@ -65,7 +65,7 @@ export type BaseTransaction = {
   /**
    * Arbitrary data.
    */
-  data?: Buffer;
+  data?: Bytes;
 };
 
 /**
