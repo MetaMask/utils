@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { Bytes } from './bytes';
 import { Hex } from './hex';
 
