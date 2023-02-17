@@ -131,5 +131,5 @@ export type EIP1559Transaction = TypedTransaction & {
   /**
    * Maximum total fee
    */
-  maxFeePerGas: bigint | string | number | Buffer;
+  maxFeePerGas: Bytes;
 };
