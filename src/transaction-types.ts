@@ -102,7 +102,7 @@ export type EIP2930Transaction = TypedTransaction & {
   /**
    * Transaction chain ID
    */
-  chainId: bigint | string | number | Buffer;
+  chainId: Bytes;
 
   /**
    * List of addresses and storage keys that the transaction plans to access
