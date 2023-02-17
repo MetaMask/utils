@@ -126,7 +126,7 @@ export type EIP1559Transaction = TypedTransaction & {
   /**
    * Maximum fee to give to the miner
    */
-  maxPriorityFeePerGas: bigint | string | number | Buffer;
+  maxPriorityFeePerGas: Bytes;
 
   /**
    * Maximum total fee
