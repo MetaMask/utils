@@ -109,7 +109,7 @@ export type EIP2930Transaction = TypedTransaction & {
    */
   accessList:
     | { address: Hex; storageKeys: Hex[] }[]
-    | { address: Buffer; storageKeys: Buffer[] }[];
+    | { address: Uint8Array; storageKeys: Uint8Array[] }[];
 };
 
 /**
