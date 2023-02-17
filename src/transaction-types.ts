@@ -2,44 +2,44 @@
 import { Bytes } from './bytes';
 import { Hex } from './hex';
 
-export type Transaction = (
+export type Transaction =
   | LegacyTransaction
   | EIP2930Transaction
-  | EIP1559Transaction
-) &
-  Signature;
+  | EIP1559Transaction;
+
+export type SignedTransaction = Transaction & Signature;
 
 export type Signature = {
   /**
    * EC signature parameter
    * 32 bytes long sequence.
    */
-  r?: Bytes;
+  r: Bytes;
 
   /**
    * EC signature parameter
    * Signature proof.
    * 32 bytes long sequence
    */
-  s?: Bytes;
+  s: Bytes;
 
   /**
    * Recovery identifier. It can be either 0x1b or 0x1c
    * 1 byte long sequence
    */
-  yParity?: Bytes;
+  yParity: Bytes;
 };
 
 /**
- * Ethereum Legacy Transaction
- * Reference: https://ethereum.org/en/developers/docs/transactions/
+ * Base Ethereum Transaction
  */
-export type LegacyTransaction = {
+export type BaseTransaction = {
   /**
    * Sequentially incrementing counter which indicates the transaction
    * number from the account
    */
   nonce: bigint | string | number | Buffer;
+
   /**
    * The address of the sender, that will be signing the transaction
    */
@@ -53,55 +53,73 @@ export type LegacyTransaction = {
   to: Hex | Buffer;
 
   /**
-   * Arbitrary data.
+   * The amount of Ether sent.
    */
-  data?: Buffer;
-
-  /**
-   * Transaction's gas price.
-   */
-  gasPrice?: bigint | string | number | Buffer | null;
+  value: bigint | string | number | Buffer;
 
   /**
    * Maximum amount of gas units that this transaction can consume.
    */
-  gasLimit?: bigint | string | number | Buffer;
+  gasLimit: bigint | string | number | Buffer;
 
   /**
-   * The amount of Ether sent.
+   * Arbitrary data.
    */
-  value?: bigint | string | number | Buffer;
+  data?: Buffer;
+};
 
+export type TypedTransaction = BaseTransaction & {
   /**
    * Transaction type.
    */
-  type?: bigint | string | number | Buffer;
+  type: number;
+};
+
+/**
+ * Ethereum Legacy Transaction
+ * Reference: https://ethereum.org/en/developers/docs/transactions/
+ */
+export type LegacyTransaction = BaseTransaction & {
+  /**
+   * Transaction's gas price.
+   */
+  gasPrice?: bigint | string | number | Buffer | null;
 };
 
 /**
  * EIP-2930 Transaction: Optional Access Lists
  * Reference: https://eips.ethereum.org/EIPS/eip-2930
  */
-export type EIP2930Transaction = {
+export type EIP2930Transaction = TypedTransaction & {
+  /**
+   * Transaction type.
+   */
+  type: 1;
+
   /**
    * Transaction chain ID
    */
-  chainId?: bigint | string | number | Buffer;
+  chainId: bigint | string | number | Buffer;
 
   /**
    * List of addresses and storage keys that the transaction plans to access
    */
-  accessList?:
+  accessList:
     | { address: Hex; storageKeys: Hex[] }[]
     | { address: Buffer; storageKeys: Buffer[] }[];
-} & LegacyTransaction;
+};
 
 /**
  * EIP-1559 Transaction: Fee market change for ETH 1.0 chain (Type-2)
  *
  * Reference: https://eips.ethereum.org/EIPS/eip-1559
  */
-export type EIP1559Transaction = {
+export type EIP1559Transaction = TypedTransaction & {
+  /**
+   * Transaction type.
+   */
+  type: 2;
+
   /**
    * Maximum fee to give to the miner
    */
@@ -111,10 +129,4 @@ export type EIP1559Transaction = {
    * Maximum total fee
    */
   maxFeePerGas: bigint | string | number | Buffer;
-
-  /**
-   * Gas price from {@link LegacyTransaction}.
-   * Not necessary for EIP-1559 transactions.
-   */
-  gasPrice?: never | null | undefined;
-} & LegacyTransaction;
+};
