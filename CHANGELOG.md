@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [3.6.0]
-### Uncategorized
+### Changed
 - Add `Keyring` types ([#74](https://github.com/MetaMask/utils/pull/74))
+  -  New data types added. These are `Keyring`, `Transaction` (`LegacyTransaction`, `EIP2930Transaction`, `EIP1559Transaction`), `SignedTransaction`, `Signature`, and `Eip1024EncryptedData`.
 
 ## [3.5.0]
 ### Changed
