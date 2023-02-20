@@ -52,7 +52,9 @@ describe('json', () => {
     it('returns error message', () => {
       const [error] = validate(undefined, JsonStruct);
       assert(error !== undefined);
-      expect(error.message).toBe('Expected a valid JSON-serializable value');
+      expect(error.message).toBe(
+        'Expected the value to satisfy a union of `literal | boolean | number | string | array | record`, but received: undefined',
+      );
     });
   });
 

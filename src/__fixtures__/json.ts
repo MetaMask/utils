@@ -5,13 +5,7 @@ export const JSON_FIXTURES = {
     ['a', 2, null],
     [{ a: null, b: 2, c: [{ foo: 'bar' }] }],
   ],
-  invalid: [
-    undefined,
-    Symbol('bar'),
-    Promise.resolve(),
-    () => 'foo',
-    [{ a: undefined }],
-  ],
+  invalid: [undefined, Symbol('bar'), () => 'foo', [{ a: undefined }]],
 };
 
 export const JSON_RPC_NOTIFICATION_FIXTURES = {

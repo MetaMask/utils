@@ -1,9 +1,12 @@
 import {
   array,
+  assert,
+  boolean,
   define,
   Infer,
   integer,
   is,
+  lazy,
   literal,
   nullable,
   number,
@@ -25,14 +28,6 @@ import {
   JsonSize,
 } from './misc';
 
-export const JsonStruct = define<Json>('Json', (value) => {
-  const [isValid] = validateJsonAndGetSize(value, true);
-  if (!isValid) {
-    return 'Expected a valid JSON-serializable value';
-  }
-  return true;
-});
-
 /**
  * Any JSON-compatible value.
  */
@@ -45,6 +40,70 @@ export type Json =
   | { [prop: string]: Json };
 
 /**
+ * A struct to check if the given value is a valid JSON-serializable value.
+ *
+ * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.
+ */
+// We cannot infer the type of the struct, because it is recursive.
+export const UnsafeJsonStruct: Struct<Json> = union([
+  literal(null),
+  boolean(),
+  number(),
+  string(),
+  array(lazy(() => UnsafeJsonStruct)),
+  record(
+    string(),
+    lazy(() => UnsafeJsonStruct),
+  ),
+]);
+
+/**
+ * A struct to check if the given value is a valid JSON-serializable value.
+ *
+ * This struct sanitizes the value before validating it, so that it is safe to
+ * use with untrusted input.
+ */
+export const JsonStruct = define<Json>('Json', (value, context) => {
+  /**
+   * Helper function that runs the given struct validator and returns the
+   * validation errors, if any. If the value is valid, it returns `true`.
+   *
+   * @param innerValue - The value to validate.
+   * @param struct - The struct to use for validation.
+   * @returns The validation errors, or `true` if the value is valid.
+   */
+  function checkStruct<Type>(innerValue: unknown, struct: Struct<Type>) {
+    const iterator = struct.validator(innerValue, context);
+    const errors = [...iterator];
+
+    if (errors.length > 0) {
+      return errors;
+    }
+
+    return true;
+  }
+
+  // The plain value must be a valid JSON value, but it may be altered in the
+  // process of JSON serialization, so we need to validate it again after
+  // serialization. This has the added benefit that the returned error messages
+  // will be more helpful, as they will point to the exact location of the
+  // invalid value.
+  //
+  // This seems overcomplicated, but without checking the plain value first,
+  // there are some cases where the validation passes, even though the value is
+  // not valid JSON. For example, `undefined` is not valid JSON, but serializing
+  // it will remove it from the object, so the validation will pass.
+  const unsafeResult = checkStruct(value, UnsafeJsonStruct);
+  if (unsafeResult !== true) {
+    return unsafeResult;
+  }
+
+  // JavaScript engines are highly optimized for this specific use case of
+  // JSON parsing and stringifying, so there should be no performance impact.
+  return checkStruct(JSON.parse(JSON.stringify(value)), UnsafeJsonStruct);
+});
+
+/**
  * Check if the given value is a valid {@link Json} value, i.e., a value that is
  * serializable to JSON.
  *
@@ -53,6 +112,19 @@ export type Json =
  */
 export function isValidJson(value: unknown): value is Json {
   return is(value, JsonStruct);
+}
+
+/**
+ * Get the size of a JSON value in bytes. This also validates the value.
+ *
+ * @param value - The JSON value to get the size of.
+ * @returns The size of the JSON value in bytes.
+ */
+export function getJsonSize(value: unknown): number {
+  assertStruct(value, JsonStruct, 'Invalid JSON value');
+
+  const json = JSON.stringify(value);
+  return new TextEncoder().encode(json).byteLength;
 }
 
 /**
