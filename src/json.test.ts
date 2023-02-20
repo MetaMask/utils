@@ -1,11 +1,4 @@
-import {
-  validate,
-  assert as superstructAssert,
-  is,
-  literal,
-  union,
-  number,
-} from 'superstruct';
+import { validate, assert as superstructAssert } from 'superstruct';
 
 import {
   assert,
