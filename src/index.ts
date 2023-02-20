@@ -12,3 +12,6 @@ export * from './number';
 export * from './opaque';
 export * from './time';
 export * from './versions';
+export * from './keyring';
+export * from './transaction-types';
+export * from './encryption-types';
