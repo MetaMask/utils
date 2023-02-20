@@ -13,9 +13,13 @@
 <li><a href="../modules.html">@metamask/utils</a></li>
 <li><a href="JsonStruct.html">JsonStruct</a></li></ul>
 <h1>Variable JsonStruct<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
-<div class="tsd-signature">Json<wbr/>Struct<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/Json.html" class="tsd-signature-type" data-tsd-kind="Type alias">Json</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
+<div class="tsd-signature">Json<wbr/>Struct<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/Json.html" class="tsd-signature-type" data-tsd-kind="Type alias">Json</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-comment tsd-typography"><p>A struct to check if the given value is a valid JSON-serializable value.</p>
+<p>This struct sanitizes the value before validating it, so that it is safe to
+use with untrusted input.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/42b832d/src/json.ts#L28">src/json.ts:28</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/389ee06/src/json.ts#L70">src/json.ts:70</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -85,6 +89,7 @@
 <li class="current tsd-kind-variable"><a href="JsonStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Json<wbr/>Struct</a></li>
 <li class="tsd-kind-variable"><a href="PendingJsonRpcResponseStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Pending<wbr/>Json<wbr/>Rpc<wbr/>Response<wbr/>Struct</a></li>
 <li class="tsd-kind-variable"><a href="StrictHexStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Strict<wbr/>Hex<wbr/>Struct</a></li>
+<li class="tsd-kind-variable"><a href="UnsafeJsonStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Unsafe<wbr/>Json<wbr/>Struct</a></li>
 <li class="tsd-kind-variable"><a href="VersionRangeStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Version<wbr/>Range<wbr/>Struct</a></li>
 <li class="tsd-kind-variable"><a href="VersionStruct.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>Version<wbr/>Struct</a></li>
 <li class="tsd-kind-variable"><a href="jsonrpc2.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>jsonrpc2</a></li>
@@ -123,6 +128,7 @@
 <li class="tsd-kind-function"><a href="../functions/createNumber.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Number</a></li>
 <li class="tsd-kind-function"><a href="../functions/createProjectLogger.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Project<wbr/>Logger</a></li>
 <li class="tsd-kind-function"><a href="../functions/getJsonRpcIdValidator.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Json<wbr/>Rpc<wbr/>Id<wbr/>Validator</a></li>
+<li class="tsd-kind-function"><a href="../functions/getJsonSize.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Json<wbr/>Size</a></li>
 <li class="tsd-kind-function"><a href="../functions/gtRange.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>gt<wbr/>Range</a></li>
 <li class="tsd-kind-function"><a href="../functions/gtVersion.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>gt<wbr/>Version</a></li>
 <li class="tsd-kind-function"><a href="../functions/hasProperty.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>has<wbr/>Property</a></li>
@@ -155,6 +161,5 @@
 <li class="tsd-kind-function"><a href="../functions/signedBigIntToBytes.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>signed<wbr/>Big<wbr/>Int<wbr/>To<wbr/>Bytes</a></li>
 <li class="tsd-kind-function"><a href="../functions/stringToBytes.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>string<wbr/>To<wbr/>Bytes</a></li>
 <li class="tsd-kind-function"><a href="../functions/timeSince.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>time<wbr/>Since</a></li>
-<li class="tsd-kind-function"><a href="../functions/validateJsonAndGetSize.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>validate<wbr/>Json<wbr/>And<wbr/>Get<wbr/>Size</a></li>
 <li class="tsd-kind-function"><a href="../functions/valueToBytes.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>value<wbr/>To<wbr/>Bytes</a></li></ul></nav></div></div>
 <div class="overlay"></div><script src="../assets/main.js"></script></body></html>
