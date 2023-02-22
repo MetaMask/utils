@@ -1,7 +1,8 @@
+import type { Transaction, TxData } from '@ethereumjs/tx';
+
 import type { Eip1024EncryptedData } from './encryption-types';
 import { Hex } from './hex';
 import { Json } from './json';
-import type { Transaction, SignedTransaction } from './transaction-types';
 
 /**
  * A Keyring class.
@@ -137,7 +138,7 @@ export type Keyring<State extends Json> = {
     address: Hex,
     transaction: Transaction,
     options?: Record<string, unknown>,
-  ): Promise<SignedTransaction>;
+  ): Promise<TxData>;
 
   /**
    * Sign a message. This is equivalent to an older version of the the
