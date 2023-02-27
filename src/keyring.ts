@@ -36,7 +36,7 @@ export type KeyringClass<State extends Json> = {
 };
 
 /**
- * 
+ *
  */
 export type KeyringSignDataOpts = {
   withAppKeyOrigin?: string;
