@@ -224,7 +224,7 @@ export type Keyring<State extends Json> = {
    * @returns The signed message.
    */
   signTypedData?<T extends MessageTypes>(
-    address: string,
+    address: Hex,
     typedData: TypedDataV1 | TypedMessage<T>,
     opts: KeyringSignDataOpts,
   ): Promise<string>;
