@@ -10,6 +10,11 @@ import type { Eip1024EncryptedData } from './encryption-types';
 import { Hex } from './hex';
 import { Json } from './json';
 
+export type KeyringSignDataOpts = {
+  withAppKeyOrigin?: string;
+  version?: SignTypedDataVersion;
+};
+
 /**
  * A Keyring class.
  *
@@ -33,14 +38,6 @@ export type KeyringClass<State extends Json> = {
    * keyring type.
    */
   type: string;
-};
-
-/**
- *
- */
-export type KeyringSignDataOpts = {
-  withAppKeyOrigin?: string;
-  version?: SignTypedDataVersion;
 };
 
 /**
