@@ -1,4 +1,4 @@
-import type { Transaction, TxData } from '@ethereumjs/tx';
+import type { TypedTransaction, TxData } from '@ethereumjs/tx';
 import type {
   MessageTypes,
   TypedMessage,
@@ -150,7 +150,7 @@ export type Keyring<State extends Json> = {
    */
   signTransaction?(
     address: Hex,
-    transaction: Transaction,
+    transaction: TypedTransaction,
     options?: Record<string, unknown>,
   ): Promise<TxData>;
 
