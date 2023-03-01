@@ -1,19 +1,8 @@
 import type { TypedTransaction, TxData } from '@ethereumjs/tx';
-import type {
-  MessageTypes,
-  TypedMessage,
-  TypedDataV1,
-  SignTypedDataVersion,
-} from '@metamask/eth-sig-util';
 
 import type { Eip1024EncryptedData } from './encryption-types';
 import { Hex } from './hex';
 import { Json } from './json';
-
-export type KeyringSignDataOpts = {
-  withAppKeyOrigin?: string;
-  version?: SignTypedDataVersion;
-};
 
 /**
  * A Keyring class.
@@ -217,13 +206,13 @@ export type Keyring<State extends Json> = {
    *
    * @param address - The address of the account to use for signing.
    * @param typedData - The data to sign.
-   * @param opts - Signing options; differs between keyrings.
+   * @param options - Signing options; differs between keyrings.
    * @returns The signed message.
    */
-  signTypedData?<T extends MessageTypes>(
+  signTypedData?(
     address: Hex,
-    typedData: TypedDataV1 | TypedMessage<T>,
-    opts: KeyringSignDataOpts,
+    typedData: Record<string, unknown>,
+    options?: Record<string, unknown>,
   ): Promise<string>;
 
   /**
