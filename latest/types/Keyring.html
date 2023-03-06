@@ -13,7 +13,7 @@
 <li><a href="../modules.html">@metamask/utils</a></li>
 <li><a href="Keyring.html">Keyring</a></li></ul>
 <h1>Type alias Keyring&lt;State&gt;</h1></div>
-<div class="tsd-signature">Keyring<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>addAccounts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>decryptMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>deserialize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>exportAccount<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getAccounts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getAppKeyAddress<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getEncryptionPublicKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeAccount<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>serialize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signPersonalMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signTransaction<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signTypedData<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
+<div class="tsd-signature">Keyring<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>addAccounts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>decryptMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>deserialize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>exportAccount<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>generateRandomMnemonic<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getAccounts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getAppKeyAddress<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getEncryptionPublicKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeAccount<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>serialize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signPersonalMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signTransaction<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>signTypedData<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
 <div class="tsd-comment tsd-typography"><p>A keyring is something that can sign messages. Keyrings are used to add new
 signing strategies; each strategy is a new keyring.</p>
 <p>Each keyring manages a collection of key pairs, which we call &quot;accounts&quot;.
@@ -57,7 +57,7 @@ the keyring class.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L66">src/keyring.ts:66</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L67">src/keyring.ts:67</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>decrypt<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -83,7 +83,7 @@ the message.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L245">src/keyring.ts:245</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L246">src/keyring.ts:246</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>deserialize<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -101,7 +101,7 @@ the serialized state provided.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L81">src/keyring.ts:81</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L82">src/keyring.ts:82</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>export<wbr/>Account<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -129,7 +129,18 @@ that account&#39;s private key directly.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L103">src/keyring.ts:103</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L104">src/keyring.ts:104</a></li></ul></aside></li></ul></li>
+<li class="tsd-parameter">
+<h5>generate<wbr/>Random<wbr/>Mnemonic<span class="tsd-signature-symbol">?:</span>function</h5>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+<li class="tsd-signature tsd-anchor-link" id="__type.generateRandomMnemonic.generateRandomMnemonic-1">generate<wbr/>Random<wbr/>Mnemonic<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#__type.generateRandomMnemonic.generateRandomMnemonic-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Generates the properties for the keyring based on the given
+BIP39-compliant mnemonic.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L255">src/keyring.ts:255</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>Accounts<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -141,7 +152,7 @@ that account&#39;s private key directly.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L58">src/keyring.ts:58</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L59">src/keyring.ts:59</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>App<wbr/>Key<wbr/>Address<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -168,7 +179,7 @@ part of the key derivation process.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L119">src/keyring.ts:119</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L120">src/keyring.ts:120</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>Encryption<wbr/>Public<wbr/>Key<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -195,7 +206,7 @@ used (e.g. encrypting with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L230">src/keyring.ts:230</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L231">src/keyring.ts:231</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>remove<wbr/>Account<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -212,7 +223,7 @@ used (e.g. encrypting with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L88">src/keyring.ts:88</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L89">src/keyring.ts:89</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>serialize<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -224,7 +235,7 @@ used (e.g. encrypting with app keys).</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">State</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L73">src/keyring.ts:73</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L74">src/keyring.ts:74</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -259,7 +270,7 @@ used for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L160">src/keyring.ts:160</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L161">src/keyring.ts:161</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Personal<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -294,11 +305,11 @@ used for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L184">src/keyring.ts:184</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L185">src/keyring.ts:185</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Transaction<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
-<li class="tsd-signature tsd-anchor-link" id="__type.signTransaction.signTransaction-1">sign<wbr/>Transaction<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span>, transaction<span class="tsd-signature-symbol">: </span><a href="Transaction.html" class="tsd-signature-type" data-tsd-kind="Type alias">Transaction</a>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="SignedTransaction.html" class="tsd-signature-type" data-tsd-kind="Type alias">SignedTransaction</a><span class="tsd-signature-symbol">&gt;</span><a href="#__type.signTransaction.signTransaction-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="__type.signTransaction.signTransaction-1">sign<wbr/>Transaction<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span>, transaction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypedTransaction</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxData</span><span class="tsd-signature-symbol">&gt;</span><a href="#__type.signTransaction.signTransaction-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Sign a transaction. This is equivalent to the <code>eth_signTransaction</code>
 Ethereum JSON-RPC method. See the Ethereum JSON-RPC API documentation for
@@ -318,16 +329,16 @@ used for signing (e.g. signing with app keys).</p>
 <div class="tsd-comment tsd-typography"><p>The address of the account to use for signing.</p>
 </div></li>
 <li>
-<h5>transaction: <a href="Transaction.html" class="tsd-signature-type" data-tsd-kind="Type alias">Transaction</a></h5>
+<h5>transaction: <span class="tsd-signature-type">TypedTransaction</span></h5>
 <div class="tsd-comment tsd-typography"><p>The transaction to sign.</p>
 </div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> options: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 <div class="tsd-comment tsd-typography"><p>Signing options; differs between keyrings.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="SignedTransaction.html" class="tsd-signature-type" data-tsd-kind="Type alias">SignedTransaction</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxData</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L136">src/keyring.ts:136</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L137">src/keyring.ts:137</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Typed<wbr/>Data<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -365,9 +376,9 @@ for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L211">src/keyring.ts:211</a></li></ul></aside></li></ul></li></ul></div><aside class="tsd-sources">
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L212">src/keyring.ts:212</a></li></ul></aside></li></ul></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/69dd9dd/src/keyring.ts#L46">src/keyring.ts:46</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/f424d21/src/keyring.ts#L47">src/keyring.ts:47</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
