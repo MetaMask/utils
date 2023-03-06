@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0]
+### Uncategorized
+- Update `Keyring` type ([#89](https://github.com/MetaMask/utils/pull/89))
+- Bump `peaceiris/actions-gh-pages` to more recent version ([#88](https://github.com/MetaMask/utils/pull/88))
+
 ## [4.0.0]
 ### Changed
 - Export new modules (`keyring`, `transaction-types`, and `encryption-types`) ([#86](https://github.com/MetaMask/utils/pull/86))
@@ -124,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/MetaMask/utils/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/MetaMask/utils/compare/v3.6.0...v4.0.0
 [3.6.0]: https://github.com/MetaMask/utils/compare/v3.5.0...v3.6.0
 [3.5.0]: https://github.com/MetaMask/utils/compare/v3.4.1...v3.5.0
