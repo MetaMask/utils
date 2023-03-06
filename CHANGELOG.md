@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING:** Update `Keyring` type ([#89](https://github.com/MetaMask/utils/pull/89))
   - The `Keyring` class now uses the data types `TypedTransaction` and `TxData` from `@ethereumjs/tx` (`v4.1.1`).
   - The `Keyring` now exposes a new optional method called `generateRandomMnemonic`.
-- Bump `peaceiris/actions-gh-pages` to more recent version ([#88](https://github.com/MetaMask/utils/pull/88))
 
 ## [4.0.0]
 ### Changed
