@@ -7,10 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [5.0.1]
-### Uncategorized
-- Use PAT for publishing docs ([#96](https://github.com/MetaMask/utils/pull/96))
+### Fixed
 - Keep original type when using `hasProperty` if defined ([#94](https://github.com/MetaMask/utils/pull/94))
-- Update GitHub Actions to match module template ([#95](https://github.com/MetaMask/utils/pull/95))
 
 ## [5.0.0]
 ### Changed
