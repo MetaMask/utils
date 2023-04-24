@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.2]
+### Uncategorized
+- Bump `@ethereumjs/tx` to `4.1.2` ([#100](https://github.com/MetaMask/utils/pull/100))
+- Add `init` optional method to Keyring type ([#99](https://github.com/MetaMask/utils/pull/99))
+
 ## [5.0.1]
 ### Fixed
 - Keep original type when using `hasProperty` if defined ([#94](https://github.com/MetaMask/utils/pull/94))
@@ -134,7 +139,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v5.0.2...HEAD
+[5.0.2]: https://github.com/MetaMask/utils/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/MetaMask/utils/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/MetaMask/utils/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/MetaMask/utils/compare/v3.6.0...v4.0.0
