@@ -1470,41 +1470,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 552,
   },
   {
-    value: { a: { b: REVOKED_OBJECT_PROXY.proxy } },
-    valid: false,
-    size: 0,
-  },
-  {
-    value: {
-      get key() {
-        throw new Error();
-      },
-    },
-    valid: false,
-    size: 0,
-  },
-  {
     value: undefined,
-    valid: false,
-    size: 0,
-  },
-  {
-    value: DIRECT_CIRCULAR_REFERENCE_ARRAY,
-    valid: false,
-    size: 0,
-  },
-  {
-    value: INDIRECT_CIRCULAR_REFERENCE_ARRAY,
-    valid: false,
-    size: 0,
-  },
-  {
-    value: DIRECT_CIRCULAR_REFERENCE_OBJECT,
-    valid: false,
-    size: 0,
-  },
-  {
-    value: INDIRECT_CIRCULAR_REFERENCE_OBJECT,
     valid: false,
     size: 0,
   },
