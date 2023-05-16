@@ -1093,36 +1093,6 @@ export const CHARACTER_MAP = {
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
-const DIRECT_CIRCULAR_REFERENCE_ARRAY: unknown[] = [];
-DIRECT_CIRCULAR_REFERENCE_ARRAY.push(DIRECT_CIRCULAR_REFERENCE_ARRAY);
-
-const INDIRECT_CIRCULAR_REFERENCE_ARRAY: unknown[] = [];
-INDIRECT_CIRCULAR_REFERENCE_ARRAY.push([[INDIRECT_CIRCULAR_REFERENCE_ARRAY]]);
-
-const DIRECT_CIRCULAR_REFERENCE_OBJECT: Record<string, unknown> = {};
-DIRECT_CIRCULAR_REFERENCE_OBJECT.prop = DIRECT_CIRCULAR_REFERENCE_OBJECT;
-
-const INDIRECT_CIRCULAR_REFERENCE_OBJECT: Record<string, unknown> = {
-  p1: {
-    p2: {
-      get p3() {
-        return INDIRECT_CIRCULAR_REFERENCE_OBJECT;
-      },
-    },
-  },
-};
-
-const TO_JSON_CIRCULAR_REFERENCE = {
-  toJSON() {
-    return {};
-  },
-};
-
-const CIRCULAR_REFERENCE = { prop: TO_JSON_CIRCULAR_REFERENCE };
-TO_JSON_CIRCULAR_REFERENCE.toJSON = function () {
-  return CIRCULAR_REFERENCE;
-};
-
 const DUPLICATE_DATE = new Date();
 const DUPLICATE_OBJECT = {
   value: 'foo',
@@ -1161,12 +1131,6 @@ const DUPLICATE_REFERENCE = {
     },
   },
 };
-
-const REVOKED_ARRAY_PROXY = Proxy.revocable([], {});
-REVOKED_ARRAY_PROXY.revoke();
-
-const REVOKED_OBJECT_PROXY = Proxy.revocable({}, {});
-REVOKED_OBJECT_PROXY.revoke();
 
 export const JSON_VALIDATION_FIXTURES = [
   {
