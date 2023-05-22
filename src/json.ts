@@ -1,6 +1,9 @@
 import {
+  any,
   array,
   boolean,
+  coerce,
+  create,
   define,
   Infer,
   integer,
@@ -45,19 +48,32 @@ const finiteNumber = () =>
 
 /**
  * A struct to check if the given value is a valid JSON-serializable value.
+ *
+ * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.
  */
 // We cannot infer the type of the struct, because it is recursive.
-export const JsonStruct: Struct<Json> = union([
+export const UnsafeJsonStruct: Struct<Json> = union([
   literal(null),
   boolean(),
   finiteNumber(),
   string(),
-  array(lazy(() => JsonStruct)),
+  array(lazy(() => UnsafeJsonStruct)),
   record(
     string(),
-    lazy(() => JsonStruct),
+    lazy(() => UnsafeJsonStruct),
   ),
 ]);
+
+/**
+ * A struct to check if the given value is a valid JSON-serializable value.
+ *
+ * This struct sanitizes the value before validating it, so that it is safe to
+ * use with untrusted input.
+ */
+export const JsonStruct = coerce(UnsafeJsonStruct, any(), (value) => {
+  assertStruct(value, UnsafeJsonStruct);
+  return JSON.parse(JSON.stringify(value));
+});
 
 /**
  * Check if the given value is a valid {@link Json} value, i.e., a value that is
@@ -67,7 +83,27 @@ export const JsonStruct: Struct<Json> = union([
  * @returns Whether the value is a valid {@link Json} value.
  */
 export function isValidJson(value: unknown): value is Json {
-  return is(value, JsonStruct);
+  try {
+    getValidatedAndSanitizedJson(value as Json);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Validate and sanitize JSON structure.
+ *
+ * Note:
+ * This function will use structure that stringify and then parse
+ * the object provided to ensure that there are no getters
+ * which can have side effects that can cause security issues.
+ *
+ * @param value - JSON structure to be processed.
+ * @returns Sanitized JSON structure.
+ */
+export function getValidatedAndSanitizedJson(value: Json): Json {
+  return create(value, JsonStruct);
 }
 
 /**
