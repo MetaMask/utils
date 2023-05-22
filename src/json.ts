@@ -102,8 +102,8 @@ export function isValidJson(value: unknown): value is Json {
  * @param value - JSON structure to be processed.
  * @returns Sanitized JSON structure.
  */
-export function getValidatedAndSanitizedJson(value: Json): Json {
-  return create(value, JsonStruct);
+export function getValidatedAndSanitizedJson<Type>(value: unknown): Type {
+  return create(value, JsonStruct) as Type;
 }
 
 /**

@@ -59,8 +59,13 @@ describe('json', () => {
 
   describe('getValidatedAndSanitizedJson', () => {
     it('should return sanitized JSON', () => {
+      type TestSubjectType = {
+        a: unknown;
+        b: unknown;
+        jailbreak?: number;
+      };
       // Make sure that getters cannot have side effect
-      const testSubject = { a: {}, b: {} };
+      const testSubject: TestSubjectType = { a: {}, b: {} };
       let counter = 0;
       Object.defineProperty(testSubject, 'jailbreak', {
         enumerable: true,
@@ -72,9 +77,7 @@ describe('json', () => {
           return (counter = value);
         },
       });
-      const result = getValidatedAndSanitizedJson(testSubject) as {
-        jailbreak: number;
-      };
+      const result = getValidatedAndSanitizedJson<TestSubjectType>(testSubject);
 
       // Check that the counter is not increasing
       expect(result.jailbreak).toStrictEqual(result.jailbreak);
