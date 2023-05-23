@@ -84,7 +84,7 @@ export const JsonStruct = coerce(UnsafeJsonStruct, any(), (value) => {
  */
 export function isValidJson(value: unknown): value is Json {
   try {
-    getValidatedAndSanitizedJson(value as Json);
+    getValidatedAndSanitizedJson(value);
     return true;
   } catch {
     return false;
@@ -92,12 +92,13 @@ export function isValidJson(value: unknown): value is Json {
 }
 
 /**
- * Validate and sanitize JSON structure.
+ * Validate and return sanitized JSON.
  *
  * Note:
- * This function will use structure that stringify and then parse
- * the object provided to ensure that there are no getters
- * which can have side effects that can cause security issues.
+ * This function use sanitized JsonStruct for validation
+ * that applies stringify and then parse of a value provided
+ * to ensure that there are no getters which can have side effects
+ * that can cause security issues.
  *
  * @param value - JSON structure to be processed.
  * @returns Sanitized JSON structure.
