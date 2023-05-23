@@ -95,7 +95,7 @@ export function isValidJson(value: unknown): value is Json {
  * Validate and return sanitized JSON.
  *
  * Note:
- * This function use sanitized JsonStruct for validation
+ * This function uses sanitized JsonStruct for validation
  * that applies stringify and then parse of a value provided
  * to ensure that there are no getters which can have side effects
  * that can cause security issues.
