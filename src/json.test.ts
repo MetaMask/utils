@@ -11,7 +11,7 @@ import {
   assertIsPendingJsonRpcResponse,
   getJsonRpcIdValidator,
   getJsonSize,
-  getValidatedAndSanitizedJson,
+  getSafeJson,
   isJsonRpcError,
   isJsonRpcFailure,
   isJsonRpcNotification,
@@ -77,7 +77,7 @@ describe('json', () => {
           return (counter = value);
         },
       });
-      const result = getValidatedAndSanitizedJson<TestSubjectType>(testSubject);
+      const result = getSafeJson<TestSubjectType>(testSubject);
 
       // Check that the counter is not increasing
       expect(result.jailbreak).toStrictEqual(result.jailbreak);

@@ -84,7 +84,7 @@ export const JsonStruct = coerce(UnsafeJsonStruct, any(), (value) => {
  */
 export function isValidJson(value: unknown): value is Json {
   try {
-    getValidatedAndSanitizedJson(value);
+    getSafeJson(value);
     return true;
   } catch {
     return false;
@@ -103,7 +103,7 @@ export function isValidJson(value: unknown): value is Json {
  * @param value - JSON structure to be processed.
  * @returns Sanitized JSON structure.
  */
-export function getValidatedAndSanitizedJson<Type>(value: unknown): Type {
+export function getSafeJson<Type>(value: unknown): Type {
   return create(value, JsonStruct) as Type;
 }
 
