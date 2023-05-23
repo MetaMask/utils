@@ -57,7 +57,7 @@ describe('json', () => {
     });
   });
 
-  describe('getValidatedAndSanitizedJson', () => {
+  describe('getSafeJson', () => {
     it('should return sanitized JSON', () => {
       type TestSubjectType = {
         a: unknown;
