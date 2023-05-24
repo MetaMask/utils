@@ -60,12 +60,11 @@ describe('json', () => {
   describe('getSafeJson', () => {
     it('should return sanitized JSON', () => {
       type TestSubjectType = {
-        a: unknown;
-        b: unknown;
+        a: { value: string };
         jailbreak?: number;
       };
       // Make sure that getters cannot have side effect
-      const testSubject: TestSubjectType = { a: {}, b: {} };
+      const testSubject: TestSubjectType = { a: { value: 'a' } };
       let counter = 0;
       Object.defineProperty(testSubject, 'jailbreak', {
         enumerable: true,

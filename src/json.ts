@@ -103,7 +103,7 @@ export function isValidJson(value: unknown): value is Json {
  * @param value - JSON structure to be processed.
  * @returns Sanitized JSON structure.
  */
-export function getSafeJson<Type>(value: unknown): Type {
+export function getSafeJson<Type extends Json = Json>(value: unknown): Type {
   return create(value, JsonStruct) as Type;
 }
 
