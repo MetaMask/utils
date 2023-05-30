@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [5.0.3]
-### Uncategorized
-- First part of a solution for fixing JSON validation security issue ([#103](https://github.com/MetaMask/utils/pull/103))
-- Standardise repo per module template as of April 2023 ([#102](https://github.com/MetaMask/utils/pull/102))
+### Changed
+- Standardised repo per module template as of April 2023 ([#102](https://github.com/MetaMask/utils/pull/102))
+
+### Security
+- Fixed JSON validation security issue ([#103](https://github.com/MetaMask/utils/pull/103))
+  - Adds a new function `getSafeJson` which validates and returns sanitized JSON.
 
 ## [5.0.2]
 ### Changed
