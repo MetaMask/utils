@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.3]
+### Uncategorized
+- First part of a solution for fixing JSON validation security issue ([#103](https://github.com/MetaMask/utils/pull/103))
+- Standardise repo per module template as of April 2023 ([#102](https://github.com/MetaMask/utils/pull/102))
+
 ## [5.0.2]
 ### Changed
 - The `Keyring` exposes a new optional method `init` ([#99](https://github.com/MetaMask/utils/pull/99))
@@ -141,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v5.0.2...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v5.0.3...HEAD
+[5.0.3]: https://github.com/MetaMask/utils/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/MetaMask/utils/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/MetaMask/utils/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/MetaMask/utils/compare/v4.0.0...v5.0.0
