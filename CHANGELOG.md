@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.0.3]
+## [6.0.0]
 ### Changed
-- Standardised repo per module template as of April 2023 ([#102](https://github.com/MetaMask/utils/pull/102))
+- **BREAKING:** Bump minimum Node version to 16 ([#102](https://github.com/MetaMask/utils/pull/102))
+- **BREAKING:** Target `ES2020` ([#102](https://github.com/MetaMask/utils/pull/102))
 
-### Security
-- Fixed JSON validation security issue ([#103](https://github.com/MetaMask/utils/pull/103))
-  - Adds a new function `getSafeJson` which validates and returns sanitized JSON.
+### Fixed
+- Fix JSON validation security issue ([#103](https://github.com/MetaMask/utils/pull/103))
+  - This adds a new function `getSafeJson` which validates and returns sanitized JSON.
 
 ## [5.0.2]
 ### Changed
@@ -149,8 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v5.0.3...HEAD
-[5.0.3]: https://github.com/MetaMask/utils/compare/v5.0.2...v5.0.3
+[Unreleased]: https://github.com/MetaMask/utils/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/MetaMask/utils/compare/v5.0.2...v6.0.0
 [5.0.2]: https://github.com/MetaMask/utils/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/MetaMask/utils/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/MetaMask/utils/compare/v4.0.0...v5.0.0
