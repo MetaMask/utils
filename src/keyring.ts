@@ -91,7 +91,7 @@ export type Keyring<State extends Json> = {
    *
    * @param address - The address of the account to remove.
    */
-  removeAccount?(address: Hex): void;
+  removeAccount?(address: Hex): Promise<void>;
 
   /**
    * Export the private key for one of the keyring accounts.
