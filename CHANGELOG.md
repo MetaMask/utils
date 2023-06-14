@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.0.1]
-### Uncategorized
+### Fixed
 - Strip `__proto__` and `constructor` JSON properties in `getSafeJson` ([#105](https://github.com/MetaMask/utils/pull/105))
 
 ## [6.0.0]
