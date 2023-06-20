@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.1.0]
-### Uncategorized
+### Added
 - Add optional `destroy` method to `Keyring` type ([#108](https://github.com/MetaMask/utils/pull/108))
 
 ## [6.0.1]
