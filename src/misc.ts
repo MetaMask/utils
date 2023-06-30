@@ -110,10 +110,10 @@ export const hasProperty = <
  * @returns The own property names of the object which are assigned a type
  * derived from the object itself.
  */
-export function getKnownPropertyNames<K extends PropertyKey>(
-  object: Partial<Record<K, any>>,
-): K[] {
-  return Object.getOwnPropertyNames(object) as K[];
+export function getKnownPropertyNames<Key extends PropertyKey>(
+  object: Partial<Record<Key, any>>,
+): Key[] {
+  return Object.getOwnPropertyNames(object) as Key[];
 }
 
 export type PlainObject = Record<number | string | symbol, unknown>;
