@@ -182,6 +182,7 @@ describe('isValidHexAddress', () => {
     '0x1234567890abcdefG',
     '0x1234567890abcdefABCDEFg',
     '0x1234567890abcdefABCDEF1234567890abcdefABCDEFg',
+    '0Xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
   ])('returns false for an invalid hex address', (hexString) => {
     // @ts-expect-error - testing invalid input
     expect(isValidHexAddress(hexString)).toBe(false);
