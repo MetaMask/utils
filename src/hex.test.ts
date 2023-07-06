@@ -4,6 +4,7 @@ import {
   assertIsStrictHexString,
   isHexString,
   isStrictHexString,
+  isValidHexAddress,
   remove0x,
 } from './hex';
 
@@ -148,6 +149,54 @@ describe('assertIsStrictHexString', () => {
     expect(() => assertIsStrictHexString(hexString)).toThrow(
       'Value must be a hexadecimal string, starting with "0x".',
     );
+  });
+});
+
+describe('isValidHexAddress', () => {
+  describe('with allowNonPrefixed option set to true', () => {
+    it.each([
+      '0000000000000000000000000000000000000000',
+      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+      '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+      '0x0000000000000000000000000000000000000000',
+    ])('returns true for a valid prefixed hex address', (hexString) => {
+      expect(isValidHexAddress(hexString)).toBe(true);
+    });
+
+    it.each([
+      '0000000000000000000000000000000000000000',
+      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    ])('returns true for a valid non-prefixed hex address', (hexString) => {
+      expect(isValidHexAddress(hexString)).toBe(true);
+    });
+  });
+
+  describe('with allowNonPrefixed option set to false', () => {
+    it.each([
+      '0000000000000000000000000000000000000000',
+      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    ])('returns false for a valid non-prefixed hex address', (hexString) => {
+      expect(isValidHexAddress(hexString, { allowNonPrefixed: false })).toBe(
+        false,
+      );
+    });
+  });
+
+  it.each([
+    '12345g',
+    '1234567890abcdefg',
+    '1234567890abcdefG',
+    '1234567890abcdefABCDEFg',
+    '1234567890abcdefABCDEF1234567890abcdefABCDEFg',
+    '0x',
+    '0x0',
+    '0x12345g',
+    '0x1234567890abcdefg',
+    '0x1234567890abcdefG',
+    '0x1234567890abcdefABCDEFg',
+    '0x1234567890abcdefABCDEF1234567890abcdefABCDEFg',
+  ])('returns false for an invalid hex address', (hexString) => {
+    expect(isValidHexAddress(hexString)).toBe(false);
   });
 });
 
