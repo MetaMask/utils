@@ -9,6 +9,10 @@ export const StrictHexStruct = pattern(string(), /^0x[0-9a-f]+$/iu) as Struct<
   Hex,
   null
 >;
+export const HexAddressStruct = pattern(
+  string(),
+  /^0x[0-9a-f]{40}$/iu,
+) as Struct<Hex, null>;
 
 /**
  * Check if a string is a valid hex string.
@@ -56,27 +60,13 @@ export function assertIsStrictHexString(value: unknown): asserts value is Hex {
 }
 
 /**
- * Validates that the input is a hex address. This utility by default
- * will return true for hex strings that meet the length requirement
- * of a hex address, but are not necessarily prefixed with `0x`.
+ * Validates that the passed prefixed hex string is a correct hex address.
  *
  * @param possibleAddress - Input parameter to check against.
- * @param options - The validation options.
- * @param options.allowNonPrefixed - If true will allow addresses without `0x` prefix.`
  * @returns Whether or not the input is a valid hex address.
  */
-export function isValidHexAddress(
-  possibleAddress: string,
-  { allowNonPrefixed = true } = {},
-) {
-  const addressToCheck = allowNonPrefixed
-    ? add0x(possibleAddress)
-    : possibleAddress;
-  if (!isHexString(addressToCheck)) {
-    return false;
-  }
-
-  return is(addressToCheck, pattern(string(), /^0x[0-9a-fA-F]{40}$/u));
+export function isValidHexAddress(possibleAddress: Hex) {
+  return is(possibleAddress, HexAddressStruct);
 }
 
 /**

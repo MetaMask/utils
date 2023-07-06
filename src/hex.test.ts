@@ -1,4 +1,5 @@
 import {
+  Hex,
   add0x,
   assertIsHexString,
   assertIsStrictHexString,
@@ -153,33 +154,19 @@ describe('assertIsStrictHexString', () => {
 });
 
 describe('isValidHexAddress', () => {
-  describe('with allowNonPrefixed option set to true', () => {
-    it.each([
-      '0000000000000000000000000000000000000000',
-      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      '0x0000000000000000000000000000000000000000',
-    ])('returns true for a valid prefixed hex address', (hexString) => {
-      expect(isValidHexAddress(hexString)).toBe(true);
-    });
-
-    it.each([
-      '0000000000000000000000000000000000000000',
-      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-    ])('returns true for a valid non-prefixed hex address', (hexString) => {
-      expect(isValidHexAddress(hexString)).toBe(true);
-    });
+  it.each([
+    '0x0000000000000000000000000000000000000000' as Hex,
+    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045' as Hex,
+  ])('returns true for a valid prefixed hex address', (hexString) => {
+    expect(isValidHexAddress(hexString)).toBe(true);
   });
 
-  describe('with allowNonPrefixed option set to false', () => {
-    it.each([
-      '0000000000000000000000000000000000000000',
-      'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-    ])('returns false for a valid non-prefixed hex address', (hexString) => {
-      expect(isValidHexAddress(hexString, { allowNonPrefixed: false })).toBe(
-        false,
-      );
-    });
+  it.each([
+    '0000000000000000000000000000000000000000',
+    'd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+  ])('returns false for a valid non-prefixed hex address', (hexString) => {
+    // @ts-expect-error - testing invalid input
+    expect(isValidHexAddress(hexString)).toBe(false);
   });
 
   it.each([
@@ -196,6 +183,7 @@ describe('isValidHexAddress', () => {
     '0x1234567890abcdefABCDEFg',
     '0x1234567890abcdefABCDEF1234567890abcdefABCDEFg',
   ])('returns false for an invalid hex address', (hexString) => {
+    // @ts-expect-error - testing invalid input
     expect(isValidHexAddress(hexString)).toBe(false);
   });
 });
