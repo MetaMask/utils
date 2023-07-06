@@ -11,7 +11,7 @@ export const StrictHexStruct = pattern(string(), /^0x[0-9a-f]+$/iu) as Struct<
 >;
 export const HexAddressStruct = pattern(
   string(),
-  /^0x[0-9a-f]{40}$/iu,
+  /^0x[0-9a-fA-F]{40}$/u,
 ) as Struct<Hex, null>;
 
 /**
