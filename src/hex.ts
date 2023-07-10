@@ -1,6 +1,8 @@
+import { keccak_256 as keccak256 } from '@noble/hashes/sha3';
 import { is, pattern, string, Struct } from 'superstruct';
 
 import { assert } from './assert';
+import { bytesToHex } from './bytes';
 
 export type Hex = `0x${string}`;
 
@@ -10,6 +12,10 @@ export const StrictHexStruct = pattern(string(), /^0x[0-9a-f]+$/iu) as Struct<
   null
 >;
 export const HexAddressStruct = pattern(
+  string(),
+  /^0x[0-9a-f]{40}$/u,
+) as Struct<Hex, null>;
+export const HexChecksumAddressStruct = pattern(
   string(),
   /^0x[0-9a-fA-F]{40}$/u,
 ) as Struct<Hex, null>;
@@ -60,13 +66,47 @@ export function assertIsStrictHexString(value: unknown): asserts value is Hex {
 }
 
 /**
- * Validates that the passed prefixed hex string is a valid hex address.
+ * Validate that the passed prefixed hex string is a valid hex address, or a
+ * valid mixed-case checksum address.
  *
  * @param possibleAddress - Input parameter to check against.
  * @returns Whether or not the input is a valid hex address.
  */
 export function isValidHexAddress(possibleAddress: Hex) {
-  return is(possibleAddress, HexAddressStruct);
+  return (
+    is(possibleAddress, HexAddressStruct) ||
+    isValidChecksumAddress(possibleAddress)
+  );
+}
+
+/**
+ * Validate that the passed hex string is a valid ERC-55 mixed-case
+ * checksum address.
+ *
+ * @param possibleChecksum - The hex address to check.
+ * @returns True if the address is a checksum address.
+ */
+export function isValidChecksumAddress(possibleChecksum: Hex) {
+  if (!is(possibleChecksum, HexChecksumAddressStruct)) {
+    return false;
+  }
+
+  const unPrefixed = remove0x(possibleChecksum);
+  const unPrefixedHash = remove0x(
+    bytesToHex(keccak256(unPrefixed.toLowerCase())),
+  );
+
+  for (let i = 0; i < unPrefixedHash.length; i++) {
+    const value = parseInt(unPrefixedHash[i] as string, 16);
+    if (
+      (value > 7 && unPrefixed[i]?.toUpperCase() !== unPrefixed[i]) ||
+      (value <= 7 && unPrefixed[i]?.toLowerCase() !== unPrefixed[i])
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**

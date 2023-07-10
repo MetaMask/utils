@@ -3,6 +3,7 @@ import {
   add0x,
   assertIsHexString,
   assertIsStrictHexString,
+  isValidChecksumAddress,
   isHexString,
   isStrictHexString,
   isValidHexAddress,
@@ -182,10 +183,32 @@ describe('isValidHexAddress', () => {
     '0x1234567890abcdefG',
     '0x1234567890abcdefABCDEFg',
     '0x1234567890abcdefABCDEF1234567890abcdefABCDEFg',
+    '0xD8DA6BF26964AF9D7EED9E03E53415D37AA96045',
+    '0xCF5609B003B2776699EEA1233F7C82D5695CC9AA',
     '0Xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
   ])('returns false for an invalid hex address', (hexString) => {
     // @ts-expect-error - testing invalid input
     expect(isValidHexAddress(hexString)).toBe(false);
+  });
+});
+
+describe('isValidChecksumAddress', () => {
+  it.each([
+    '0x0000000000000000000000000000000000000000' as Hex,
+    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045' as Hex,
+    '0xCf5609B003B2776699eEA1233F7C82D5695cC9AA' as Hex,
+    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045' as Hex,
+    '0x8617E340B3D01FA5F11F306F4090FD50E238070D' as Hex,
+  ])('returns true for a valid checksum address', (hexString) => {
+    expect(isValidChecksumAddress(hexString)).toBe(true);
+  });
+
+  it.each([
+    '0xz' as Hex,
+    '0xD8DA6BF26964AF9D7EED9E03E53415D37AA96045' as Hex,
+    '0xCF5609B003B2776699EEA1233F7C82D5695CC9AA' as Hex,
+  ])('returns false for an invalid checksum address', (hexString) => {
+    expect(isValidChecksumAddress(hexString)).toBe(false);
   });
 });
 
