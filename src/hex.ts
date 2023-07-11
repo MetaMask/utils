@@ -80,6 +80,26 @@ export function isValidHexAddress(possibleAddress: Hex) {
 }
 
 /**
+ * Encode a passed hex string as an ERC-55 mixed-case checksum address.
+ *
+ * @param address - The hex address to encode.
+ * @returns The address encoded according to ERC-55.
+ * @see https://eips.ethereum.org/EIPS/eip-55
+ */
+export function getChecksumAddress(address: Hex) {
+  const unPrefixed = remove0x(address.toLowerCase());
+  const unPrefixedHash = remove0x(bytesToHex(keccak256(unPrefixed)));
+  return `0x${unPrefixed
+    .split('')
+    .map((character, nibbleIndex) =>
+      parseInt(unPrefixedHash[nibbleIndex] as string, 16) > 7
+        ? character.toUpperCase()
+        : character,
+    )
+    .join('')}`;
+}
+
+/**
  * Validate that the passed hex string is a valid ERC-55 mixed-case
  * checksum address.
  *
@@ -91,22 +111,7 @@ export function isValidChecksumAddress(possibleChecksum: Hex) {
     return false;
   }
 
-  const unPrefixed = remove0x(possibleChecksum);
-  const unPrefixedHash = remove0x(
-    bytesToHex(keccak256(unPrefixed.toLowerCase())),
-  );
-
-  for (let i = 0; i < unPrefixedHash.length; i++) {
-    const value = parseInt(unPrefixedHash[i] as string, 16);
-    if (
-      (value > 7 && unPrefixed[i]?.toUpperCase() !== unPrefixed[i]) ||
-      (value <= 7 && unPrefixed[i]?.toLowerCase() !== unPrefixed[i])
-    ) {
-      return false;
-    }
-  }
-
-  return true;
+  return getChecksumAddress(possibleChecksum) === possibleChecksum;
 }
 
 /**

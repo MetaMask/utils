@@ -8,6 +8,7 @@ import {
   isStrictHexString,
   isValidHexAddress,
   remove0x,
+  getChecksumAddress,
 } from './hex';
 
 describe('isHexString', () => {
@@ -189,6 +190,30 @@ describe('isValidHexAddress', () => {
   ])('returns false for an invalid hex address', (hexString) => {
     // @ts-expect-error - testing invalid input
     expect(isValidHexAddress(hexString)).toBe(false);
+  });
+});
+
+describe('getChecksumAddress', () => {
+  it('returns the checksum address for a valid hex address', () => {
+    expect(
+      getChecksumAddress('0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed'),
+    ).toBe('0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed');
+
+    expect(
+      getChecksumAddress('0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359'),
+    ).toBe('0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359');
+
+    expect(
+      getChecksumAddress('0x52908400098527886e0f7030069857d2e4169ee7'),
+    ).toBe('0x52908400098527886E0F7030069857D2E4169EE7');
+
+    expect(
+      getChecksumAddress('0xde709f2102306220921060314715629080e2fb77'),
+    ).toBe('0xde709f2102306220921060314715629080e2fb77');
+
+    expect(
+      getChecksumAddress('0x0000000000000000000000000000000000000000'),
+    ).toBe('0x0000000000000000000000000000000000000000');
   });
 });
 
