@@ -80,11 +80,11 @@ export function isValidHexAddress(possibleAddress: Hex) {
 }
 
 /**
- * Encodes a passed hex string as an ERC-55 mixed-case checksum address.
- * Specification: https://eips.ethereum.org/EIPS/eip-55.
+ * Encode a passed hex string as an ERC-55 mixed-case checksum address.
  *
  * @param address - The hex address to encode.
  * @returns The address encoded according to ERC-55.
+ * @see https://eips.ethereum.org/EIPS/eip-55
  */
 export function erc55EncodeAddress(address: Hex) {
   const unPrefixed = remove0x(address.toLowerCase());
