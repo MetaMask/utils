@@ -59,6 +59,9 @@ jobs:
           cache: 'yarn'
       - run: yarn --immutable --immutable-cache
       - run: yarn build:types
+      # This step is dependent on the TypeScript build output, so it's run
+      # here, rather than in the test job.
+      - run: yarn test:types
       - name: Require clean working directory
         shell: bash
         run: |
@@ -114,7 +117,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn --immutable --immutable-cache
-      - run: yarn test
+      - run: yarn test:source
       - name: Require clean working directory
         shell: bash
         run: |
