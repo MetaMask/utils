@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.2.0]
-### Uncategorized
+### Added
 - Add address related utils ([#112](https://github.com/MetaMask/utils/pull/112))
-- Bump semver from 7.3.8 to 7.5.2 ([#110](https://github.com/MetaMask/utils/pull/110))
+  - `isValidHexAddress` has been added to check the validity of an hex address
+  - `getChecksumAddress` has been added to calculate the ERC-55 mixed-case checksum of an hex address
+  - `isValidChecksumAddress` has been added to check the validity of an ERC-55 mixed-case checksum address
 
 ## [6.1.0]
 ### Added
