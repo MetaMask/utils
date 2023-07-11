@@ -215,6 +215,10 @@ describe('getChecksumAddress', () => {
       getChecksumAddress('0x0000000000000000000000000000000000000000'),
     ).toBe('0x0000000000000000000000000000000000000000');
   });
+
+  it('throws for an invalid hex address', () => {
+    expect(() => getChecksumAddress('0x')).toThrow('Invalid hex address.');
+  });
 });
 
 describe('isValidChecksumAddress', () => {

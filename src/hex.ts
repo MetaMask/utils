@@ -87,15 +87,14 @@ export function isValidHexAddress(possibleAddress: Hex) {
  * @see https://eips.ethereum.org/EIPS/eip-55
  */
 export function getChecksumAddress(address: Hex) {
+  assert(is(address, HexChecksumAddressStruct), 'Invalid hex address.');
   const unPrefixed = remove0x(address.toLowerCase());
   const unPrefixedHash = remove0x(bytesToHex(keccak256(unPrefixed)));
   return `0x${unPrefixed
     .split('')
     .map((character, nibbleIndex) => {
       const hashCharacter = unPrefixedHash[nibbleIndex];
-      if (!hashCharacter) {
-        throw new Error('Hash shorter than address');
-      }
+      assert(is(hashCharacter, string()), 'Hash shorter than address.');
       return parseInt(hashCharacter, 16) > 7
         ? character.toUpperCase()
         : character;
