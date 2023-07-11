@@ -66,8 +66,8 @@ export function assertIsStrictHexString(value: unknown): asserts value is Hex {
 }
 
 /**
- * Validate that the passed prefixed hex string is a valid hex address, or a
- * valid mixed-case checksum address.
+ * Validate that the passed prefixed hex string is an all-lowercase
+ * hex address, or a valid mixed-case checksum address.
  *
  * @param possibleAddress - Input parameter to check against.
  * @returns Whether or not the input is a valid hex address.
