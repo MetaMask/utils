@@ -91,11 +91,15 @@ export function getChecksumAddress(address: Hex) {
   const unPrefixedHash = remove0x(bytesToHex(keccak256(unPrefixed)));
   return `0x${unPrefixed
     .split('')
-    .map((character, nibbleIndex) =>
-      parseInt(unPrefixedHash[nibbleIndex] as string, 16) > 7
+    .map((character, nibbleIndex) => {
+      const hashCharacter = unPrefixedHash[nibbleIndex];
+      if (!hashCharacter) {
+        throw new Error('Hash shorter than address');
+      }
+      return parseInt(hashCharacter, 16) > 7
         ? character.toUpperCase()
-        : character,
-    )
+        : character;
+    })
     .join('')}`;
 }
 
