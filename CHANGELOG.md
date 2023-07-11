@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0]
+### Uncategorized
+- Add address related utils ([#112](https://github.com/MetaMask/utils/pull/112))
+- Bump semver from 7.3.8 to 7.5.2 ([#110](https://github.com/MetaMask/utils/pull/110))
+
 ## [6.1.0]
 ### Added
 - Add optional `destroy` method to `Keyring` type ([#108](https://github.com/MetaMask/utils/pull/108))
@@ -158,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v6.1.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v6.2.0...HEAD
+[6.2.0]: https://github.com/MetaMask/utils/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/MetaMask/utils/compare/v6.0.1...v6.1.0
 [6.0.1]: https://github.com/MetaMask/utils/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/MetaMask/utils/compare/v5.0.2...v6.0.0
