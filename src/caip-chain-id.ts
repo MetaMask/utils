@@ -4,9 +4,11 @@ import { assert } from './assert';
 
 export type CaipChainId = `${string}:${string}`;
 
+const CAIP2_REGEX = /^([-a-z0-9]{3,8}):([-_a-zA-Z0-9]{1,32})$/u
+
 export const CaipChainIdStruct = pattern(
   string(),
-  /^[-a-z0-9]{3,8}:[-_a-zA-Z0-9]{1,32}$/u,
+  CAIP2_REGEX,
 ) as Struct<CaipChainId, null>;
 
 export type ParsedCaipChainId = {
@@ -57,7 +59,7 @@ export function getCaipChainIdString(
  * @returns The {@link ParsedCaipChainId} object.
  */
 export function parseCaipChainIdString(caipChainId: string): ParsedCaipChainId {
-  const [namespace, reference] = caipChainId.split(':');
+  const [_, namespace, reference] = caipChainId.match(CAIP2_REGEX) || []
   return {
     namespace: namespace || '',
     reference: reference || '',

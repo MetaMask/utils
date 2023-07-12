@@ -95,22 +95,30 @@ describe('getCaipChainIdString', () => {
 });
 
 describe('parseCaipChainIdString', () => {
-  it('returns the unvalidated caip chain id namespace and reference', () => {
+  it('returns the namespace and reference for valid caip chain id', () => {
     expect(parseCaipChainIdString('eip155:1')).toStrictEqual({
       namespace: 'eip155',
       reference: '1',
     });
-    expect(parseCaipChainIdString('namespace:reference')).toStrictEqual({
-      namespace: 'namespace',
+    expect(parseCaipChainIdString('name:reference')).toStrictEqual({
+      namespace: 'name',
       reference: 'reference',
     });
-    expect(parseCaipChainIdString('abc:123:xyz')).toStrictEqual({
+    expect(parseCaipChainIdString('abc:123')).toStrictEqual({
       namespace: 'abc',
       reference: '123',
     });
   });
 
-  it('returns empty string for missing caip chain id namespace or reference', () => {
+  it('returns empty strings for invalid caip chain id', () => {
+    expect(parseCaipChainIdString('12:a')).toStrictEqual({
+      namespace: '',
+      reference: '',
+    });
+    expect(parseCaipChainIdString('abc:')).toStrictEqual({
+      namespace: '',
+      reference: '',
+    });
     expect(parseCaipChainIdString(':')).toStrictEqual({
       namespace: '',
       reference: '',
@@ -119,9 +127,9 @@ describe('parseCaipChainIdString', () => {
       namespace: '',
       reference: '',
     });
-    expect(parseCaipChainIdString(':abc:123:xyz')).toStrictEqual({
+    expect(parseCaipChainIdString('abc:123:xyz')).toStrictEqual({
       namespace: '',
-      reference: 'abc',
+      reference: '',
     });
   });
 });
