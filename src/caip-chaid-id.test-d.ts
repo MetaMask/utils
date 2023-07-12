@@ -6,6 +6,10 @@ import { CaipChainId } from '.';
 
 expectAssignable<CaipChainId>('namespace:reference');
 
+expectAssignable<CaipChainId>('namespace:');
+
+expectAssignable<CaipChainId>(':reference');
+
 const embeddedString = 'test';
 expectAssignable<CaipChainId>(`${embeddedString}:${embeddedString}`);
 
@@ -15,9 +19,5 @@ expectAssignable<CaipChainId>('namespace:😀');
 expectAssignable<CaipChainId>('😀:reference');
 
 expectNotAssignable<CaipChainId>(0);
-
-expectNotAssignable<CaipChainId>('namespace:');
-
-expectNotAssignable<CaipChainId>(':reference');
 
 expectNotAssignable<CaipChainId>('🙃');

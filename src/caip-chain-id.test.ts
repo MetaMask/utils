@@ -2,6 +2,7 @@ import {
   isCaipChainIdString,
   assertIsCaipChainIdString,
   getCaipChainIdString,
+  parseCaipChainIdString,
 } from './caip-chain-id';
 
 const validCaipChainIdStrings = [
@@ -90,5 +91,37 @@ describe('getCaipChainIdString', () => {
     expect(getCaipChainIdString('UNVALIDATED', '!@#$%^&*()')).toBe(
       'UNVALIDATED:!@#$%^&*()',
     );
+  });
+});
+
+describe('parseCaipChainIdString', () => {
+  it('returns the unvalidated caip chain id namespace and reference', () => {
+    expect(parseCaipChainIdString('eip155:1')).toStrictEqual({
+      namespace: 'eip155',
+      reference: '1',
+    });
+    expect(parseCaipChainIdString('namespace:reference')).toStrictEqual({
+      namespace: 'namespace',
+      reference: 'reference',
+    });
+    expect(parseCaipChainIdString('abc:123:xyz')).toStrictEqual({
+      namespace: 'abc',
+      reference: '123',
+    });
+  });
+
+  it('returns empty string for missing caip chain id namespace or reference', () => {
+    expect(parseCaipChainIdString(':')).toStrictEqual({
+      namespace: '',
+      reference: '',
+    });
+    expect(parseCaipChainIdString('')).toStrictEqual({
+      namespace: '',
+      reference: '',
+    });
+    expect(parseCaipChainIdString(':abc:123:xyz')).toStrictEqual({
+      namespace: '',
+      reference: 'abc',
+    });
   });
 });

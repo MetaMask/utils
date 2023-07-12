@@ -9,6 +9,11 @@ export const CaipChainIdStruct = pattern(
   /^[-a-z0-9]{3,8}:[-_a-zA-Z0-9]{1,32}$/u,
 ) as Struct<CaipChainId, null>;
 
+export type ParsedCaipChainId = {
+  namespace: string;
+  reference: string;
+};
+
 /**
  * Check if a string is a valid caip chain id string.
  *
@@ -43,4 +48,18 @@ export function getCaipChainIdString(
   reference: string,
 ): string {
   return `${namespace}:${reference}`;
+}
+
+/**
+ * Returns the namespace and reference strings from caip chain id string.
+ *
+ * @param caipChainId - The caip chain id string.
+ * @returns The {@link ParsedCaipChainId} object.
+ */
+export function parseCaipChainIdString(caipChainId: string): ParsedCaipChainId {
+  const [namespace, reference] = caipChainId.split(':');
+  return {
+    namespace: namespace || '',
+    reference: reference || '',
+  };
 }
