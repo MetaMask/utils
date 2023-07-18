@@ -17,25 +17,25 @@ export type ParsedCaipChainId = {
 };
 
 /**
- * Check if a string is a valid caip chain id string.
+ * Check if a string is a valid caip chain id.
  *
  * @param value - The value to check.
  * @returns Whether the value is a valid caip chain id string.
  */
-export function isCaipChainIdString(value: unknown): value is CaipChainId {
+export function isCaipChainId(value: unknown): value is CaipChainId {
   return is(value, CaipChainIdStruct);
 }
 
 /**
- * Assert that a value is a valid caip chain id string.
+ * Assert that a value is a valid caip chain id.
  *
  * @param value - The value to check.
  * @throws If the value is not a valid caip chain id string.
  */
-export function assertIsCaipChainIdString(
+export function assertIsCaipChainId(
   value: unknown,
 ): asserts value is CaipChainId {
-  assert(isCaipChainIdString(value), 'Value must be a caip chain id string.');
+  assert(isCaipChainId(value), 'Value must be a caip chain id string.');
 }
 
 /**
@@ -45,10 +45,10 @@ export function assertIsCaipChainIdString(
  * @param reference - The caip chaid id reference string.
  * @returns The unvalidated caip chaid id string.
  */
-export function getCaipChainIdString(
+export function buildCaipChainId(
   namespace: string,
   reference: string,
-): string {
+): CaipChainId {
   return `${namespace}:${reference}`;
 }
 
@@ -58,7 +58,7 @@ export function getCaipChainIdString(
  * @param caipChainId - The caip chain id string.
  * @returns The {@link ParsedCaipChainId} object.
  */
-export function parseCaipChainIdString(caipChainId: string): ParsedCaipChainId {
+export function parseCaipChainId(caipChainId: CaipChainId): ParsedCaipChainId {
   const [, namespace, reference] = caipChainId.match(CAIP2_REGEX) ?? [];
   return {
     namespace: namespace ?? '',

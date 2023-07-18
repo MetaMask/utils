@@ -1,11 +1,11 @@
 import {
-  isCaipChainIdString,
-  assertIsCaipChainIdString,
-  getCaipChainIdString,
-  parseCaipChainIdString,
+  isCaipChainId,
+  assertIsCaipChainId,
+  buildCaipChainId,
+  parseCaipChainId,
 } from './caip-chain-id';
 
-const validCaipChainIdStrings = [
+const validCaipChainIds = [
   '123:a',
   '12345678:a',
   'abc:1',
@@ -25,7 +25,7 @@ const validCaipChainIdStrings = [
   'chainstd:8c3444cf8970a9e41a706fab93e7a6c4',
 ] as const;
 
-const invalidCaipChainIdStrings = [
+const invalidCaipChainIds = [
   true,
   false,
   null,
@@ -47,87 +47,83 @@ const invalidCaipChainIdStrings = [
   'abc:!@#$%^&*()123',
 ] as const;
 
-describe('isCaipChainIdString', () => {
-  it.each(validCaipChainIdStrings)(
+describe('isCaipChainId', () => {
+  it.each(validCaipChainIds)(
     'returns true for a valid caip chain id string',
-    (caipChainIdString) => {
-      expect(isCaipChainIdString(caipChainIdString)).toBe(true);
+    (caipChainId) => {
+      expect(isCaipChainId(caipChainId)).toBe(true);
     },
   );
 
-  it.each(invalidCaipChainIdStrings)(
+  it.each(invalidCaipChainIds)(
     'returns false for an invalid caip chain id string',
-    (caipChainIdString) => {
-      expect(isCaipChainIdString(caipChainIdString)).toBe(false);
+    (caipChainId) => {
+      expect(isCaipChainId(caipChainId)).toBe(false);
     },
   );
 });
 
-describe('assertIsCaipChainIdString', () => {
-  it.each(validCaipChainIdStrings)(
+describe('assertIsCaipChainId', () => {
+  it.each(validCaipChainIds)(
     'does not throw for a valid caip chain id string',
-    (caipChainIdString) => {
-      expect(() => assertIsCaipChainIdString(caipChainIdString)).not.toThrow();
+    (caipChainId) => {
+      expect(() => assertIsCaipChainId(caipChainId)).not.toThrow();
     },
   );
 
-  it.each(invalidCaipChainIdStrings)(
+  it.each(invalidCaipChainIds)(
     'throws for an invalid caip chain id string',
-    (caipChainIdString) => {
-      expect(() => assertIsCaipChainIdString(caipChainIdString)).toThrow(
+    (caipChainId) => {
+      expect(() => assertIsCaipChainId(caipChainId)).toThrow(
         'Value must be a caip chain id string.',
       );
     },
   );
 });
 
-describe('getCaipChainIdString', () => {
+describe('buildCaipChainId', () => {
   it('returns the unvalidated caip chain id string', () => {
-    expect(getCaipChainIdString('eip155', '1')).toBe('eip155:1');
-    expect(getCaipChainIdString('namespace', 'reference')).toBe(
+    expect(buildCaipChainId('eip155', '1')).toBe('eip155:1');
+    expect(buildCaipChainId('namespace', 'reference')).toBe(
       'namespace:reference',
     );
-    expect(getCaipChainIdString('', '')).toBe(':');
-    expect(getCaipChainIdString('UNVALIDATED', '!@#$%^&*()')).toBe(
+    expect(buildCaipChainId('', '')).toBe(':');
+    expect(buildCaipChainId('UNVALIDATED', '!@#$%^&*()')).toBe(
       'UNVALIDATED:!@#$%^&*()',
     );
   });
 });
 
-describe('parseCaipChainIdString', () => {
+describe('parseCaipChainId', () => {
   it('returns the namespace and reference for valid caip chain id', () => {
-    expect(parseCaipChainIdString('eip155:1')).toStrictEqual({
+    expect(parseCaipChainId('eip155:1')).toStrictEqual({
       namespace: 'eip155',
       reference: '1',
     });
-    expect(parseCaipChainIdString('name:reference')).toStrictEqual({
+    expect(parseCaipChainId('name:reference')).toStrictEqual({
       namespace: 'name',
       reference: 'reference',
     });
-    expect(parseCaipChainIdString('abc:123')).toStrictEqual({
+    expect(parseCaipChainId('abc:123')).toStrictEqual({
       namespace: 'abc',
       reference: '123',
     });
   });
 
   it('returns empty strings for invalid caip chain id', () => {
-    expect(parseCaipChainIdString('12:a')).toStrictEqual({
+    expect(parseCaipChainId('12:a')).toStrictEqual({
       namespace: '',
       reference: '',
     });
-    expect(parseCaipChainIdString('abc:')).toStrictEqual({
+    expect(parseCaipChainId('abc:')).toStrictEqual({
       namespace: '',
       reference: '',
     });
-    expect(parseCaipChainIdString(':')).toStrictEqual({
+    expect(parseCaipChainId(':')).toStrictEqual({
       namespace: '',
       reference: '',
     });
-    expect(parseCaipChainIdString('')).toStrictEqual({
-      namespace: '',
-      reference: '',
-    });
-    expect(parseCaipChainIdString('abc:123:xyz')).toStrictEqual({
+    expect(parseCaipChainId('abc:123:xyz')).toStrictEqual({
       namespace: '',
       reference: '',
     });
