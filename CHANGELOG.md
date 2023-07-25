@@ -7,13 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [7.0.0]
-### Uncategorized
-- Bump semver to ensure signed provenance, CVE fix ([#123](https://github.com/MetaMask/utils/pull/123))
-- BREAKING: Synchronise package with module template to fix ESM build ([#124](https://github.com/MetaMask/utils/pull/124))
-- Bump word-wrap from 1.2.3 to 1.2.4 ([#122](https://github.com/MetaMask/utils/pull/122))
-- Bump @metamask/auto-changelog from 3.1.0 to 3.2.0 ([#117](https://github.com/MetaMask/utils/pull/117))
-- Add getKnownPropertyNames ([#111](https://github.com/MetaMask/utils/pull/111))
-- Standardise repo per module template as of July 2023 ([#115](https://github.com/MetaMask/utils/pull/115))
+### Added
+- Add `getKnownPropertyNames` function ([#111](https://github.com/MetaMask/utils/pull/111))
+
+### Changed
+- **BREAKING:** Build the package as both CJS and ESM ([#115](https://github.com/MetaMask/utils/pull/115), [#124](https://github.com/MetaMask/utils/pull/124))
+  - It's no longer possible to import from the `dist` folder. Everything must be imported from `@metamask/utils`.
 
 ## [6.2.0]
 ### Added
