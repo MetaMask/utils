@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING:** Build the package as both CJS and ESM ([#115](https://github.com/MetaMask/utils/pull/115), [#124](https://github.com/MetaMask/utils/pull/124))
   - It's no longer possible to import from the `dist` folder. Everything must be imported from `@metamask/utils`.
+- Bump `semver` to `^7.5.4` ([#123](https://github.com/MetaMask/utils/pull/123))
 
 ## [6.2.0]
 ### Added
