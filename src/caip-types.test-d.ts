@@ -1,6 +1,6 @@
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
-import {
+import type {
   CaipAccountId,
   CaipChain,
   CaipChainId,
