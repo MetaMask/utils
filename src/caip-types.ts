@@ -15,10 +15,10 @@ export const CAIP_CHAIN_ID_REGEX =
 export const CAIP_NAMESPACE_ID_REGEX = /^[-a-z0-9]{3,8}$/u;
 
 export const CAIP_ACCOUNT_ID_REGEX =
-  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-a-zA-Z0-9]{1,32})):(?<accountAddress>[a-zA-Z0-9]{1,128})$/u;
+  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-a-zA-Z0-9]{1,32})):(?<accountAddress>[-.%a-zA-Z0-9]{1,128})$/u;
 
 export const CAIP_ACCOUNT_ADDRESS_REGEX =
-  /^(?<accountAddress>[a-zA-Z0-9]{1,128})$/u;
+  /^(?<accountAddress>[-.%a-zA-Z0-9]{1,128})$/u;
 
 /**
  * Parse a chain ID string to an object containing the namespace and reference.
@@ -79,10 +79,10 @@ export const LimitedString = size(string(), 1, 40);
  * A CAIP-2 chain ID, i.e., a human-readable namespace and reference.
  */
 export const CaipChainIdStruct = pattern(string(), CAIP_CHAIN_ID_REGEX);
-export type CaipChainId = `${string}:${string}`;
+export type CaipChainId = Infer<typeof CaipChainIdStruct>;
 
 export const CaipAccountIdStruct = pattern(string(), CAIP_ACCOUNT_ID_REGEX);
-export type CaipAccountId = `${CaipChainId}:${string}`;
+export type CaipAccountId = Infer<typeof CaipAccountIdStruct>;
 
 export const CaipAccountIdArrayStruct = array(CaipAccountIdStruct);
 
@@ -184,6 +184,8 @@ export function isCaipAccountIdArray(value: unknown): value is CaipAccountId[] {
  * @param value - The value to validate.
  * @returns True if the value is a valid {@link CaipAccountAddress}.
  */
-export function isCaipAccountAddress(value: unknown): value is CaipAccountAddress {
+export function isCaipAccountAddress(
+  value: unknown,
+): value is CaipAccountAddress {
   return is(value, CaipAccountAddressStruct);
 }

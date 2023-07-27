@@ -1,4 +1,5 @@
 import {
+  isCaipAccountAddress,
   isCaipAccountId,
   isCaipAccountIdArray,
   isCaipChainId,
@@ -323,5 +324,37 @@ describe('isCaipNamespace', () => {
     { chains: ['foo'] },
   ])('returns false for an invalid namespace', (namespace) => {
     expect(isCaipNamespace(namespace)).toBe(false);
+  });
+});
+
+describe('isCaipAccountAddress', () => {
+  it.each([
+    Array(128).fill('0').join(''),
+    '0',
+    '0x0',
+    '0x0000000000000000000000000000000000000000',
+    '0xab16a96D359eC26a11e2C2b3d8f8B8942d5Bfcdb',
+    '128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
+    'cosmos1t2uflqwqe0fsj0shcfkrvpukewcw40yjj6hdc0',
+    '5hmuyxw9xdgbpptgypokw4thfyoe3ryenebr381z9iaegmfy',
+    '0x02dd1b492765c064eac4039e3841aa5f382773b598097a40073bd8b48170ab57',
+    '6d9b0b4b9994e8a6afbd3dc3ed983cd51c755afb27cd1dc7825ef59c134a39f7',
+    '0.0.1234567890-zbhlt',
+  ])('returns true for a valid account address', (id) => {
+    expect(isCaipAccountAddress(id)).toBe(true);
+  });
+
+  it.each([
+    true,
+    false,
+    null,
+    undefined,
+    1,
+    {},
+    [],
+    '',
+    Array(129).fill('a').join(''),
+  ])('returns false for an invalid account address', (id) => {
+    expect(isCaipAccountAddress(id)).toBe(false);
   });
 });

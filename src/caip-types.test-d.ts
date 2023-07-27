@@ -1,6 +1,7 @@
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
 import type {
+  CaipAccountAddress,
   CaipAccountId,
   CaipChain,
   CaipChainId,
@@ -27,6 +28,9 @@ expectAssignable<CaipAccountId>(
 expectAssignable<CaipNamespaceId>('string');
 expectAssignable<CaipNamespaceId>(`${embeddedString}`);
 
+expectAssignable<CaipAccountAddress>('string');
+expectAssignable<CaipAccountAddress>(`${embeddedString}`);
+
 // Not valid caip strings:
 
 expectAssignable<CaipChainId>('namespace:😀');
@@ -40,6 +44,8 @@ expectNotAssignable<CaipAccountId>(0);
 expectNotAssignable<CaipAccountId>('🙃');
 
 expectNotAssignable<CaipNamespaceId>(0);
+
+expectNotAssignable<CaipAccountAddress>(0);
 
 // Valid caip objects:
 
