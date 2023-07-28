@@ -99,8 +99,8 @@ export function isCaipAccountAddress(
 }
 
 /**
- * Parse a CAIP-2 chain ID string to an object containing the namespace and reference.
- * This validates the CAIP chain ID before parsing it.
+ * Parse a CAIP-2 chain ID to an object containing the namespace and reference.
+ * This validates the CAIP-2 chain ID before parsing it.
  *
  * @param caipChainId - The CAIP-2 chain ID to validate and parse.
  * @returns The parsed CAIP-2 chain ID.
@@ -121,8 +121,8 @@ export function parseCaipChainId(caipChainId: CaipChainId): {
 }
 
 /**
- * Parse an CAIP-10 account ID to an object containing the chain, chain ID, and account address.
- * This validates the CAIP account ID before parsing it.
+ * Parse an CAIP-10 account ID to an object containing the chain ID, parsed chain ID, and account address.
+ * This validates the CAIP-10 account ID before parsing it.
  *
  * @param caipAccountId - The CAIP-10 account ID to validate and parse.
  * @returns The parsed CAIP-10 account ID.
