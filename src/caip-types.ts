@@ -79,10 +79,10 @@ export const LimitedString = size(string(), 1, 40);
  * A CAIP-2 chain ID, i.e., a human-readable namespace and reference.
  */
 export const CaipChainIdStruct = pattern(string(), CAIP_CHAIN_ID_REGEX);
-export type CaipChainId = Infer<typeof CaipChainIdStruct>;
+export type CaipChainId = `${string}:${string}`;
 
 export const CaipAccountIdStruct = pattern(string(), CAIP_ACCOUNT_ID_REGEX);
-export type CaipAccountId = Infer<typeof CaipAccountIdStruct>;
+export type CaipAccountId = `${string}:${string}:${string}`;
 
 export const CaipAccountIdArrayStruct = array(CaipAccountIdStruct);
 
@@ -93,7 +93,10 @@ export const CaipChainStruct = object({
   id: CaipChainIdStruct,
   name: LimitedString,
 });
-export type CaipChain = Infer<typeof CaipChainStruct>;
+export type CaipChain = {
+  id: CaipChainId;
+  name: string;
+};
 
 export const CaipNamespaceStruct = object({
   /**
@@ -111,7 +114,11 @@ export const CaipNamespaceStruct = object({
    */
   events: optional(array(LimitedString)),
 });
-export type CaipNamespace = Infer<typeof CaipNamespaceStruct>;
+export type CaipNamespace = {
+  chains: CaipChain[];
+  methods?: string[];
+  events?: string[];
+};
 
 /**
  * A CAIP-2 namespace, i.e., the first part of a chain ID.

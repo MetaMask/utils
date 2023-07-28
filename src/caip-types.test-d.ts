@@ -50,22 +50,22 @@ expectNotAssignable<CaipAccountAddress>(0);
 // Valid caip objects:
 
 expectAssignable<CaipChain>({
-  id: 'string',
+  id: 'namespace:reference',
   name: 'string',
 });
 expectAssignable<CaipChain>({
-  id: `${embeddedString}`,
+  id: `${embeddedString}:${embeddedString}`,
   name: `${embeddedString}`,
 });
 
 expectAssignable<CaipNamespace>({
   chains: [
     {
-      id: 'string',
+      id: 'namespace:reference',
       name: 'string',
     },
     {
-      id: `${embeddedString}`,
+      id: `${embeddedString}:${embeddedString}`,
       name: `${embeddedString}`,
     },
   ],
@@ -73,11 +73,11 @@ expectAssignable<CaipNamespace>({
 expectAssignable<CaipNamespace>({
   chains: [
     {
-      id: 'string',
+      id: 'namespace:reference',
       name: 'string',
     },
     {
-      id: `${embeddedString}`,
+      id: `${embeddedString}:${embeddedString}`,
       name: `${embeddedString}`,
     },
   ],
