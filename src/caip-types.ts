@@ -1,79 +1,17 @@
 import type { Infer } from 'superstruct';
-import {
-  array,
-  is,
-  object,
-  optional,
-  pattern,
-  size,
-  string,
-} from 'superstruct';
+import { is, pattern, string } from 'superstruct';
 
 export const CAIP_CHAIN_ID_REGEX =
-  /^(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-a-zA-Z0-9]{1,32})$/u;
+  /^(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-_a-zA-Z0-9]{1,32})$/u;
 
-export const CAIP_NAMESPACE_ID_REGEX = /^[-a-z0-9]{3,8}$/u;
+export const CAIP_NAMESPACE_REGEX = /^[-a-z0-9]{3,8}$/u;
+
+export const CAIP_REFERENCE_REGEX = /^[-_a-zA-Z0-9]{1,32}$/u;
 
 export const CAIP_ACCOUNT_ID_REGEX =
-  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-a-zA-Z0-9]{1,32})):(?<accountAddress>[-.%a-zA-Z0-9]{1,128})$/u;
+  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-_a-zA-Z0-9]{1,32})):(?<accountAddress>[-.%a-zA-Z0-9]{1,128})$/u;
 
-export const CAIP_ACCOUNT_ADDRESS_REGEX =
-  /^(?<accountAddress>[-.%a-zA-Z0-9]{1,128})$/u;
-
-/**
- * Parse a chain ID string to an object containing the namespace and reference.
- * This validates the chain ID before parsing it.
- *
- * @param caipChainId - The chain ID to validate and parse.
- * @returns The parsed chain ID.
- */
-export function parseCaipChainId(caipChainId: CaipChainId): {
-  namespace: CaipNamespaceId;
-  reference: string;
-} {
-  const match = CAIP_CHAIN_ID_REGEX.exec(caipChainId);
-  if (!match?.groups) {
-    throw new Error('Invalid chain ID.');
-  }
-
-  return {
-    namespace: match.groups.namespace as CaipNamespaceId,
-    reference: match.groups.reference as string,
-  };
-}
-
-/**
- * Parse an account ID to an object containing the chain, chain ID and address.
- * This validates the account ID before parsing it.
- *
- * @param accountId - The account ID to validate and parse.
- * @returns The parsed account ID.
- */
-export function parseCaipAccountId(accountId: CaipAccountId): {
-  chain: { namespace: CaipNamespaceId; reference: string };
-  chainId: CaipChainId;
-  address: string;
-} {
-  const match = CAIP_ACCOUNT_ID_REGEX.exec(accountId);
-  if (!match?.groups) {
-    throw new Error('Invalid account ID.');
-  }
-
-  return {
-    address: match.groups.accountAddress as string,
-    chainId: match.groups.chainId as CaipChainId,
-    chain: {
-      namespace: match.groups.namespace as CaipNamespaceId,
-      reference: match.groups.reference as string,
-    },
-  };
-}
-
-/**
- * A helper struct for a string with a minimum length of 1 and a maximum length
- * of 40.
- */
-export const LimitedString = size(string(), 1, 40);
+export const CAIP_ACCOUNT_ADDRESS_REGEX = /^[-.%a-zA-Z0-9]{1,128}$/u;
 
 /**
  * A CAIP-2 chain ID, i.e., a human-readable namespace and reference.
@@ -81,53 +19,26 @@ export const LimitedString = size(string(), 1, 40);
 export const CaipChainIdStruct = pattern(string(), CAIP_CHAIN_ID_REGEX);
 export type CaipChainId = `${string}:${string}`;
 
+/**
+ * A CAIP-2 namespace, i.e., the first part of a CAIP chain ID.
+ */
+export const CaipNamespaceStruct = pattern(string(), CAIP_NAMESPACE_REGEX);
+export type CaipNamespace = Infer<typeof CaipNamespaceStruct>;
+
+/**
+ * A CAIP-2 reference, i.e., the second part of a CAIP chain ID.
+ */
+export const CaipReferenceStruct = pattern(string(), CAIP_REFERENCE_REGEX);
+export type CaipReference = Infer<typeof CaipReferenceStruct>;
+
+/**
+ * A CAIP-10 account ID, i.e., a human-readable namespace, reference, and account address.
+ */
 export const CaipAccountIdStruct = pattern(string(), CAIP_ACCOUNT_ID_REGEX);
 export type CaipAccountId = `${string}:${string}:${string}`;
 
-export const CaipAccountIdArrayStruct = array(CaipAccountIdStruct);
-
 /**
- * A chain descriptor.
- */
-export const CaipChainStruct = object({
-  id: CaipChainIdStruct,
-  name: LimitedString,
-});
-export type CaipChain = {
-  id: CaipChainId;
-  name: string;
-};
-
-export const CaipNamespaceStruct = object({
-  /**
-   * A list of supported chains in the namespace.
-   */
-  chains: array(CaipChainStruct),
-
-  /**
-   * A list of supported RPC methods on the namespace, that a DApp can call.
-   */
-  methods: optional(array(LimitedString)),
-
-  /**
-   * A list of supported RPC events on the namespace, that a DApp can listen to.
-   */
-  events: optional(array(LimitedString)),
-});
-export type CaipNamespace = {
-  chains: CaipChain[];
-  methods?: string[];
-  events?: string[];
-};
-
-/**
- * A CAIP-2 namespace, i.e., the first part of a chain ID.
- */
-export const CaipNamespaceIdStruct = pattern(string(), CAIP_NAMESPACE_ID_REGEX);
-export type CaipNamespaceId = Infer<typeof CaipNamespaceIdStruct>;
-
-/**
- * A CAIP-10 account address, i.e., the last part of the account ID.
+ * A CAIP-10 account address, i.e., the third part of the CAIP account ID.
  */
 export const CaipAccountAddressStruct = pattern(
   string(),
@@ -136,53 +47,43 @@ export const CaipAccountAddressStruct = pattern(
 export type CaipAccountAddress = Infer<typeof CaipAccountAddressStruct>;
 
 /**
- * Check if the given value is a CAIP-2 chain ID.
+ * Check if the given value is a {@link CaipChainId}.
  *
  * @param value - The value to check.
- * @returns Whether the value is a CAIP-2 chain ID.
+ * @returns Whether the value is a {@link CaipChainId}.
  */
 export function isCaipChainId(value: unknown): value is CaipChainId {
   return is(value, CaipChainIdStruct);
 }
 
 /**
- * Check if the given value is a CAIP-2 namespace ID.
+ * Check if the given value is a {@link CaipNamespace}.
  *
  * @param value - The value to check.
- * @returns Whether the value is a CAIP-2 namespace ID.
- */
-export function isCaipNamespaceId(value: unknown): value is CaipNamespaceId {
-  return is(value, CaipNamespaceIdStruct);
-}
-
-/**
- * Check if a value is a {@link CaipNamespace}.
- *
- * @param value - The value to validate.
- * @returns True if the value is a valid {@link CaipNamespace}.
+ * @returns Whether the value is a {@link CaipNamespace}.
  */
 export function isCaipNamespace(value: unknown): value is CaipNamespace {
   return is(value, CaipNamespaceStruct);
 }
 
 /**
- * Check if the given value is a CAIP-10 account ID.
+ * Check if the given value is a {@link CaipReference}.
  *
  * @param value - The value to check.
- * @returns Whether the value is a CAIP-10 account ID.
+ * @returns Whether the value is a {@link CaipReference}.
  */
-export function isCaipAccountId(value: unknown): value is CaipAccountId {
-  return is(value, CaipAccountIdStruct);
+export function isCaipReference(value: unknown): value is CaipReference {
+  return is(value, CaipReferenceStruct);
 }
 
 /**
- * Check if the given value is an array of CAIP-10 account IDs.
+ * Check if the given value is a {@link CaipAccountId}.
  *
  * @param value - The value to check.
- * @returns Whether the value is an array of CAIP-10 account IDs.
+ * @returns Whether the value is a {@link CaipAccountId}.
  */
-export function isCaipAccountIdArray(value: unknown): value is CaipAccountId[] {
-  return is(value, CaipAccountIdArrayStruct);
+export function isCaipAccountId(value: unknown): value is CaipAccountId {
+  return is(value, CaipAccountIdStruct);
 }
 
 /**
@@ -195,4 +96,53 @@ export function isCaipAccountAddress(
   value: unknown,
 ): value is CaipAccountAddress {
   return is(value, CaipAccountAddressStruct);
+}
+
+/**
+ * Parse a CAIP-2 chain ID string to an object containing the namespace and reference.
+ * This validates the CAIP chain ID before parsing it.
+ *
+ * @param caipChainId - The CAIP-2 chain ID to validate and parse.
+ * @returns The parsed CAIP-2 chain ID.
+ */
+export function parseCaipChainId(caipChainId: CaipChainId): {
+  namespace: CaipNamespace;
+  reference: CaipReference;
+} {
+  const match = CAIP_CHAIN_ID_REGEX.exec(caipChainId);
+  if (!match?.groups) {
+    throw new Error('Invalid CAIP chain ID.');
+  }
+
+  return {
+    namespace: match.groups.namespace as CaipNamespace,
+    reference: match.groups.reference as CaipReference,
+  };
+}
+
+/**
+ * Parse an CAIP-10 account ID to an object containing the chain, chain ID, and account address.
+ * This validates the CAIP account ID before parsing it.
+ *
+ * @param caipAccountId - The CAIP-10 account ID to validate and parse.
+ * @returns The parsed CAIP-10 account ID.
+ */
+export function parseCaipAccountId(caipAccountId: CaipAccountId): {
+  address: CaipAccountAddress;
+  chainId: CaipChainId;
+  chain: { namespace: CaipNamespace; reference: CaipReference };
+} {
+  const match = CAIP_ACCOUNT_ID_REGEX.exec(caipAccountId);
+  if (!match?.groups) {
+    throw new Error('Invalid CAIP account ID.');
+  }
+
+  return {
+    address: match.groups.accountAddress as CaipAccountAddress,
+    chainId: match.groups.chainId as CaipChainId,
+    chain: {
+      namespace: match.groups.namespace as CaipNamespace,
+      reference: match.groups.reference as CaipReference,
+    },
+  };
 }
