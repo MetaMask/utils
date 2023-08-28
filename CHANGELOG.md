@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.0.0]
-### Uncategorized
-- Fix JsonRpcRequest to be valid json ([#130](https://github.com/MetaMask/utils/pull/130))
-- Fix changelog entry ([#127](https://github.com/MetaMask/utils/pull/127))
+### Changed
+- types: **BREAKING**: `JsonRpcParams` no longer accepts `undefined` as value as `undefined` is not a valid JSON type. ([#130](https://github.com/MetaMask/utils/pull/130))
 
 ## [7.1.0]
 ### Added
