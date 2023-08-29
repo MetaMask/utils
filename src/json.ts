@@ -198,7 +198,7 @@ export const JsonRpcRequestStruct: Struct<
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: JsonRpcParamsStruct,
+  params: optional(JsonRpcParamsStruct),
 }) as Struct<
   {
     id: string | number | null;
@@ -246,7 +246,7 @@ export const JsonRpcNotificationStruct: Struct<
 > = object({
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: JsonRpcParamsStruct,
+  params: optional(JsonRpcParamsStruct),
 }) as Struct<
   {
     jsonrpc: '2.0';
