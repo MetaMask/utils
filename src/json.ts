@@ -181,44 +181,18 @@ export const JsonRpcParamsStruct: Struct<Json[] | Record<string, Json>, null> =
 
 export type JsonRpcParams = Json[] | Record<string, Json>;
 
-export const JsonRpcRequestStruct: Struct<
-  {
-    id: string | number | null;
-    jsonrpc: '2.0';
-    method: string;
-    params?: Json[] | Record<string, Json>;
-  },
-  {
-    id: Struct<string | number | null, null>;
-    jsonrpc: Struct<'2.0', '2.0'>;
-    method: Struct<string, null>;
-    params?: Struct<Json[] | Record<string, Json>, null>;
-  }
-> = object({
+export const JsonRpcRequestStruct = object({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
   params: optional(JsonRpcParamsStruct),
-}) as Struct<
-  {
-    id: string | number | null;
-    jsonrpc: '2.0';
-    method: string;
-    params?: Json[] | Record<string, Json>;
-  },
-  {
-    id: Struct<string | number | null, null>;
-    jsonrpc: Struct<'2.0', '2.0'>;
-    method: Struct<string, null>;
-    params?: Struct<Json[] | Record<string, Json>, null>;
-  }
->;
+});
 
 export type InferWithParams<
   Type extends Struct<any>,
   Params extends JsonRpcParams,
 > = Omit<Infer<Type>, 'params'> & {
-  params?: Params;
+  params?: Exclude<Params, undefined>;
 };
 
 /**
@@ -227,33 +201,11 @@ export type InferWithParams<
 export type JsonRpcRequest<Params extends JsonRpcParams = JsonRpcParams> =
   InferWithParams<typeof JsonRpcRequestStruct, Params>;
 
-export const JsonRpcNotificationStruct: Struct<
-  {
-    jsonrpc: '2.0';
-    method: string;
-    params?: Json[] | Record<string, Json>;
-  },
-  {
-    jsonrpc: Struct<'2.0', '2.0'>;
-    method: Struct<string, null>;
-    params?: Struct<Json[] | Record<string, Json>, null>;
-  }
-> = object({
+export const JsonRpcNotificationStruct = object({
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
   params: optional(JsonRpcParamsStruct),
-}) as Struct<
-  {
-    jsonrpc: '2.0';
-    method: string;
-    params?: Json[] | Record<string, Json>;
-  },
-  {
-    jsonrpc: Struct<'2.0', '2.0'>;
-    method: Struct<string, null>;
-    params?: Struct<Json[] | Record<string, Json>, null>;
-  }
->;
+});
 
 /**
  * A JSON-RPC notification object.
