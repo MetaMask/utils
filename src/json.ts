@@ -268,7 +268,7 @@ export const JsonRpcRequestStruct = jsonObject({
 export type InferWithParams<
   Type extends Struct<any>,
   Params extends JsonRpcParams,
-> = Type & {
+> = Infer<Type> & {
   params?: Params;
 };
 
