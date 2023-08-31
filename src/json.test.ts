@@ -104,7 +104,7 @@ describe('jsonObject', () => {
           foo: undefined,
         },
         jsonObject({
-          foo: string(),
+          foo: jsonOptional(string()),
         }),
       ),
     ).toBe(false);
