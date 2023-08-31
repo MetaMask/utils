@@ -20,8 +20,8 @@ import {
   isJsonRpcSuccess,
   isPendingJsonRpcResponse,
   isValidJson,
-  jsonObject,
-  jsonOptional,
+  object,
+  exactOptional,
   JsonStruct,
 } from '.';
 import {
@@ -48,7 +48,7 @@ describe('jsonObject', () => {
         {
           foo: 'bar',
         },
-        jsonObject({
+        object({
           foo: string(),
         }),
       ),
@@ -59,7 +59,7 @@ describe('jsonObject', () => {
         {
           foo: 123,
         },
-        jsonObject({
+        object({
           foo: string(),
         }),
       ),
@@ -72,8 +72,8 @@ describe('jsonObject', () => {
         {
           foo: 'bar',
         },
-        jsonObject({
-          foo: jsonOptional(string()),
+        object({
+          foo: exactOptional(string()),
         }),
       ),
     ).toBe(true);
@@ -81,8 +81,8 @@ describe('jsonObject', () => {
     expect(
       is(
         {},
-        jsonObject({
-          foo: jsonOptional(string()),
+        object({
+          foo: exactOptional(string()),
         }),
       ),
     ).toBe(true);
@@ -92,7 +92,7 @@ describe('jsonObject', () => {
         {
           foo: 123,
         },
-        jsonObject({
+        object({
           foo: string(),
         }),
       ),
@@ -103,8 +103,8 @@ describe('jsonObject', () => {
         {
           foo: undefined,
         },
-        jsonObject({
-          foo: jsonOptional(string()),
+        object({
+          foo: exactOptional(string()),
         }),
       ),
     ).toBe(false);

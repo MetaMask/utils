@@ -13,7 +13,6 @@ import {
   nullable,
   number,
   object as superstructObject,
-  object,
   optional,
   record,
   string,
@@ -23,6 +22,7 @@ import {
 import type {
   ObjectSchema,
   OmitBy,
+  Optionalize,
   PickBy,
   Simplify,
 } from 'superstruct/dist/utils';
@@ -48,54 +48,88 @@ export type Json =
  *
  * @example
  * ```ts
- * type Foo = JsonOptional<{ foo: string | undefined }>;
+ * type Foo = ObjectOptional<{ foo: string | undefined }>;
  * // Foo is equivalent to { foo?: string }
  * ```
  */
-export type JsonOptional<Schema extends Record<string, unknown>> = {
-  [Key in keyof PickBy<Schema, undefined>]?: Exclude<Schema[Key], undefined>;
+export type ObjectOptional<Schema extends Record<string, unknown>> = {
+  [Key in keyof Schema as Schema[Key] extends ExactOptionalGuard
+    ? Key
+    : never]?: Schema[Key] extends ExactOptionalGuard & infer Original
+    ? Original
+    : never;
 } & {
-  [Key in keyof OmitBy<Schema, undefined>]: Schema[Key];
+  [Key in keyof Schema as Schema[Key] extends ExactOptionalGuard
+    ? never
+    : Key]: Schema[Key];
 };
 
 /**
- * A JSON object type. This is used by the `json` struct. This uses the
- * {@link JsonOptional} helper to make properties with `undefined` in their type
- * optional, but not `undefined` itself.
+ * An object type with support for exact optionals. This is used by the `object`
+ * struct. This uses the {@link ObjectOptional} helper to make properties with
+ * `undefined` in their type optional, but not `undefined` itself.
  */
-export type JsonObjectType<Schema extends ObjectSchema> = Simplify<
-  JsonOptional<{
-    [Key in keyof Schema]: Infer<Schema[Key]>;
-  }>
+export type ObjectType<Schema extends ObjectSchema> = Simplify<
+  ObjectOptional<
+    Optionalize<{
+      [Key in keyof Schema]: Infer<Schema[Key]>;
+    }>
+  >
 >;
 
 /**
- * A struct to check if the given value is a valid JSON object.
+ * A struct to check if the given value is a valid object, with support for
+ * {@link exactOptional} types.
  *
- * @param schema - The schema of the JSON object.
- * @returns A struct to check if the given value is a valid JSON object.
+ * @param schema - The schema of the object.
+ * @returns A struct to check if the given value is an object.
  */
-export const jsonObject = <Schema extends ObjectSchema>(
+export const object = <Schema extends ObjectSchema>(
   schema: Schema,
-): Struct<JsonObjectType<Schema>> =>
+): Struct<ObjectType<Schema>> =>
   // The type is slightly different from a regular object struct, because we
   // want to make properties with `undefined` in their type optional, but not
   // `undefined` itself. This means that we need a type cast.
-  superstructObject(schema) as unknown as Struct<JsonObjectType<Schema>>;
+  superstructObject(schema) as unknown as Struct<ObjectType<Schema>>;
+
+declare const exactOptionalSymbol: unique symbol;
+type ExactOptionalGuard = {
+  _exactOptionalGuard?: typeof exactOptionalSymbol;
+};
 
 /**
- * A struct to check if the given value is a valid JSON object, or not present.
- * This means that it allows an object which does not have the property, or an
- * object which has the property and is valid, but not an object which has the
- * property set to `undefined`.
+ * A struct to check if the given value is valid, or not present. This means
+ * that it allows an object which does not have the property, or an object which
+ * has the property and is valid, but not an object which has the property set
+ * to `undefined`.
+ *
+ * This struct should be used in conjunction with the {@link object} from this
+ * library, to get proper type inference.
  *
  * @param struct - The struct to check the value against, if present.
- * @returns A struct to check if the given value is a valid JSON object, or not
- * present.
+ * @returns A struct to check if the given value is valid, or not present.
+ * @example
+ * ```ts
+ * const struct = object({
+ *   foo: exactOptional(string()),
+ *   bar: exactOptional(number()),
+ *   baz: optional(boolean()),
+ *   qux: unknown(),
+ * });
+ *
+ * type Type = Infer<typeof struct>;
+ * // Type is equivalent to:
+ * // {
+ * //   foo?: string;
+ * //   bar?: number;
+ * //   baz?: boolean | undefined;
+ * //   qux: unknown;
+ * // }
+ * ```
  */
-export const jsonOptional = <Type, Schema>(
+export const exactOptional = <Type, Schema>(
   struct: Struct<Type, Schema>,
-): Struct<Type | undefined, null> =>
+): Struct<Type & ExactOptionalGuard, null> =>
   define('optional', (value, context) => {
     const parent = context.branch[context.branch.length - 2];
     const key = context.path[context.path.length - 1];
@@ -226,11 +260,11 @@ export const JsonRpcIdStruct = nullable(union([number(), string()]));
  */
 export type JsonRpcId = Infer<typeof JsonRpcIdStruct>;
 
-export const JsonRpcErrorStruct = jsonObject({
+export const JsonRpcErrorStruct = object({
   code: integer(),
   message: string(),
-  data: jsonOptional(JsonStruct),
-  stack: jsonOptional(string()),
+  data: exactOptional(JsonStruct),
+  stack: exactOptional(string()),
 });
 
 /**
@@ -258,11 +292,11 @@ export const JsonRpcParamsStruct: Struct<Json[] | Record<string, Json>, null> =
 
 export type JsonRpcParams = Json[] | Record<string, Json>;
 
-export const JsonRpcRequestStruct = jsonObject({
+export const JsonRpcRequestStruct = object({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: jsonOptional(JsonRpcParamsStruct),
+  params: exactOptional(JsonRpcParamsStruct),
 });
 
 export type InferWithParams<
@@ -278,10 +312,10 @@ export type InferWithParams<
 export type JsonRpcRequest<Params extends JsonRpcParams = JsonRpcParams> =
   InferWithParams<typeof JsonRpcRequestStruct, Params>;
 
-export const JsonRpcNotificationStruct = jsonObject({
+export const JsonRpcNotificationStruct = object({
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: jsonOptional(JsonRpcParamsStruct),
+  params: exactOptional(JsonRpcParamsStruct),
 });
 
 /**
@@ -355,7 +389,7 @@ export function assertIsJsonRpcRequest(
   );
 }
 
-export const PendingJsonRpcResponseStruct = object({
+export const PendingJsonRpcResponseStruct = superstructObject({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   result: optional(unknown()),
@@ -372,7 +406,7 @@ export type PendingJsonRpcResponse<Result extends Json> = Omit<
   result?: Result;
 };
 
-export const JsonRpcSuccessStruct = jsonObject({
+export const JsonRpcSuccessStruct = object({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   result: JsonStruct,
@@ -388,7 +422,7 @@ export type JsonRpcSuccess<Result extends Json> = Omit<
   result: Result;
 };
 
-export const JsonRpcFailureStruct = jsonObject({
+export const JsonRpcFailureStruct = object({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   error: JsonRpcErrorStruct as Struct<JsonRpcError>,
