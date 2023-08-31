@@ -226,11 +226,11 @@ export const JsonRpcIdStruct = nullable(union([number(), string()]));
  */
 export type JsonRpcId = Infer<typeof JsonRpcIdStruct>;
 
-export const JsonRpcErrorStruct = object({
+export const JsonRpcErrorStruct = jsonObject({
   code: integer(),
   message: string(),
-  data: optional(JsonStruct),
-  stack: optional(string()),
+  data: jsonOptional(JsonStruct),
+  stack: jsonOptional(string()),
 });
 
 /**
@@ -258,18 +258,18 @@ export const JsonRpcParamsStruct: Struct<Json[] | Record<string, Json>, null> =
 
 export type JsonRpcParams = Json[] | Record<string, Json>;
 
-export const JsonRpcRequestStruct = object({
+export const JsonRpcRequestStruct = jsonObject({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: optional(JsonRpcParamsStruct),
+  params: jsonOptional(JsonRpcParamsStruct),
 });
 
 export type InferWithParams<
   Type extends Struct<any>,
   Params extends JsonRpcParams,
-> = Omit<Infer<Type>, 'params'> & {
-  params?: Exclude<Params, undefined>;
+> = Type & {
+  params?: Params;
 };
 
 /**
@@ -278,10 +278,10 @@ export type InferWithParams<
 export type JsonRpcRequest<Params extends JsonRpcParams = JsonRpcParams> =
   InferWithParams<typeof JsonRpcRequestStruct, Params>;
 
-export const JsonRpcNotificationStruct = object({
+export const JsonRpcNotificationStruct = jsonObject({
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: optional(JsonRpcParamsStruct),
+  params: jsonOptional(JsonRpcParamsStruct),
 });
 
 /**
@@ -372,7 +372,7 @@ export type PendingJsonRpcResponse<Result extends Json> = Omit<
   result?: Result;
 };
 
-export const JsonRpcSuccessStruct = object({
+export const JsonRpcSuccessStruct = jsonObject({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   result: JsonStruct,
@@ -388,7 +388,7 @@ export type JsonRpcSuccess<Result extends Json> = Omit<
   result: Result;
 };
 
-export const JsonRpcFailureStruct = object({
+export const JsonRpcFailureStruct = jsonObject({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   error: JsonRpcErrorStruct as Struct<JsonRpcError>,
