@@ -41,8 +41,8 @@ jest.mock('superstruct', () => ({
   assert: jest.fn(),
 }));
 
-describe('jsonObject', () => {
-  it('validates a JSON object', () => {
+describe('object', () => {
+  it('validates an object', () => {
     expect(
       is(
         {
@@ -66,7 +66,7 @@ describe('jsonObject', () => {
     ).toBe(false);
   });
 
-  it('validates a JSON object with optional values', () => {
+  it('validates an object with optional values', () => {
     expect(
       is(
         {
