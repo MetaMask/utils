@@ -1,4 +1,4 @@
-import { validate, assert as superstructAssert } from 'superstruct';
+import { validate, assert as superstructAssert, is, string } from 'superstruct';
 
 import {
   assert,
@@ -20,6 +20,8 @@ import {
   isJsonRpcSuccess,
   isPendingJsonRpcResponse,
   isValidJson,
+  jsonObject,
+  jsonOptional,
   JsonStruct,
 } from '.';
 import {
@@ -38,6 +40,76 @@ jest.mock('superstruct', () => ({
   ...jest.requireActual('superstruct'),
   assert: jest.fn(),
 }));
+
+describe('jsonObject', () => {
+  it('validates a JSON object', () => {
+    expect(
+      is(
+        {
+          foo: 'bar',
+        },
+        jsonObject({
+          foo: string(),
+        }),
+      ),
+    ).toBe(true);
+
+    expect(
+      is(
+        {
+          foo: 123,
+        },
+        jsonObject({
+          foo: string(),
+        }),
+      ),
+    ).toBe(false);
+  });
+
+  it('validates a JSON object with optional values', () => {
+    expect(
+      is(
+        {
+          foo: 'bar',
+        },
+        jsonObject({
+          foo: jsonOptional(string()),
+        }),
+      ),
+    ).toBe(true);
+
+    expect(
+      is(
+        {},
+        jsonObject({
+          foo: jsonOptional(string()),
+        }),
+      ),
+    ).toBe(true);
+
+    expect(
+      is(
+        {
+          foo: 123,
+        },
+        jsonObject({
+          foo: string(),
+        }),
+      ),
+    ).toBe(false);
+
+    expect(
+      is(
+        {
+          foo: undefined,
+        },
+        jsonObject({
+          foo: string(),
+        }),
+      ),
+    ).toBe(false);
+  });
+});
 
 describe('json', () => {
   beforeEach(() => {

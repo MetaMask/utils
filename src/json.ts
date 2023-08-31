@@ -12,6 +12,7 @@ import {
   literal,
   nullable,
   number,
+  object as superstructObject,
   object,
   optional,
   record,
@@ -19,9 +20,16 @@ import {
   union,
   unknown,
 } from 'superstruct';
+import type {
+  ObjectSchema,
+  OmitBy,
+  PickBy,
+  Simplify,
+} from 'superstruct/dist/utils';
 
 import type { AssertionErrorConstructor } from './assert';
 import { assertStruct } from './assert';
+import { hasProperty } from './misc';
 
 /**
  * Any JSON-compatible value.
@@ -33,6 +41,75 @@ export type Json =
   | string
   | Json[]
   | { [prop: string]: Json };
+
+/**
+ * A helper type to make properties with `undefined` in their type optional, but
+ * not `undefined` itself.
+ *
+ * @example
+ * ```ts
+ * type Foo = JsonOptional<{ foo: string | undefined }>;
+ * // Foo is equivalent to { foo?: string }
+ * ```
+ */
+export type JsonOptional<Schema extends Record<string, unknown>> = {
+  [Key in keyof PickBy<Schema, undefined>]?: Exclude<Schema[Key], undefined>;
+} & {
+  [Key in keyof OmitBy<Schema, undefined>]: Schema[Key];
+};
+
+/**
+ * A JSON object type. This is used by the `json` struct. This uses the
+ * {@link JsonOptional} helper to make properties with `undefined` in their type
+ * optional, but not `undefined` itself.
+ */
+export type JsonObjectType<Schema extends ObjectSchema> = Simplify<
+  JsonOptional<{
+    [Key in keyof Schema]: Infer<Schema[Key]>;
+  }>
+>;
+
+/**
+ * A struct to check if the given value is a valid JSON object.
+ *
+ * @param schema - The schema of the JSON object.
+ * @returns A struct to check if the given value is a valid JSON object.
+ */
+export const jsonObject = <Schema extends ObjectSchema>(
+  schema: Schema,
+): Struct<JsonObjectType<Schema>> =>
+  // The type is slightly different from a regular object struct, because we
+  // want to make properties with `undefined` in their type optional, but not
+  // `undefined` itself. This means that we need a type cast.
+  superstructObject(schema) as unknown as Struct<JsonObjectType<Schema>>;
+
+/**
+ * A struct to check if the given value is a valid JSON object, or not present.
+ * This means that it allows an object which does not have the property, or an
+ * object which has the property and is valid, but not an object which has the
+ * property set to `undefined`.
+ *
+ * @param struct - The struct to check the value against, if present.
+ * @returns A struct to check if the given value is a valid JSON object, or not
+ * present.
+ */
+export const jsonOptional = <Type, Schema>(
+  struct: Struct<Type, Schema>,
+): Struct<Type | undefined, null> =>
+  define('optional', (value, context) => {
+    const parent = context.branch[context.branch.length - 2];
+    const key = context.path[context.path.length - 1];
+
+    if (!hasProperty(parent, key)) {
+      return true;
+    }
+
+    if (value === undefined) {
+      return 'Expected a value, but received: undefined.';
+    }
+
+    return struct.validator(value, context);
+  });
 
 /**
  * A struct to check if the given value is finite number. Superstruct's
