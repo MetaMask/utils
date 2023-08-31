@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [8.1.0]
 ### Changed
-- fix(types): Make Make typings for JsonRpc-related Struct types more accurate ([#134](https://github.com/MetaMask/utils/pull/134))
+- Make types for JSON-RPC-related structs more accurate ([#134](https://github.com/MetaMask/utils/pull/134))
   - Aligning `JsonRpcParams` to be optional, yet not `undefined`.
   - Updated types:
     - `InferWithParams`
