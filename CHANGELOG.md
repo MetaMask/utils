@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.1.0]
-### Uncategorized
-- fix(types): Optional JSON params where undefined is not valid ([#134](https://github.com/MetaMask/utils/pull/134))
+### Changed
+- fix(types): Make Make typings for JsonRpc-related Struct types more accurate ([#134](https://github.com/MetaMask/utils/pull/134))
+  - Aligning `JsonRpcParams` to be optional, yet not `undefined`.
+  - Updated types:
+    - `InferWithParams`
+    - `JsonRpcNotificationStruct`
+    - `JsonRpcParamsStruct`
+    - `JsonRpcRequestStruct`
 
 ## [8.0.0]
 ### Changed
