@@ -21,9 +21,7 @@ import {
 } from 'superstruct';
 import type {
   ObjectSchema,
-  OmitBy,
   Optionalize,
-  PickBy,
   Simplify,
 } from 'superstruct/dist/utils';
 

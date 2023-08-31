@@ -4,7 +4,7 @@ import type { Infer } from 'superstruct';
 import { boolean, number, optional, string } from 'superstruct';
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
-import type { Json, ObjectOptional } from '.';
+import type { Json } from '.';
 import { exactOptional, object } from '.';
 
 // Valid Json:
