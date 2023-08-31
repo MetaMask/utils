@@ -2,7 +2,7 @@
 
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
-import type { Json } from '.';
+import type { Json, JsonOptional } from '.';
 
 // Valid Json:
 
@@ -134,3 +134,23 @@ class Foo {
 }
 const foo = new Foo();
 expectNotAssignable<Json>(foo);
+
+// Optional Json object:
+
+type JsonCompatibleObject = {
+  a: number;
+  b?: string;
+  c?: boolean | undefined;
+};
+
+type OptionalJsonCompatibleObject = JsonOptional<JsonCompatibleObject>;
+
+expectAssignable<OptionalJsonCompatibleObject>({ a: 0 });
+expectAssignable<OptionalJsonCompatibleObject>({ a: 0, b: 'test' });
+expectAssignable<OptionalJsonCompatibleObject>({ a: 0, b: 'test', c: true });
+expectNotAssignable<OptionalJsonCompatibleObject>({ a: 0, b: 'test', c: 0 });
+expectNotAssignable<OptionalJsonCompatibleObject>({
+  a: 0,
+  b: 'test',
+  c: undefined,
+});
