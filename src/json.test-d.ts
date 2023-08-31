@@ -142,8 +142,8 @@ expectNotAssignable<Json>(foo);
 
 const exactOptionalObject = object({
   a: number(),
-  b: exactOptional(string()),
-  c: optional(boolean()),
+  b: optional(string()),
+  c: exactOptional(boolean()),
 });
 
 type ExactOptionalObject = Infer<typeof exactOptionalObject>;
