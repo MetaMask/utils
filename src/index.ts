@@ -16,3 +16,4 @@ export * from './opaque';
 export * from './time';
 export * from './transaction-types';
 export * from './versions';
+export * from './superstruct';
