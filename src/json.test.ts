@@ -1,4 +1,13 @@
-import { validate, assert as superstructAssert, is, string } from 'superstruct';
+import {
+  validate,
+  assert as superstructAssert,
+  is,
+  string,
+  union,
+  literal,
+  max,
+  number,
+} from 'superstruct';
 
 import {
   assert,
@@ -108,6 +117,73 @@ describe('object', () => {
         }),
       ),
     ).toBe(false);
+  });
+});
+
+describe('exactOptional', () => {
+  const simpleStruct = object({
+    foo: exactOptional(string()),
+  });
+
+  it.each([
+    { struct: simpleStruct, obj: {}, expected: true },
+    { struct: simpleStruct, obj: { foo: undefined }, expected: false },
+    { struct: simpleStruct, obj: { foo: 'hi' }, expected: true },
+    { struct: simpleStruct, obj: { bar: 'hi' }, expected: false },
+    { struct: simpleStruct, obj: { foo: 1 }, expected: false },
+  ])(
+    'returns $expected for is($obj, <struct>)',
+    ({ struct, obj, expected }) => {
+      expect(is(obj, struct)).toBe(expected);
+    },
+  );
+
+  const nestedStruct = object({
+    foo: object({
+      bar: exactOptional(string()),
+    }),
+  });
+
+  it.each([
+    { struct: nestedStruct, obj: { foo: {} }, expected: true },
+    { struct: nestedStruct, obj: { foo: { bar: 'hi' } }, expected: true },
+    {
+      struct: nestedStruct,
+      obj: { foo: { bar: undefined } },
+      expected: false,
+    },
+  ])(
+    'returns $expected for is($obj, <struct>)',
+    ({ struct, obj, expected }) => {
+      expect(is(obj, struct)).toBe(expected);
+    },
+  );
+
+  const structWithUndefined = object({
+    foo: exactOptional(union([string(), literal(undefined)])),
+  });
+
+  it.each([
+    { struct: structWithUndefined, obj: {}, expected: true },
+    { struct: structWithUndefined, obj: { foo: undefined }, expected: true },
+    { struct: structWithUndefined, obj: { foo: 'hi' }, expected: true },
+    { struct: structWithUndefined, obj: { bar: 'hi' }, expected: false },
+    { struct: structWithUndefined, obj: { foo: 1 }, expected: false },
+  ])(
+    'returns $expected for is($obj, <struct>)',
+    ({ struct, obj, expected }) => {
+      expect(is(obj, struct)).toBe(expected);
+    },
+  );
+
+  it('supports refinements', () => {
+    const struct = object({
+      foo: exactOptional(max(number(), 0)),
+    });
+
+    expect(is({ foo: 0 }, struct)).toBe(true);
+    expect(is({ foo: -1 }, struct)).toBe(true);
+    expect(is({ foo: 1 }, struct)).toBe(false);
   });
 });
 

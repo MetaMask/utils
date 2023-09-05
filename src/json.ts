@@ -1,4 +1,4 @@
-import type { Infer, Struct } from 'superstruct';
+import type { Context, Infer } from 'superstruct';
 import {
   any,
   array,
@@ -18,6 +18,7 @@ import {
   string,
   union,
   unknown,
+  Struct,
 } from 'superstruct';
 import type {
   ObjectSchema,
@@ -96,6 +97,19 @@ type ExactOptionalGuard = {
 };
 
 /**
+ * Check the last field of a path is present.
+ *
+ * @param context - The context to check.
+ * @param context.path - The path to check.
+ * @param context.branch - The branch to check.
+ * @returns Whether the last field of a path is present.
+ */
+function hasOptional({ path, branch }: Context): boolean {
+  const field = path[path.length - 1];
+  return hasProperty(branch[branch.length - 2], field);
+}
+
+/**
  * A struct to check if the given value is valid, or not present. This means
  * that it allows an object which does not have the property, or an object which
  * has the property and is valid, but not an object which has the property set
@@ -125,23 +139,20 @@ type ExactOptionalGuard = {
  * // }
  * ```
  */
-export const exactOptional = <Type, Schema>(
+export function exactOptional<Type, Schema>(
   struct: Struct<Type, Schema>,
-): Struct<Type & ExactOptionalGuard, null> =>
-  define('optional', (value, context) => {
-    const parent = context.branch[context.branch.length - 2];
-    const key = context.path[context.path.length - 1];
+): Struct<Type & ExactOptionalGuard, Schema> {
+  return new Struct<Type & ExactOptionalGuard, Schema>({
+    ...struct,
 
-    if (!hasProperty(parent, key)) {
-      return true;
-    }
+    type: `optional ${struct.type}`,
+    validator: (value, context) =>
+      !hasOptional(context) || struct.validator(value, context),
 
-    if (value === undefined) {
-      return 'Expected a value, but received: undefined.';
-    }
-
-    return struct.validator(value, context);
+    refiner: (value, context) =>
+      !hasOptional(context) || struct.refiner(value as Type, context),
   });
+}
 
 /**
  * A struct to check if the given value is finite number. Superstruct's
