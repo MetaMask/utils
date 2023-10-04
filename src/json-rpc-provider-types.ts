@@ -33,20 +33,27 @@ export type EIP1193Provider = SafeEventEmitter & {
  * [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193). It is not compliant with
  * any Ethereum provider standard.
  */
-export type LegacyEthereumProvider = LegacyEthersProvider | LegacyEthJsQueryProvider | LegacyWeb3Provider;
+export type LegacyEthereumProvider =
+  | LegacyEthersProvider
+  | LegacyEthJsQueryProvider
+  | LegacyWeb3Provider;
 
-type LegacyWeb3Provider = {
+type LegacyEthersProvider = {
   /**
-   * Send a provider request asynchronously.
+   * Send a provider request asynchronously. (ethers v5 Web3Provider)
    *
-   * @param req - The request to send.
-   * @param callback - A function that is called upon the success or failure of the request.
+   * @param method - The RPC method to call.
+   * @param params - Array with method parameters.
+   * @returns A promise resolving with the result of the RPC call, or rejecting on failure.
    */
-  send?<Result extends Json = Json>(
-    req: Partial<JsonRpcRequest>,
-    callback: SendAsyncCallback<Result>,
-  ): void;
-}
+  send(method: string, params: any[]): Promise<Json>;
+  /*
+  send<Result extends Json = Json>(
+    method: string,
+    params: any[],
+  ): Promise<Result>;
+  */
+};
 
 type LegacyEthJsQueryProvider = {
   /**
@@ -55,24 +62,20 @@ type LegacyEthJsQueryProvider = {
    * @param req - The request to send.
    * @param callback - A function that is called upon the success or failure of the request.
    */
-  sendAsync?<Result extends Json = Json>(
+  sendAsync<Result extends Json = Json>(
     req: Partial<JsonRpcRequest>,
     callback: SendAsyncCallback<Result>,
   ): void;
 };
 
-type LegacyEthersProvider = {
+type LegacyWeb3Provider = {
   /**
-   * Send a provider request asynchronously. (ethers v5 Web3Provider)
+   * Send a provider request asynchronously.
    *
-   * @param method - The RPC method to call.
-   * @param params - Array with method parameters.
-   * @returns - A promise resolving with the result of the RPC call, or rejecting on failure.
+   * @param req - The request to send.
+   * @param callback - A function that is called upon the success or failure of the request.
    */
-  send?<Result extends Json = Json>(
-    method: string,
-    params: any[],
-  ): Promise<Result>;
+  send(req: Partial<JsonRpcRequest>, callback: SendAsyncCallback<Json>): void;
 };
 
 type SendAsyncCallback<Result extends Json> = (
