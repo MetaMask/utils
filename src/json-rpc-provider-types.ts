@@ -1,7 +1,6 @@
 import type SafeEventEmitter from '@metamask/safe-event-emitter';
 
-import type { Hex } from './hex';
-import type { JsonRpcParams, Json } from './json';
+import type { JsonRpcParams, JsonRpcRequest, Json } from './json';
 import type { PartialOrAbsent } from './misc';
 
 /**
@@ -28,30 +27,37 @@ export type EIP1193Provider = SafeEventEmitter & {
 };
 
 /**
- * An extension of the EIP-1193 specification for an Ethereum JavaScript Provider.
+ * The interface for a legacy Ethereum provider.
  *
- * For details, see:
- * - [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)
- * - [BaseProvider]{@link https://github.com/MetaMask/providers/blob/main/src/BaseProvider.ts} in package [@metamask/providers](https://www.npmjs.com/package/@metamask/providers)
- * - https://docs.metamask.io/wallet/reference/provider-api/
+ * This provider follows conventions that pre-date
+ * [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193). It is not compliant with
+ * any Ethereum provider standard.
  */
-export type EthJsonRpcProvider = EIP1193Provider & {
+export type LegacyEthereumProvider = {
   /**
-   * The chain ID of the currently connected Ethereum chain, represented as 0x-prefixed hexstring.
-   * See [chainId.network]{@link https://chainid.network} for more information.
-   */
-  chainId: Hex | null;
-
-  /**
-   * The user's currently selected Ethereum address as a 0x-prefixed hexstring.
-   * If read-access is denied, null is returned.
-   */
-  selectedAddress: Hex | null;
-
-  /**
-   * Returns true if the provider has a connection to the network and is able to process requests for the active chain.
+   * Send a provider request asynchronously.
    *
-   * @returns Whether the provider can process RPC requests.
+   * @param req - The request to send.
+   * @param callback - A function that is called upon the success or failure of the request.
    */
-  isConnected(): boolean;
+  sendAsync<Result extends Json = Json>(
+    req: Partial<JsonRpcRequest>,
+    callback: SendAsyncCallback<Result>,
+  ): void;
 };
+
+type SendAsyncCallback<Result extends Json> = (
+  ...args:
+    | [error: EverythingButNull, result: undefined]
+    | [error: null, result: Result]
+) => void;
+
+// What it says on the tin. We omit `null`, as that value is used for a
+// successful response to indicate a lack of an error.
+type EverythingButNull =
+  | string
+  | number
+  | boolean
+  | object
+  | symbol
+  | undefined;
