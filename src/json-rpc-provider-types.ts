@@ -33,17 +33,46 @@ export type EIP1193Provider = SafeEventEmitter & {
  * [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193). It is not compliant with
  * any Ethereum provider standard.
  */
-export type LegacyEthereumProvider = {
+export type LegacyEthereumProvider = LegacyEthersProvider | LegacyEthJsQueryProvider | LegacyWeb3Provider;
+
+type LegacyWeb3Provider = {
   /**
    * Send a provider request asynchronously.
    *
    * @param req - The request to send.
    * @param callback - A function that is called upon the success or failure of the request.
    */
-  sendAsync<Result extends Json = Json>(
+  send?<Result extends Json = Json>(
     req: Partial<JsonRpcRequest>,
     callback: SendAsyncCallback<Result>,
   ): void;
+}
+
+type LegacyEthJsQueryProvider = {
+  /**
+   * Send a provider request asynchronously. (ethjs-query)
+   *
+   * @param req - The request to send.
+   * @param callback - A function that is called upon the success or failure of the request.
+   */
+  sendAsync?<Result extends Json = Json>(
+    req: Partial<JsonRpcRequest>,
+    callback: SendAsyncCallback<Result>,
+  ): void;
+};
+
+type LegacyEthersProvider = {
+  /**
+   * Send a provider request asynchronously. (ethers v5 Web3Provider)
+   *
+   * @param method - The RPC method to call.
+   * @param params - Array with method parameters.
+   * @returns - A promise resolving with the result of the RPC call, or rejecting on failure.
+   */
+  send?<Result extends Json = Json>(
+    method: string,
+    params: any[],
+  ): Promise<Result>;
 };
 
 type SendAsyncCallback<Result extends Json> = (
