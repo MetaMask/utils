@@ -6,7 +6,7 @@ export * from './checksum';
 export * from './coercers';
 export * from './collections';
 export * from './encryption-types';
-export * from './eth-provider-types';
+export * from './json-rpc-provider-types';
 export * from './hex';
 export * from './json';
 export * from './keyring';
