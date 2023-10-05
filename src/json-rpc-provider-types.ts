@@ -6,9 +6,8 @@ import type { PartialOrAbsent } from './misc';
 /**
  * An interface for the EIP-1193 specification for an Ethereum JavaScript Provider.
  *
- * For details, see:
- * - [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)
- * - [BaseProvider]{@link https://github.com/MetaMask/providers/blob/main/src/BaseProvider.ts} in package [@metamask/providers](https://www.npmjs.com/package/@metamask/providers)
+ * @see [EIP-1193]{@link https://eips.ethereum.org/EIPS/eip-1193}.
+ * @see [BaseProvider]{@link https://github.com/MetaMask/providers/blob/main/src/BaseProvider.ts} in package [@metamask/providers]{@link https://www.npmjs.com/package/@metamask/providers}.
  */
 export type EIP1193Provider = SafeEventEmitter & {
   /**
