@@ -29,9 +29,7 @@ export type EIP1193Provider = SafeEventEmitter & {
 /**
  * The interface for a legacy Ethereum provider.
  *
- * This provider follows conventions that pre-date
- * [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193). It is not compliant with
- * any Ethereum provider standard.
+ * A provider of this type should be acceptable by either `eth-query`, `ethjs-query`, or Ethers' v5 `Web3Provider`.
  */
 export type LegacyEthereumProvider =
   | LegacyEthersProvider
