@@ -27,9 +27,4 @@ export default defineConfig({
   // Hide unnecessary logs from the console. Warnings and errors will still be
   // shown.
   silent: true,
-
-  // The target environment. This should be the same as the `target` option in
-  // `tsconfig.json`.
-  // https://tsup.egoist.dev/#target-environment
-  target: 'es2020',
 });
