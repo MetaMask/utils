@@ -5,6 +5,7 @@ import { expectAssignable, expectNotAssignable } from 'tsd';
 import type { JsonRpcRequest, LegacyEthereumProvider } from '.';
 
 // Known legacy providers
+// @ts-expect-error TODO: align `EverythingButNull` type in `@metamask/eth-query`
 expectAssignable<LegacyEthereumProvider>(new EthQuery({} as any));
 expectAssignable<LegacyEthereumProvider>(new Web3Provider({} as any));
 expectAssignable<LegacyEthereumProvider>({
