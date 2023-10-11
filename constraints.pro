@@ -65,9 +65,9 @@ gen_enforced_field(WorkspaceCwd, 'repository.url', 'https://github.com/MetaMask/
 % The license for the package must be specified.
 gen_enforced_field(WorkspaceCwd, 'license').
 
-% The type definitions entrypoint the package must be `./dist/index.d.ts`.
-gen_enforced_field(WorkspaceCwd, 'types', './dist/index.d.ts').
-gen_enforced_field(WorkspaceCwd, 'exports["."].types', './dist/index.d.ts').
+% The type definitions entrypoint the package must be `./dist/types/index.d.ts`.
+gen_enforced_field(WorkspaceCwd, 'types', './dist/types/index.d.ts').
+gen_enforced_field(WorkspaceCwd, 'exports["."].types', './dist/types/index.d.ts').
 
 % The entrypoint for the package must be `./dist/index.js`.
 gen_enforced_field(WorkspaceCwd, 'main', './dist/index.js').

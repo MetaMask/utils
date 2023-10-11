@@ -15,10 +15,6 @@ export default defineConfig({
   // Clean the dist folder before bundling.
   clean: true,
 
-  // Enables TypeScript declaration files.
-  // https://tsup.egoist.dev/#generate-declaration-file
-  dts: true,
-
   // Enables shimming of `__dirname` and `import.meta.url`, so that they work
   // in both CommonJS and ESM.
   // https://tsup.egoist.dev/#inject-cjs-and-esm-shims
