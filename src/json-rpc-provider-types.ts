@@ -83,10 +83,4 @@ type SendAsyncCallback<Result extends Json> = (
 
 // What it says on the tin. We omit `null`, as that value is used for a
 // successful response to indicate a lack of an error.
-type EverythingButNull =
-  | string
-  | number
-  | boolean
-  | object
-  | symbol
-  | undefined;
+type EverythingButNull = NonNullable<unknown> | undefined;
