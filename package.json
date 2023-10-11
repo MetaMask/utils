@@ -27,8 +27,8 @@
   ],
   "scripts": {
     "build": "tsup && yarn build:types",
-    "build:types": "tsc --project tsconfig.build.json",
     "build:docs": "typedoc",
+    "build:types": "tsc --project tsconfig.build.json",
     "lint": "yarn lint:eslint && yarn lint:constraints && yarn lint:misc --check && yarn lint:dependencies --check && yarn lint:changelog",
     "lint:changelog": "auto-changelog validate",
     "lint:constraints": "yarn constraints",
