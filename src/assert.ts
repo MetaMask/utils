@@ -1,20 +1,11 @@
 import type { Struct } from 'superstruct';
 import { assert as assertSuperstruct } from 'superstruct';
 
+import { isErrorWithMessage } from './errors';
+
 export type AssertionErrorConstructor =
   | (new (args: { message: string }) => Error)
   | ((args: { message: string }) => Error);
-
-/**
- * Type guard for determining whether the given value is an error object with a
- * `message` property, such as an instance of Error.
- *
- * @param error - The object to check.
- * @returns True or false, depending on the result.
- */
-function isErrorWithMessage(error: unknown): error is { message: string } {
-  return typeof error === 'object' && error !== null && 'message' in error;
-}
 
 /**
  * Check if a value is a constructor, i.e., a function that can be called with
