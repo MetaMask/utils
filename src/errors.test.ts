@@ -9,8 +9,14 @@ import {
 } from './errors';
 
 describe('isErrorWithCode', () => {
-  it('returns true if given an object with a "code" property', () => {
+  it('returns true if given an object with only a "code" property', () => {
     expect(isErrorWithCode({ code: 'some code' })).toBe(true);
+  });
+
+  it('returns true if given an object that includes a "code" property', () => {
+    expect(
+      isErrorWithCode({ code: 'some code', message: 'some message' }),
+    ).toBe(true);
   });
 
   it('returns false if given null', () => {
@@ -25,14 +31,24 @@ describe('isErrorWithCode', () => {
     expect(isErrorWithCode(12345)).toBe(false);
   });
 
-  it('returns false if given an object that does not have a "code" property', () => {
+  it('returns false if given an empty object', () => {
     expect(isErrorWithCode({})).toBe(false);
+  });
+
+  it('returns false if given a non-empty object that does not have a "code" property', () => {
+    expect(isErrorWithCode({ message: 'some message' })).toBe(false);
   });
 });
 
 describe('isErrorWithMessage', () => {
-  it('returns true if given an object with a "message" property', () => {
+  it('returns true if given an object with only a "message" property', () => {
     expect(isErrorWithMessage({ message: 'some message' })).toBe(true);
+  });
+
+  it('returns true if given an object that includes a "message" property', () => {
+    expect(
+      isErrorWithMessage({ code: 'some code', message: 'some message' }),
+    ).toBe(true);
   });
 
   it('returns false if given null', () => {
@@ -47,8 +63,12 @@ describe('isErrorWithMessage', () => {
     expect(isErrorWithMessage(12345)).toBe(false);
   });
 
-  it('returns false if given an object that does not have a "message" property', () => {
+  it('returns false if given an empty object', () => {
     expect(isErrorWithMessage({})).toBe(false);
+  });
+
+  it('returns false if given a non-empty object that does not have a "message" property', () => {
+    expect(isErrorWithMessage({ code: 'some code' })).toBe(false);
   });
 });
 
@@ -69,8 +89,14 @@ describe('isErrorWithStack', () => {
     expect(isErrorWithStack(12345)).toBe(false);
   });
 
-  it('returns false if given an object that does not have a "stack" property', () => {
+  it('returns false if given an empty object', () => {
     expect(isErrorWithStack({})).toBe(false);
+  });
+
+  it('returns false if given a non-empty object that does not have a "stack" property', () => {
+    expect(
+      isErrorWithStack({ code: 'some code', message: 'some message' }),
+    ).toBe(false);
   });
 });
 
