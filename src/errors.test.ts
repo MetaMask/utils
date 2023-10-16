@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import {
+  getErrorMessage,
   isErrorWithCode,
   isErrorWithMessage,
   isErrorWithStack,
@@ -132,5 +133,27 @@ describe('wrapError', () => {
 
       expect(newError.cause).toBeUndefined();
     });
+  });
+});
+
+describe('getErrorMessage', () => {
+  it("returns the value of the 'message' property from the given object if it is present", () => {
+    expect(getErrorMessage({ message: 'hello' })).toBe('hello');
+  });
+
+  it("returns the result of calling .toString() on the given object if it has no 'message' property", () => {
+    expect(getErrorMessage({ foo: 'bar' })).toBe('[object Object]');
+  });
+
+  it('returns the result of calling .toString() on the given non-object', () => {
+    expect(getErrorMessage(42)).toBe('42');
+  });
+
+  it('returns an empty string if given null', () => {
+    expect(getErrorMessage(null)).toBe('');
+  });
+
+  it('returns an empty string if given undefined', () => {
+    expect(getErrorMessage(undefined)).toBe('');
   });
 });

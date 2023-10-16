@@ -1,6 +1,6 @@
 import { ErrorWithCause } from 'pony-cause';
 
-import { isObject } from './misc';
+import { hasProperty, isNullOrUndefined, isObject } from './misc';
 
 /**
  * Type guard for determining whether the given value is an instance of Error.
@@ -51,6 +51,27 @@ export function isErrorWithMessage(
  */
 export function isErrorWithStack(error: unknown): error is { stack: string } {
   return typeof error === 'object' && error !== null && 'stack' in error;
+}
+
+/**
+ * Attempts to obtain the message from a possible error object, defaulting to an
+ * empty string if it is impossible to do so.
+ *
+ * @param error - The possible error to get the message from.
+ * @returns The message if `error` is an object with a `message` property;
+ * the string version of `error` if it is not `undefined` or `null`; otherwise
+ * an empty string.
+ */
+export function getErrorMessage(error: unknown): string {
+  if (isErrorWithMessage(error) && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  if (isNullOrUndefined(error)) {
+    return '';
+  }
+
+  return String(error);
 }
 
 /**
