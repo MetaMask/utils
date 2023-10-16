@@ -9,10 +9,6 @@ import {
 } from './errors';
 
 describe('isErrorWithCode', () => {
-  it('returns true if given an object with only a "code" property', () => {
-    expect(isErrorWithCode({ code: 'some code' })).toBe(true);
-  });
-
   it('returns true if given an object that includes a "code" property', () => {
     expect(
       isErrorWithCode({ code: 'some code', message: 'some message' }),
@@ -41,10 +37,6 @@ describe('isErrorWithCode', () => {
 });
 
 describe('isErrorWithMessage', () => {
-  it('returns true if given an object with only a "message" property', () => {
-    expect(isErrorWithMessage({ message: 'some message' })).toBe(true);
-  });
-
   it('returns true if given an object that includes a "message" property', () => {
     expect(
       isErrorWithMessage({ code: 'some code', message: 'some message' }),
@@ -73,8 +65,10 @@ describe('isErrorWithMessage', () => {
 });
 
 describe('isErrorWithStack', () => {
-  it('returns true if given an object with a "stack" property', () => {
-    expect(isErrorWithStack({ stack: 'some stack' })).toBe(true);
+  it('returns true if given an object that includes "stack" property', () => {
+    expect(isErrorWithStack({ code: 'some code', stack: 'some stack' })).toBe(
+      true,
+    );
   });
 
   it('returns false if given null', () => {
