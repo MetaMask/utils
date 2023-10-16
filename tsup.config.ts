@@ -2,7 +2,17 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   // The entry to bundle.
-  entry: ['src/index.ts'],
+  entry: [
+    'src/**/*.ts',
+    '!src/**/__fixtures__/**/*',
+    '!src/**/__mocks__/**/*',
+    '!src/**/__test__/**/*',
+    '!src/**/__tests__/**/*',
+    '!src/**/__snapshots__/**/*',
+    '!src/**/*.test.ts',
+    '!src/**/*.test-d.ts',
+    '!src/**/*.test.*.ts',
+  ],
 
   // The output formats. We want to generate both CommonJS and ESM bundles.
   // https://tsup.egoist.dev/#bundle-formats
@@ -18,9 +28,13 @@ export default defineConfig({
   // Enables shimming of `__dirname` and `import.meta.url`, so that they work
   // in both CommonJS and ESM.
   // https://tsup.egoist.dev/#inject-cjs-and-esm-shims
-  shims: true,
+  shims: false,
 
   // Hide unnecessary logs from the console. Warnings and errors will still be
   // shown.
   silent: true,
+
+  // Split the output into chunks. This is useful for tree-shaking.
+  // https://tsup.egoist.dev/#code-splitting
+  splitting: true,
 });

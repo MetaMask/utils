@@ -6,6 +6,7 @@
   "bugs": {
     "url": "https://github.com/MetaMask/utils/issues"
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/utils.git"
@@ -19,8 +20,6 @@
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist"
