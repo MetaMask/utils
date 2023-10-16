@@ -65,7 +65,7 @@ describe('isErrorWithMessage', () => {
 });
 
 describe('isErrorWithStack', () => {
-  it('returns true if given an object that includes "stack" property', () => {
+  it('returns true if given an object that includes a "stack" property', () => {
     expect(isErrorWithStack({ code: 'some code', stack: 'some stack' })).toBe(
       true,
     );
