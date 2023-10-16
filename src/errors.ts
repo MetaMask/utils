@@ -113,5 +113,9 @@ export function wrapError<Throwable>(
     return error;
   }
 
-  return new Error(`${message}: ${String(originalError)}`);
+  if (message.length > 0) {
+    return new Error(`${String(originalError)}: ${message}`);
+  }
+
+  return new Error(String(originalError));
 }
