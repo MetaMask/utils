@@ -1,6 +1,6 @@
 import { ErrorWithCause } from 'pony-cause';
 
-import { hasProperty, isNullOrUndefined, isObject } from './misc';
+import { isNullOrUndefined, isObject } from './misc';
 
 /**
  * Type guard for determining whether the given value is an instance of Error.
@@ -92,14 +92,18 @@ export function wrapError<Throwable>(
   message: string,
 ): Error & { code?: string } {
   if (isError(originalError)) {
-    // @ts-expect-error This is okay
-    const error: Error & { code: string } =
-      'cause' in Error.prototype
-        ? // This is getting tested using different Node versions
+    const error: Error & { code?: string } =
+      Error.length === 2
+        ? // This branch is getting tested by using the Node version that
+          // supports `cause` on the Error constructor.
           // istanbul ignore next
-          new Error(message, {
-            cause: originalError,
-          })
+          // Also, for some reason `tsserver` is not complaining that the
+          // Error constructor doesn't support a second argument in the editor,
+          // but `tsc` does. I'm not sure why, but we disable this in the
+          // meantime.
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          new Error(message, { cause: originalError })
         : new ErrorWithCause(message, { cause: originalError });
 
     if (isErrorWithCode(originalError)) {
