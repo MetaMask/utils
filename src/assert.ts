@@ -1,7 +1,7 @@
 import type { Struct } from 'superstruct';
 import { assert as assertSuperstruct } from 'superstruct';
 
-import { isErrorWithMessage } from './errors';
+import { getErrorMessage } from './errors';
 
 export type AssertionErrorConstructor =
   | (new (args: { message: string }) => Error)
@@ -22,18 +22,20 @@ function isConstructable(
 }
 
 /**
- * Get the error message from an unknown error object. If the error object has
- * a `message` property, that property is returned. Otherwise, the stringified
- * error object is returned.
+ * Attempts to obtain the message from a possible error object. If it is
+ * possible to do so, any trailing period will be removed from the message;
+ * otherwise an empty string is returned.
  *
  * @param error - The error object to get the message from.
- * @returns The error message.
+ * @returns The message without any trailing period if `error` is an object
+ * with a `message` property; the string version of `error` without any trailing
+ * period if it is not `undefined` or `null`; otherwise an empty string.
  */
-function getErrorMessage(error: unknown): string {
-  const message = isErrorWithMessage(error) ? error.message : String(error);
+function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
+  const message = getErrorMessage(error);
 
-  // If the error ends with a period, remove it, as we'll add our own period.
   if (message.endsWith('.')) {
+    // We'll add our own period.
     return message.slice(0, -1);
   }
 
@@ -118,7 +120,10 @@ export function assertStruct<Type, Schema>(
   try {
     assertSuperstruct(value, struct);
   } catch (error) {
-    throw getError(ErrorWrapper, `${errorPrefix}: ${getErrorMessage(error)}.`);
+    throw getError(
+      ErrorWrapper,
+      `${errorPrefix}: ${getErrorMessageWithoutTrailingPeriod(error)}.`,
+    );
   }
 }
 
