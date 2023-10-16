@@ -28,7 +28,7 @@ export default defineConfig({
   // Enables shimming of `__dirname` and `import.meta.url`, so that they work
   // in both CommonJS and ESM.
   // https://tsup.egoist.dev/#inject-cjs-and-esm-shims
-  shims: false,
+  shims: true,
 
   // Hide unnecessary logs from the console. Warnings and errors will still be
   // shown.
