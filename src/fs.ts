@@ -85,7 +85,7 @@ export async function readJsonFile<Value extends Json>(
 }
 
 /**
- * Attempts to write the given JSON-like value to the file at the given path.
+ * Attempt to write the given JSON-like value to the file at the given path.
  * Adds a newline to the end of the file. Supports a custom parser (in case you
  * want to use the [JSON5](https://www.npmjs.com/package/json5) package
  * instead).
