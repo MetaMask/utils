@@ -35,7 +35,7 @@ export async function readFile(filePath: string): Promise<string> {
 }
 
 /**
- * Writes content to the file at the given path.
+ * Write content to the file at the given path.
  *
  * @param filePath - The path to the file.
  * @param content - The new content of the file.
