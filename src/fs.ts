@@ -54,7 +54,7 @@ export async function writeFile(
 }
 
 /**
- * Reads the assumed JSON file at the given path, attempts to parse it, and
+ * Read the assumed JSON file at the given path, attempts to parse it, and
  * returns the resulting object. Supports a custom parser (in case you want to
  * use the [JSON5](https://www.npmjs.com/package/json5) package instead).
  *
