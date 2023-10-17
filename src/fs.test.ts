@@ -605,6 +605,14 @@ describe('fs', () => {
   });
 
   describe('createSandbox', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
     it('does not create the sandbox directory immediately', async () => {
       createSandbox('utils-fs');
 
@@ -615,28 +623,64 @@ describe('fs', () => {
       );
     });
 
-    it('returns an object with a "withinSandbox" function which creates the sandbox directory', async () => {
-      const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
+    describe('withinSandbox', () => {
+      it('creates the sandbox directory and keeps it around before its given function ends', async () => {
+        const nowTimestamp = new Date('2023-01-01').getTime();
+        jest.setSystemTime(nowTimestamp);
+        const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
+        const sandboxDirectoryPath = path.join(
+          os.tmpdir(),
+          `utils-fs--${nowTimestamp}`,
+        );
 
-      await withinTestSandbox(async ({ directoryPath }) => {
-        expect(await fs.promises.stat(directoryPath)).toStrictEqual(
-          expect.anything(),
+        await withinTestSandbox(async () => {
+          expect(await fs.promises.stat(sandboxDirectoryPath)).toStrictEqual(
+            expect.anything(),
+          );
+        });
+      });
+
+      it('removes the sandbox directory after its given function ends', async () => {
+        const nowTimestamp = new Date('2023-01-01').getTime();
+        jest.setSystemTime(nowTimestamp);
+        const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
+        const sandboxDirectoryPath = path.join(
+          os.tmpdir(),
+          `utils-fs--${nowTimestamp}`,
+        );
+
+        await withinTestSandbox(async () => {
+          // do nothing
+        });
+
+        await expect(fs.promises.stat(sandboxDirectoryPath)).rejects.toThrow(
+          'ENOENT',
         );
       });
-    });
 
-    it('removes the sandbox directory after the function given to "withinSandbox" ends', async () => {
-      const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
-      let sandboxDirectoryPath: string;
+      it('throws if the sandbox directory already exists', async () => {
+        const nowTimestamp = new Date('2023-01-01').getTime();
+        jest.setSystemTime(nowTimestamp);
+        const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
+        const sandboxDirectoryPath = path.join(
+          os.tmpdir(),
+          `utils-fs--${nowTimestamp}`,
+        );
 
-      await withinTestSandbox(async ({ directoryPath }) => {
-        sandboxDirectoryPath = directoryPath;
+        try {
+          await fs.promises.mkdir(sandboxDirectoryPath);
+
+          await expect(
+            withinTestSandbox(async (_sandbox) => {
+              // do nothing
+            }),
+          ).rejects.toThrow(
+            `${sandboxDirectoryPath} already exists. Cannot continue.`,
+          );
+        } finally {
+          await fs.promises.rm(sandboxDirectoryPath, { recursive: true });
+        }
       });
-
-      // @ts-expect-error We can assume sandboxDirectoryPath is defined.
-      await expect(fs.promises.stat(sandboxDirectoryPath)).rejects.toThrow(
-        'ENOENT',
-      );
     });
   });
 });

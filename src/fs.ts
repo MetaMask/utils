@@ -240,7 +240,8 @@ export async function forceRemove(entryPath: string): Promise<void> {
  * ```
  */
 export function createSandbox(projectName: string): FileSandbox {
-  const directoryPath = path.join(os.tmpdir(), projectName);
+  const timestamp = new Date().getTime();
+  const directoryPath = path.join(os.tmpdir(), `${projectName}--${timestamp}`);
 
   return {
     directoryPath,
@@ -248,7 +249,7 @@ export function createSandbox(projectName: string): FileSandbox {
       test: (args: { directoryPath: string }) => Promise<void>,
     ) {
       if (await directoryExists(directoryPath)) {
-        throw new Error(`${directoryPath} already exists, cannot continue`);
+        throw new Error(`${directoryPath} already exists. Cannot continue.`);
       }
 
       await ensureDirectoryStructureExists(directoryPath);
