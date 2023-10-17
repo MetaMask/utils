@@ -129,7 +129,7 @@ export async function writeJsonFile(
 }
 
 /**
- * Tests the given path to determine whether it represents a file.
+ * Test the given path to determine whether it represents a file.
  *
  * @param filePath - The path to a (supposed) file on the filesystem.
  * @returns A promise for true if the file exists or false otherwise.
