@@ -35,7 +35,8 @@ export async function readFile(filePath: string): Promise<string> {
 }
 
 /**
- * Write content to the file at the given path.
+ * Write content to the file at the given path, creating the directory structure
+ * for the file automatically if necessary.
  *
  * @param filePath - The path to the file.
  * @param content - The new content of the file.
@@ -85,7 +86,8 @@ export async function readJsonFile<Value extends Json>(
 }
 
 /**
- * Attempt to write the given JSON-like value to the file at the given path.
+ * Attempt to write the given JSON-like value to the file at the given path,
+ * creating the directory structure for the file automatically if necessary.
  * Adds a newline to the end of the file. Supports a custom parser (in case you
  * want to use the [JSON5](https://www.npmjs.com/package/json5) package
  * instead).
