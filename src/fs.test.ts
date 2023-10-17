@@ -444,9 +444,9 @@ describe('fs', () => {
         .calledWith(entryPath)
         .mockRejectedValue(error);
 
-      await expect(fileExists(entryPath)).rejects.toThrow(
+      await expect(directoryExists(entryPath)).rejects.toThrow(
         expect.objectContaining({
-          message: `Could not determine if file exists '${entryPath}'`,
+          message: `Could not determine if directory exists '${entryPath}'`,
           cause: error,
           stack: expect.any(String),
         }),
@@ -504,7 +504,7 @@ describe('fs', () => {
           ensureDirectoryStructureExists(directoryPath),
         ).rejects.toThrow(
           expect.objectContaining({
-            message: `Could not create directory path '${directoryPath}'`,
+            message: `Could not create directory structure '${directoryPath}'`,
             code: 'EACCES',
             stack: expect.any(String),
             cause: expect.objectContaining({

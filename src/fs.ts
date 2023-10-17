@@ -172,7 +172,7 @@ export async function directoryExists(directoryPath: string): Promise<boolean> {
 
     throw wrapError(
       error,
-      `Could not determine if file exists '${directoryPath}'`,
+      `Could not determine if directory exists '${directoryPath}'`,
     );
   }
 }
@@ -192,7 +192,7 @@ export async function ensureDirectoryStructureExists(
   } catch (error) {
     throw wrapError(
       error,
-      `Could not create directory path '${directoryPath}'`,
+      `Could not create directory structure '${directoryPath}'`,
     );
   }
 }
