@@ -34,10 +34,8 @@ function isConstructable(
 function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
   const message = getErrorMessage(error);
 
-  if (message.endsWith('.')) {
-    // We'll add our own period.
-    return message.slice(0, -1);
-  }
+  // We'll add our own period.
+  return message.replace(/\.$/, '');
 
   return message;
 }
