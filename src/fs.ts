@@ -20,7 +20,7 @@ export type FileSandbox = {
 };
 
 /**
- * Reads the file at the given path, assuming its content is encoded as UTF-8.
+ * Read the file at the given path, assuming its content is encoded as UTF-8.
  *
  * @param filePath - The path to the file.
  * @returns The content of the file.
