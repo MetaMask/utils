@@ -149,7 +149,7 @@ export async function fileExists(filePath: string): Promise<boolean> {
 }
 
 /**
- * Tests the given path to determine whether it represents a file.
+ * Test the given path to determine whether it represents a directory.
  *
  * @param directoryPath - The path to a (supposed) directory on the filesystem.
  * @returns A promise for true if the file exists or false otherwise.
