@@ -172,7 +172,7 @@ export async function directoryExists(directoryPath: string): Promise<boolean> {
 }
 
 /**
- * Creates the given directory along with any directories leading up to the
+ * Create the given directory along with any directories leading up to the
  * directory. If the directory already exists, this is a no-op.
  *
  * @param directoryPath - The path to the desired directory.
