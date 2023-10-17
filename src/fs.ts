@@ -211,7 +211,7 @@ export async function forceRemove(entryPath: string): Promise<void> {
 }
 
 /**
- * Constructs a sandbox object which can be used in tests that need temporary
+ * Construct a sandbox object which can be used in tests that need temporary
  * access to the filesystem.
  *
  * @param projectName - The name of the project.
