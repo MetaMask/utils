@@ -32,12 +32,8 @@ function isConstructable(
  * period if it is not `undefined` or `null`; otherwise an empty string.
  */
 function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
-  const message = getErrorMessage(error);
-
   // We'll add our own period.
-  return message.replace(/\.$/, '');
-
-  return message;
+  return getErrorMessage(error).replace(/\.$/u, '');
 }
 
 /**
