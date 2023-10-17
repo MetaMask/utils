@@ -179,17 +179,16 @@ export async function directoryExists(directoryPath: string): Promise<boolean> {
 
 /**
  * Create the given directory along with any directories leading up to the
- * directory. If the directory already exists, this is a no-op.
+ * directory. If the directory already exists, this does nothing.
  *
  * @param directoryPath - The path to the desired directory.
- * @returns What `fs.promises.mkdir` returns.
  * @throws An error with a stack trace if reading fails in any way.
  */
 export async function ensureDirectoryStructureExists(
   directoryPath: string,
-): Promise<string | undefined> {
+): Promise<void> {
   try {
-    return await fs.promises.mkdir(directoryPath, { recursive: true });
+    await fs.promises.mkdir(directoryPath, { recursive: true });
   } catch (error) {
     throw wrapError(
       error,
@@ -202,7 +201,6 @@ export async function ensureDirectoryStructureExists(
  * Removes the given file or directory, if it exists.
  *
  * @param entryPath - The path to the file or directory.
- * @returns What `fs.promises.rm` returns.
  * @throws An error with a stack trace if removal fails in any way.
  */
 export async function forceRemove(entryPath: string): Promise<void> {
