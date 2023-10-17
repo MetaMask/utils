@@ -21,6 +21,8 @@ const { withinSandbox } = createSandbox('utils');
 describe('fs', () => {
   describe('readFile', () => {
     it('reads the contents of the given file as a UTF-8-encoded string', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'test.file');
 
@@ -31,6 +33,8 @@ describe('fs', () => {
     });
 
     it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'nonexistent.file');
 
@@ -51,6 +55,8 @@ describe('fs', () => {
 
   describe('writeFile', () => {
     it('writes the given data to the given file', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'test.file');
 
@@ -63,6 +69,8 @@ describe('fs', () => {
     });
 
     it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         // Make sandbox root directory non-readable
         await fs.promises.chmod(sandbox.directoryPath, 0o600);
@@ -85,6 +93,8 @@ describe('fs', () => {
   describe('readJsonFile', () => {
     describe('not given a custom parser', () => {
       it('reads the contents of the given file as a UTF-8-encoded string and parses it using the JSON module', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
 
@@ -95,6 +105,8 @@ describe('fs', () => {
       });
 
       it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'nonexistent.json');
 
@@ -115,6 +127,8 @@ describe('fs', () => {
 
     describe('given a custom parser', () => {
       it('reads the contents of the given file as a UTF-8-encoded string and parses it using the custom parser', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
           const parser = {
@@ -132,6 +146,8 @@ describe('fs', () => {
       });
 
       it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'nonexistent.json');
           const parser = {
@@ -159,6 +175,8 @@ describe('fs', () => {
   describe('writeJsonFile', () => {
     describe('not given a custom stringifier', () => {
       it('writes the given data to the given file as JSON (not reformatting it by default)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
 
@@ -171,6 +189,8 @@ describe('fs', () => {
       });
 
       it('writes the given data to the given file as JSON (not reformatting it if "prettify" is false)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
 
@@ -183,6 +203,8 @@ describe('fs', () => {
       });
 
       it('writes the given data to the given file as JSON (reformatting it if "prettify" is true)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
 
@@ -195,6 +217,8 @@ describe('fs', () => {
       });
 
       it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           // Make sandbox root directory non-readable
           await fs.promises.chmod(sandbox.directoryPath, 0o600);
@@ -218,6 +242,8 @@ describe('fs', () => {
 
     describe('given a custom stringifier', () => {
       it('writes the given data to the given file as JSON, using the stringifier (not reformatting it by default)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
           const stringifier = {
@@ -247,6 +273,8 @@ describe('fs', () => {
       });
 
       it('writes the given data to the given file as JSON (not reformatting it if "prettify" is false)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
           const stringifier = {
@@ -280,6 +308,8 @@ describe('fs', () => {
       });
 
       it('writes the given data to the given file as JSON (reformatting it if "prettify" is true)', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
           const stringifier = {
@@ -313,6 +343,8 @@ describe('fs', () => {
       });
 
       it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           // Make sandbox root directory non-readable
           await fs.promises.chmod(sandbox.directoryPath, 0o600);
@@ -354,6 +386,8 @@ describe('fs', () => {
 
   describe('fileExists', () => {
     it('returns true if the given path refers to an existing file', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'test.file');
         await fs.promises.writeFile(filePath, 'some content');
@@ -363,6 +397,8 @@ describe('fs', () => {
     });
 
     it('returns false if the given path refers to something that is not a file', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const directoryPath = path.join(
           sandbox.directoryPath,
@@ -375,6 +411,8 @@ describe('fs', () => {
     });
 
     it('returns false if the given path does not refer to any existing entry', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'nonexistent-entry');
 
@@ -404,6 +442,8 @@ describe('fs', () => {
 
   describe('directoryExists', () => {
     it('returns true if the given path refers to an existing directory', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const directoryPath = path.join(
           sandbox.directoryPath,
@@ -416,6 +456,8 @@ describe('fs', () => {
     });
 
     it('returns false if the given path refers to something that is not a directory', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const filePath = path.join(sandbox.directoryPath, 'test.file');
         await fs.promises.writeFile(filePath, 'some content');
@@ -425,6 +467,8 @@ describe('fs', () => {
     });
 
     it('returns false if the given path does not refer to any existing entry', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const directoryPath = path.join(
           sandbox.directoryPath,
@@ -456,6 +500,8 @@ describe('fs', () => {
 
   describe('ensureDirectoryStructureExists', () => {
     it('creates directories leading up to and including the given path', async () => {
+      expect.assertions(3);
+
       await withinSandbox(async (sandbox) => {
         const directoryPath = path.join(sandbox.directoryPath, 'a', 'b', 'c');
 
@@ -477,6 +523,8 @@ describe('fs', () => {
     });
 
     it('does not throw an error, returning undefined, if the given directory already exists', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         const directoryPath = path.join(sandbox.directoryPath, 'a', 'b', 'c');
         await fs.promises.mkdir(path.join(sandbox.directoryPath, 'a'));
@@ -492,6 +540,8 @@ describe('fs', () => {
     });
 
     it('re-throws a wrapped version of any error that occurs, assigning it the same code and giving it a stack', async () => {
+      expect.assertions(1);
+
       await withinSandbox(async (sandbox) => {
         // Make sandbox root directory non-readable
         await fs.promises.chmod(sandbox.directoryPath, 0o600);
@@ -519,6 +569,8 @@ describe('fs', () => {
   describe('forceRemove', () => {
     describe('given a file path', () => {
       it('removes the file', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.file');
           await fs.promises.writeFile(filePath, 'some content');
@@ -528,8 +580,11 @@ describe('fs', () => {
       });
 
       it('does nothing if the path does not exist', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.file');
+
           expect(await forceRemove(filePath)).toBeUndefined();
         });
       });
@@ -559,6 +614,8 @@ describe('fs', () => {
 
     describe('given a directory path', () => {
       it('removes the directory', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const directoryPath = path.join(
             sandbox.directoryPath,
@@ -571,11 +628,14 @@ describe('fs', () => {
       });
 
       it('does nothing if the path does not exist', async () => {
+        expect.assertions(1);
+
         await withinSandbox(async (sandbox) => {
           const directoryPath = path.join(
             sandbox.directoryPath,
             'test-directory',
           );
+
           expect(await forceRemove(directoryPath)).toBeUndefined();
         });
       });
@@ -625,6 +685,8 @@ describe('fs', () => {
 
     describe('withinSandbox', () => {
       it('creates the sandbox directory and keeps it around before its given function ends', async () => {
+        expect.assertions(1);
+
         const nowTimestamp = new Date('2023-01-01').getTime();
         jest.setSystemTime(nowTimestamp);
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
