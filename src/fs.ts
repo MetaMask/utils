@@ -74,7 +74,11 @@ export async function readJsonFile<Value extends Json>(
   {
     parser = JSON,
   }: {
-    parser?: { parse: typeof JSON.parse };
+    parser?: {
+      parse: (
+        text: Parameters<typeof JSON.parse>[0],
+      ) => ReturnType<typeof JSON.parse>;
+    };
   } = {},
 ): Promise<Value> {
   try {
