@@ -179,7 +179,7 @@ export async function directoryExists(directoryPath: string): Promise<boolean> {
 
 /**
  * Create the given directory along with any directories leading up to the
- * directory. If the directory already exists, this does nothing.
+ * directory, or do nothing if the directory already exists.
  *
  * @param directoryPath - The path to the desired directory.
  * @throws An error with a stack trace if reading fails in any way.
@@ -198,7 +198,8 @@ export async function ensureDirectoryStructureExists(
 }
 
 /**
- * Removes the given file or directory, if it exists.
+ * Remove the given file or directory if it exists, or do nothing if it does
+ * not.
  *
  * @param entryPath - The path to the file or directory.
  * @throws An error with a stack trace if removal fails in any way.
