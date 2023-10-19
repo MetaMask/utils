@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>bytesToHex | @metamask/utils</title><meta name="description" content="Documentation for @metamask/utils"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script async src="../assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>exactOptional | @metamask/utils</title><meta name="description" content="Documentation for @metamask/utils"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script async src="../assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,26 +13,39 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">@metamask/utils</a></li>
-<li><a href="bytesToHex.html">bytesToHex</a></li></ul>
-<h1>Function bytesToHex</h1></div>
+<li><a href="exactOptional.html">exactOptional</a></li></ul>
+<h1>Function exactOptional</h1></div>
 <section class="tsd-panel">
 <ul class="tsd-signatures tsd-kind-function">
-<li class="tsd-signature tsd-anchor-link" id="bytesToHex">bytes<wbr/>To<wbr/>Hex<span class="tsd-signature-symbol">(</span>bytes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Hex.html" class="tsd-signature-type" data-tsd-kind="Type alias">Hex</a><a href="#bytesToHex" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="exactOptional">exact<wbr/>Optional<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Schema</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>struct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Schema</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Type</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ExactOptionalGuard</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Schema</span><span class="tsd-signature-symbol">&gt;</span><a href="#exactOptional" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Convert a <code>Uint8Array</code> to a hexadecimal string.</p>
+<div class="tsd-comment tsd-typography"><p>A struct which allows the property of an object to be absent, or to be present
+as long as it&#39;s valid and not set to <code>undefined</code>.</p>
+<p>This struct should be used in conjunction with the <a href="object.html">object</a> from this
+library, to get proper type inference.</p>
 
-<h3>Returns</h3><p>The hexadecimal string.</p>
+<h3>Returns</h3><p>A struct to check if the given value is valid, or not present.</p>
+
+<h3>Example</h3><pre><code class="language-ts"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-5">struct</span><span class="hl-1"> = </span><span class="hl-6">object</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-3">foo:</span><span class="hl-1"> </span><span class="hl-6">exactOptional</span><span class="hl-1">(</span><span class="hl-6">string</span><span class="hl-1">()),</span><br/><span class="hl-1">  </span><span class="hl-3">bar:</span><span class="hl-1"> </span><span class="hl-6">exactOptional</span><span class="hl-1">(</span><span class="hl-6">number</span><span class="hl-1">()),</span><br/><span class="hl-1">  </span><span class="hl-3">baz:</span><span class="hl-1"> </span><span class="hl-6">optional</span><span class="hl-1">(</span><span class="hl-6">boolean</span><span class="hl-1">()),</span><br/><span class="hl-1">  </span><span class="hl-3">qux:</span><span class="hl-1"> </span><span class="hl-6">unknown</span><span class="hl-1">(),</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-0">type</span><span class="hl-1"> </span><span class="hl-2">Type</span><span class="hl-1"> = </span><span class="hl-2">Infer</span><span class="hl-1">&lt;</span><span class="hl-0">typeof</span><span class="hl-1"> </span><span class="hl-3">struct</span><span class="hl-1">&gt;;</span><br/><span class="hl-4">// Type is equivalent to:</span><br/><span class="hl-4">// {</span><br/><span class="hl-4">//   foo?: string;</span><br/><span class="hl-4">//   bar?: number;</span><br/><span class="hl-4">//   baz?: boolean | undefined;</span><br/><span class="hl-4">//   qux: unknown;</span><br/><span class="hl-4">// }</span>
+</code></pre>
 </div>
+<section class="tsd-panel tsd-type-parameters">
+<h4>Type Parameters</h4>
+<ul class="tsd-type-parameters">
+<li>
+<h4>Type</h4></li>
+<li>
+<h4>Schema</h4></li></ul></section>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>bytes: <span class="tsd-signature-type">Uint8Array</span></h5>
-<div class="tsd-comment tsd-typography"><p>The bytes to convert to a hexadecimal string.</p>
+<h5>struct: <span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Type</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Schema</span><span class="tsd-signature-symbol">&gt;</span></h5>
+<div class="tsd-comment tsd-typography"><p>The struct to check the value against, if present.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="../types/Hex.html" class="tsd-signature-type" data-tsd-kind="Type alias">Hex</a></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Struct</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Type</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ExactOptionalGuard</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">Schema</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/0d68084/src/bytes.ts#L80">src/bytes.ts:80</a></li></ul></aside></li></ul></section></div>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/0d68084/src/json.ts#L140">src/json.ts:140</a></li></ul></aside></li></ul></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -158,7 +171,7 @@
 <li class="tsd-kind-function"><a href="bigIntToHex.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>big<wbr/>Int<wbr/>To<wbr/>Hex</a></li>
 <li class="tsd-kind-function"><a href="bytesToBase64.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Base64</a></li>
 <li class="tsd-kind-function"><a href="bytesToBigInt.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Big<wbr/>Int</a></li>
-<li class="current tsd-kind-function"><a href="bytesToHex.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Hex</a></li>
+<li class="tsd-kind-function"><a href="bytesToHex.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Hex</a></li>
 <li class="tsd-kind-function"><a href="bytesToNumber.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Number</a></li>
 <li class="tsd-kind-function"><a href="bytesToSignedBigInt.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>Signed<wbr/>Big<wbr/>Int</a></li>
 <li class="tsd-kind-function"><a href="bytesToString.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>bytes<wbr/>To<wbr/>String</a></li>
@@ -172,7 +185,7 @@
 <li class="tsd-kind-function"><a href="createModuleLogger.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Module<wbr/>Logger</a></li>
 <li class="tsd-kind-function"><a href="createNumber.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Number</a></li>
 <li class="tsd-kind-function"><a href="createProjectLogger.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Project<wbr/>Logger</a></li>
-<li class="tsd-kind-function"><a href="exactOptional.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>exact<wbr/>Optional</a></li>
+<li class="current tsd-kind-function"><a href="exactOptional.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>exact<wbr/>Optional</a></li>
 <li class="tsd-kind-function"><a href="getChecksumAddress.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Checksum<wbr/>Address</a></li>
 <li class="tsd-kind-function"><a href="getJsonRpcIdValidator.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Json<wbr/>Rpc<wbr/>Id<wbr/>Validator</a></li>
 <li class="tsd-kind-function"><a href="getJsonSize.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Json<wbr/>Size</a></li>
