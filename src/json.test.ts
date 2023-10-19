@@ -75,7 +75,7 @@ describe('object', () => {
     ).toBe(false);
   });
 
-  it('validates an object with optional values', () => {
+  it('validates an object with exact optional values', () => {
     expect(
       is(
         {
