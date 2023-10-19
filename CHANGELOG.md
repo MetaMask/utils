@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add struct utils for validating JSON objects with optional values ([#136](https://github.com/MetaMask/utils/pull/136))
 - Add filesystem utils ([#148](https://github.com/MetaMask/utils/pull/148))
-- Add error utils ([#146](https://github.com/MetaMask/utils/pull/146))
+- Add error utils ([#146](https://github.com/MetaMask/utils/pull/146), [#151](https://github.com/MetaMask/utils/pull/151))
 - Add base64 encoding and decoding functions ([#145](https://github.com/MetaMask/utils/pull/145))
 
 ### Changed
