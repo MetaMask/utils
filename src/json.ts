@@ -110,10 +110,8 @@ function hasOptional({ path, branch }: Context): boolean {
 }
 
 /**
- * A struct to check if the given value is valid, or not present. This means
- * that it allows an object which does not have the property, or an object which
- * has the property and is valid, but not an object which has the property set
- * to `undefined`.
+ * A struct which allows the property of an object to be absent, or to be present
+ * as long as it's valid and not set to `undefined`.
  *
  * This struct should be used in conjunction with the {@link object} from this
  * library, to get proper type inference.
