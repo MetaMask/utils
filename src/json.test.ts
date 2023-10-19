@@ -7,6 +7,7 @@ import {
   literal,
   max,
   number,
+  optional,
 } from 'superstruct';
 
 import {
@@ -99,6 +100,30 @@ describe('object', () => {
     expect(
       is(
         {
+          foo: undefined,
+        },
+        object({
+          foo: exactOptional(string()),
+        }),
+      ),
+    ).toBe(false);
+  });
+
+  it('validates an object with other values', () => {
+    expect(
+      is(
+        {
+          foo: 123,
+        },
+        object({
+          foo: number(),
+        }),
+      ),
+    ).toBe(true);
+
+    expect(
+      is(
+        {
           foo: 123,
         },
         object({
@@ -113,10 +138,21 @@ describe('object', () => {
           foo: undefined,
         },
         object({
-          foo: exactOptional(string()),
+          foo: optional(string()),
         }),
       ),
-    ).toBe(false);
+    ).toBe(true);
+
+    expect(
+      is(
+        {
+          foo: 'bar',
+        },
+        object({
+          foo: optional(string()),
+        }),
+      ),
+    ).toBe(true);
   });
 });
 
