@@ -7,18 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.2.0]
-### Uncategorized
+### Added
 - Add struct utils for validating JSON objects with optional values ([#136](https://github.com/MetaMask/utils/pull/136))
 - Add filesystem utils ([#148](https://github.com/MetaMask/utils/pull/148))
-- devDeps: depcheck@^1.4.3->^1.4.7 ([#149](https://github.com/MetaMask/utils/pull/149))
 - Add error utils ([#146](https://github.com/MetaMask/utils/pull/146))
-- deps: @ethereumjs/tx@4.1.2->4.2.0 ([#133](https://github.com/MetaMask/utils/pull/133))
-- Bump @babel/traverse from 7.21.4 to 7.23.2 ([#147](https://github.com/MetaMask/utils/pull/147))
-- Use `tsup` for bundling ([#144](https://github.com/MetaMask/utils/pull/144))
 - Add base64 encoding and decoding functions ([#145](https://github.com/MetaMask/utils/pull/145))
-- Bump @metamask/auto-changelog from 3.2.0 to 3.3.0 ([#142](https://github.com/MetaMask/utils/pull/142))
-- Bump postcss from 8.4.23 to 8.4.31 ([#143](https://github.com/MetaMask/utils/pull/143))
-- Bump @metamask/eslint-config from 12.1.0 to 12.2.0 ([#141](https://github.com/MetaMask/utils/pull/141))
+
+### Changed
+- Use `tsup` for bundling ([#144](https://github.com/MetaMask/utils/pull/144))
+  - This makes the package fully compliant with ES modules.
+- Bump `@ethereumjs/tx` from `4.1.2` to `4.2.0` ([#133](https://github.com/MetaMask/utils/pull/133))
 
 ## [8.1.0]
 ### Changed
