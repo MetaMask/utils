@@ -8,6 +8,7 @@ export * from './collections';
 export * from './encryption-types';
 export * from './errors';
 export * from './hex';
+export * from './json-rpc-provider-types';
 export * from './json';
 export * from './keyring';
 export * from './logging';
