@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.2.1]
-### Fixed
-- Fix issue with source maps where line numbers were incorrect for src/error.ts ([#156](https://github.com/MetaMask/utils/pull/156))
-
 ### Changed
 - Bump @metamask/auto-changelog from 3.4.2 to 3.4.3 ([#155](https://github.com/MetaMask/utils/pull/155))
 - Bump @metamask/auto-changelog from 3.3.0 to 3.4.2 ([#154](https://github.com/MetaMask/utils/pull/154))
+
+### Fixed
+- Fix issue with source maps where line numbers were incorrect for src/error.ts ([#156](https://github.com/MetaMask/utils/pull/156))
+
 
 ## [8.2.0]
 ### Added
