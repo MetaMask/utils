@@ -95,7 +95,7 @@ export function wrapError<Throwable>(
     let error: Error & { code?: string };
     // This branch is getting tested by using the Node version that
     // supports `cause` on the Error constructor.
-    // istanbul ignore next 
+    // istanbul ignore next
     if (Error.length === 2) {
       // Also, for some reason `tsserver` is not complaining that the
       // Error constructor doesn't support a second argument in the editor,
