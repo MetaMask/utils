@@ -175,6 +175,7 @@ describe('wrapError', () => {
           super(message);
           this.cause = options.cause;
         }
+
         cause: Error | undefined;
       }
       // Set length to 2
