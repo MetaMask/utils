@@ -105,7 +105,7 @@ export function wrapError<Throwable>(
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      new ErrorWithCause(message, { cause: originalError });
+      error = new ErrorWithCause(message, { cause: originalError });
     }
 
     if (isErrorWithCode(originalError)) {
