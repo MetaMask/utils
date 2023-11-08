@@ -182,6 +182,8 @@ describe('wrapError', () => {
       Object.defineProperty(MockError, 'length', { value: 2 });
 
       // Replace global Error with MockError
+      // NOTE: when we upgrade jest, change this to use:
+      // jest.replaceProperty(global, 'Error', MockError);
       global.Error = MockError as unknown as ErrorConstructor;
 
       // Define your original error and message
