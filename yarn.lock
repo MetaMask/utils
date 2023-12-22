@@ -1208,6 +1208,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@metamask/superstruct@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@metamask/superstruct@npm:2.0.0"
+  checksum: fca5307b7145b89e99b700e3f221eb0c15edcc40f7b4af630a15e8c494145f1715344545388866de09b3d6818c7d228119f76e386ace8489efec42ec6efcf4a1
+  languageName: node
+  linkType: hard
+
 "@metamask/utils@workspace:.":
   version: 0.0.0-use.local
   resolution: "@metamask/utils@workspace:."
@@ -1220,6 +1227,7 @@ __metadata:
     "@metamask/eslint-config-jest": ^12.0.0
     "@metamask/eslint-config-nodejs": ^12.0.0
     "@metamask/eslint-config-typescript": ^12.0.0
+    "@metamask/superstruct": ^2.0.0
     "@noble/hashes": ^1.3.1
     "@scure/base": ^1.1.3
     "@types/debug": ^4.1.7
@@ -1247,7 +1255,6 @@ __metadata:
     prettier-plugin-packagejson: ^2.3.0
     semver: ^7.5.4
     stdio-mock: ^1.2.0
-    superstruct: ^1.0.3
     ts-jest: ^29.0.3
     ts-node: ^10.7.0
     tsd: ^0.29.0
@@ -7130,13 +7137,6 @@ __metadata:
     sucrase: bin/sucrase
     sucrase-node: bin/sucrase-node
   checksum: 61860063bdf6103413698e13247a3074d25843e91170825a9752e4af7668ffadd331b6e99e92fc32ee5b3c484ee134936f926fa9039d5711fafff29d017a2110
-  languageName: node
-  linkType: hard
-
-"superstruct@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "superstruct@npm:1.0.3"
-  checksum: 761790bb111e6e21ddd608299c252f3be35df543263a7ebbc004e840d01fcf8046794c274bcb351bdf3eae4600f79d317d085cdbb19ca05803a4361840cc9bb1
   languageName: node
   linkType: hard
 
