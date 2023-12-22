@@ -8,8 +8,8 @@ import {
 import type { Struct } from 'superstruct';
 import { is, refine, string } from 'superstruct';
 
-import { assertStruct } from './assert';
-import type { Opaque } from './opaque';
+import { assertStruct } from './assert.js';
+import type { Opaque } from './opaque.js';
 
 /**
  * {@link https://codemix.com/opaque-types-in-javascript/ Opaque} type for SemVer ranges.

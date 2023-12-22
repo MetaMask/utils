@@ -1,8 +1,8 @@
 import type { TypedTransaction, TxData } from '@ethereumjs/tx';
 
-import type { Eip1024EncryptedData } from './encryption-types';
-import type { Hex } from './hex';
-import type { Json } from './json';
+import type { Eip1024EncryptedData } from './encryption-types.js';
+import type { Hex } from './hex.js';
+import type { Json } from './json.js';
 
 /**
  * A Keyring class.
@@ -20,7 +20,7 @@ export type KeyringClass<State extends Json> = {
    * @param options - The constructor options. Differs between keyring
    * implementations.
    */
-  new (options?: Record<string, unknown>): Keyring<State>;
+  new(options?: Record<string, unknown>): Keyring<State>;
 
   /**
    * The name of this type of keyring. This must uniquely identify the

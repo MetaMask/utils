@@ -1,4 +1,3 @@
-import type { Context, Infer } from 'superstruct';
 import {
   any,
   array,
@@ -20,15 +19,63 @@ import {
   unknown,
   Struct,
 } from 'superstruct';
-import type {
-  ObjectSchema,
-  Optionalize,
-  Simplify,
-} from 'superstruct/dist/utils';
+import type { Context, Infer } from 'superstruct';
 
-import type { AssertionErrorConstructor } from './assert';
-import { assertStruct } from './assert';
-import { hasProperty } from './misc';
+import type { AssertionErrorConstructor } from './assert.js';
+import { assertStruct } from './assert.js';
+import { hasProperty } from './misc.js';
+
+/**
+ * Infer a type from an object struct schema.
+ *
+ * Copied from `superstruct`.
+ */
+type ObjectSchema = Record<string, Struct<any, any>>;
+
+/**
+ * Omit properties from a type that extend from a specific type.
+ *
+ * Copied from `superstruct`.
+ */
+type OmitBy<Type, Value> = Omit<
+  Type,
+  {
+    [K in keyof Type]: Value extends Extract<Type[K], Value> ? K : never;
+  }[keyof Type]
+>;
+
+/**
+ * Pick properties from a type that extend from a specific type.
+ *
+ * Copied from `superstruct`.
+ */
+type PickBy<Type, Value> = Pick<
+  Type,
+  {
+    [K in keyof Type]: Value extends Extract<Type[K], Value> ? K : never;
+  }[keyof Type]
+>;
+
+/**
+ * Normalize properties of a type that allow `undefined` to make them optional.
+ *
+ * Copied from `superstruct`.
+ */
+type Optionalize<ObjectType extends object> = OmitBy<ObjectType, undefined> &
+  Partial<PickBy<ObjectType, undefined>>;
+
+/**
+ * Simplifies a type definition to its most basic representation.
+ *
+ * Copied from `superstruct`.
+ */
+type Simplify<Type> = Type extends any[] | Date
+  ? Type
+  : {
+    [K in keyof Type]: Type[K];
+    // This was copied from `superstruct`, so we shouldn't change it.
+    // eslint-disable-next-line @typescript-eslint/ban-types
+  } & {};
 
 /**
  * Any JSON-compatible value.
@@ -53,15 +100,15 @@ export type Json =
  */
 export type ObjectOptional<Schema extends Record<string, unknown>> = {
   [Key in keyof Schema as Schema[Key] extends ExactOptionalGuard
-    ? Key
-    : never]?: Schema[Key] extends ExactOptionalGuard & infer Original
-    ? Original
-    : never;
+  ? Key
+  : never]?: Schema[Key] extends ExactOptionalGuard & infer Original
+  ? Original
+  : never;
 } & {
-  [Key in keyof Schema as Schema[Key] extends ExactOptionalGuard
+    [Key in keyof Schema as Schema[Key] extends ExactOptionalGuard
     ? never
     : Key]: Schema[Key];
-};
+  };
 
 /**
  * An object type with support for exact optionals. This is used by the `object`
@@ -665,8 +712,8 @@ export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
   const isValidJsonRpcId = (id: unknown): id is JsonRpcId => {
     return Boolean(
       (typeof id === 'number' && (permitFractions || Number.isInteger(id))) ||
-        (typeof id === 'string' && (permitEmptyString || id.length > 0)) ||
-        (permitNull && id === null),
+      (typeof id === 'string' && (permitEmptyString || id.length > 0)) ||
+      (permitNull && id === null),
     );
   };
 

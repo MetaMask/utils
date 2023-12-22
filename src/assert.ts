@@ -1,7 +1,7 @@
 import type { Struct } from 'superstruct';
 import { assert as assertSuperstruct } from 'superstruct';
 
-import { getErrorMessage } from './errors';
+import { getErrorMessage } from './errors.js';
 
 export type AssertionErrorConstructor =
   | (new (args: { message: string }) => Error)

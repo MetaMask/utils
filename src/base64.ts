@@ -1,7 +1,7 @@
 import type { Struct } from 'superstruct';
 import { pattern } from 'superstruct';
 
-import { assert } from './assert';
+import { assert } from './assert.js';
 
 export type Base64Options = {
   /**
