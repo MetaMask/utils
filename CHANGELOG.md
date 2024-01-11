@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.3.0]
-### Uncategorized
-- feat: Add `createDeferredPromise` ([#164](https://github.com/MetaMask/utils/pull/164))
-- Bump @metamask/auto-changelog from 3.4.3 to 3.4.4 ([#161](https://github.com/MetaMask/utils/pull/161))
+### Added
+- Add `createDeferredPromise` ([#164](https://github.com/MetaMask/utils/pull/164))
 
 ## [8.2.1]
 ### Fixed
