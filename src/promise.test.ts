@@ -10,6 +10,14 @@ describe('Promise utilities', () => {
       expect(await promise).toBeUndefined();
     });
 
+    it('creates a deferred promise that returns a value', async () => {
+      const { promise, resolve } = createDeferredPromise<number>();
+
+      resolve(10);
+
+      expect(await promise).toBe(10);
+    });
+
     it('creates a deferred promise that rejects when reject is called', async () => {
       const { promise, reject } = createDeferredPromise();
       const mockError = new Error('test error');

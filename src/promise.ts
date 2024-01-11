@@ -3,16 +3,17 @@
  *
  * A deferred Promise is one that can be resolved or rejected independently of
  * the Promise construction.
+ * @template Result - The result type of the Promise.
  */
-export type DeferredPromise = {
+export type DeferredPromise<Result = void> = {
   /**
    * The Promise that has been deferred.
    */
-  promise: Promise<void>;
+  promise: Promise<Result>;
   /**
    * A function that resolves the Promise.
    */
-  resolve: () => void;
+  resolve: (result: Result) => void;
   /**
    * A function that rejects the Promise.
    */
@@ -27,16 +28,20 @@ export type DeferredPromise = {
  * to the Promise to suppress the UnhandledPromiseRejection error. This can be
  * useful if the deferred Promise is sometimes intentionally not used.
  * @returns A deferred Promise.
+ * @template Result - The result type of the Promise.
  */
-export function createDeferredPromise({
+export function createDeferredPromise<Result = void>({
   suppressUnhandledRejection = false,
 }: {
   suppressUnhandledRejection?: boolean;
-} = {}): DeferredPromise {
-  let resolve: DeferredPromise['resolve'];
-  let reject: DeferredPromise['reject'];
-  const promise = new Promise<void>(
-    (innerResolve: () => void, innerReject: () => void) => {
+} = {}): DeferredPromise<Result> {
+  let resolve: DeferredPromise<Result>['resolve'];
+  let reject: DeferredPromise<Result>['reject'];
+  const promise = new Promise<Result>(
+    (
+      innerResolve: DeferredPromise<Result>['resolve'],
+      innerReject: DeferredPromise<Result>['reject'],
+    ) => {
       resolve = innerResolve;
       reject = innerReject;
     },
