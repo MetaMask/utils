@@ -22,6 +22,8 @@ const { withinSandbox } = createSandbox('utils');
 // Clone the `uuid` module so that we can spy on its exports
 jest.mock('uuid', () => {
   return {
+    // This is how to mock an ES-compatible module in Jest.
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
     ...jest.requireActual('uuid'),
   };
