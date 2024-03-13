@@ -299,7 +299,7 @@ describe('toCaipChainId', () => {
       expect(toCaipChainId(namespace, reference)).toBe(
         `${namespace}:${reference}`,
       );
-    }
+    },
   );
 
   it.each([
