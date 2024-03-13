@@ -284,13 +284,23 @@ describe('toCaipChainId', () => {
   // tested with a variety of inputs.
   // Here we mainly focus on our own wrapper around those:
 
-  it('returns a valid CAIP-2 chain ID', () => {
-    const namespace = KnownCaipNamespace.Eip155;
+  it('returns a valid CAIP-2 chain ID when given a valid namespace and reference', () => {
+    const namespace = 'abc';
     const reference = '1';
     expect(toCaipChainId(namespace, reference)).toBe(
       `${namespace}:${reference}`,
     );
   });
+
+  it.each(Object.values(KnownCaipNamespace))(
+    'treats %s as a valid namespace',
+    (namespace) => {
+      const reference = '1';
+      expect(toCaipChainId(namespace, reference)).toBe(
+        `${namespace}:${reference}`,
+      );
+    }
+  );
 
   it.each([
     // Too short, must have 3 chars at least
