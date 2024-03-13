@@ -325,7 +325,7 @@ describe('toCaipChainId', () => {
     // Too long
     '012345678901234567890123456789012', // 33 chars
   ])('throws for invalid reference: %s', (reference) => {
-    const namespace = KnownCaipNamespace.Eip155;
+    const namespace = 'abc';
     expect(() => toCaipChainId(namespace, reference)).toThrow(
       `Invalid "reference", must match: ${CAIP_REFERENCE_REGEX.toString()}`,
     );
