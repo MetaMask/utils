@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update docs for `createDeferredPromise` to caution against using `suppressUnhandledRejection` ([#174](https://github.com/MetaMask/utils/pull/174))
 
 ### Fixed
-- Fix `withSandbox` to assign unique name to sandbox directory, so that it can be used in multiple concurrently running Jest tests ([#171](https://github.com/MetaMask/utils/pull/171))
+- Fix `createSandbox` to assign a unique name to the sandbox directory, so that it can be used in multiple concurrently running Jest tests ([#171](https://github.com/MetaMask/utils/pull/171))
 
 ## [8.3.0]
 ### Added
