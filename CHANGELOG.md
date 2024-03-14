@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.4.0]
-### Uncategorized
-- feat(caip): add .toCaipChainId + KnownCaipNamespace ([#175](https://github.com/MetaMask/utils/pull/175))
-- docs: Add caution about suppressing errors ([#174](https://github.com/MetaMask/utils/pull/174))
-- Update security code scanner file ([#172](https://github.com/MetaMask/utils/pull/172))
-- Enabling MetaMask security code scanner ([#170](https://github.com/MetaMask/utils/pull/170))
-- Assign unique name to sandbox directory ([#171](https://github.com/MetaMask/utils/pull/171))
-- Bump ip from 2.0.0 to 2.0.1 ([#169](https://github.com/MetaMask/utils/pull/169))
+### Added
+- Add `toCaipChainId` utility function ([#175](https://github.com/MetaMask/utils/pull/175))
+- Add `KnownCaipNamespace` enum ([#175](https://github.com/MetaMask/utils/pull/175))
+
+### Changed
+- Update docs for `createDeferredPromise` to caution against using `suppressUnhandledRejection` ([#174](https://github.com/MetaMask/utils/pull/174))
+
+### Fixed
+- Fix `withSandbox` to assign unique name to sandbox directory, so that it can be used in multiple concurrently running Jest tests ([#171](https://github.com/MetaMask/utils/pull/171))
 
 ## [8.3.0]
 ### Added
