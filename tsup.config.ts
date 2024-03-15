@@ -30,6 +30,8 @@ export default defineConfig({
   // https://tsup.egoist.dev/#inject-cjs-and-esm-shims
   shims: true,
 
+  dts: true,
+
   // Hide unnecessary logs from the console. Warnings and errors will still be
   // shown.
   silent: true,
