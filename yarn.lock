@@ -1068,8 +1068,8 @@ __metadata:
     "@metamask/eslint-config-typescript": ^12.0.0
     "@noble/hashes": ^1.3.1
     "@scure/base": ^1.1.3
-    "@ts-bridge/cli": ^0.1.0
-    "@ts-bridge/shims": ^0.1.0
+    "@ts-bridge/cli": ^0.1.2
+    "@ts-bridge/shims": ^0.1.1
     "@types/debug": ^4.1.7
     "@types/jest": ^28.1.7
     "@types/jest-when": ^3.5.3
@@ -1294,30 +1294,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-bridge/cli@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@ts-bridge/cli@npm:0.1.0"
+"@ts-bridge/cli@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@ts-bridge/cli@npm:0.1.2"
   dependencies:
     chalk: ^5.3.0
     resolve.exports: ^2.0.2
     yargs: ^17.7.2
   peerDependencies:
-    "@ts-bridge/shims": ^0.1.0
-    typescript: ">=4.0.0"
+    "@ts-bridge/shims": ^0.1.1
+    typescript: ">=4.8.0"
   peerDependenciesMeta:
     "@ts-bridge/shims":
       optional: true
   bin:
     ts-bridge: ./dist/index.js
     tsbridge: ./dist/index.js
-  checksum: 4e326f8f0ef838c46efb5362dead41515d9f38a47b837ddd2f7d335a9d5d86f39508819e7a1cc5e6139dfdba64f0ada18e578367e648f7ea6975af864d8cbbdb
+  checksum: d3f0526fd230fc74d8285a9bef61e3b6ac0467fcb487e06b50d23cad3dcd6450aba312d86d775298b54f4b6bad0f3b45ed3bfb4d10aa8062e72e6e69c0feb59d
   languageName: node
   linkType: hard
 
-"@ts-bridge/shims@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@ts-bridge/shims@npm:0.1.0"
-  checksum: 6da1c94e647e7aece260ce2df2ffd17833efd169a879624a52e7ac716ba70d853e3051c6ef3f957a3b2cbe72c952cfbbba4a69b24f0959497df2ac42e307317d
+"@ts-bridge/shims@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@ts-bridge/shims@npm:0.1.1"
+  checksum: df15df15450f0a6305033655a0afa2458a76362d644eab046d9899b9dc9ba200023144dc8d80040f68cd74f12ba4f2da2ea2c4c950d552ff66688eccd658e2f0
   languageName: node
   linkType: hard
 
