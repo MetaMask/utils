@@ -107,8 +107,8 @@ export type EIP2930Transaction = TypedTransaction & {
    * List of addresses and storage keys that the transaction plans to access
    */
   accessList:
-  | { address: Hex; storageKeys: Hex[] }[]
-  | { address: Uint8Array; storageKeys: Uint8Array[] }[];
+    | { address: Hex; storageKeys: Hex[] }[]
+    | { address: Uint8Array; storageKeys: Uint8Array[] }[];
 };
 
 /**
