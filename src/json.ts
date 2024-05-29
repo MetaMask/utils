@@ -19,63 +19,17 @@ import {
   unknown,
   Struct,
 } from '@metamask/superstruct';
-import type { Context, Infer } from '@metamask/superstruct';
+import type {
+  Context,
+  Infer,
+  ObjectSchema,
+  Simplify,
+  Optionalize,
+} from '@metamask/superstruct';
 
 import type { AssertionErrorConstructor } from './assert';
 import { assertStruct } from './assert';
 import { hasProperty } from './misc';
-
-/**
- * Infer a type from an object struct schema.
- *
- * Copied from `superstruct`.
- */
-type ObjectSchema = Record<string, Struct<any, any>>;
-
-/**
- * Omit properties from a type that extend from a specific type.
- *
- * Copied from `superstruct`.
- */
-type OmitBy<Type, Value> = Omit<
-  Type,
-  {
-    [K in keyof Type]: Value extends Extract<Type[K], Value> ? K : never;
-  }[keyof Type]
->;
-
-/**
- * Pick properties from a type that extend from a specific type.
- *
- * Copied from `superstruct`.
- */
-type PickBy<Type, Value> = Pick<
-  Type,
-  {
-    [K in keyof Type]: Value extends Extract<Type[K], Value> ? K : never;
-  }[keyof Type]
->;
-
-/**
- * Normalize properties of a type that allow `undefined` to make them optional.
- *
- * Copied from `superstruct`.
- */
-type Optionalize<ObjectType extends object> = OmitBy<ObjectType, undefined> &
-  Partial<PickBy<ObjectType, undefined>>;
-
-/**
- * Simplifies a type definition to its most basic representation.
- *
- * Copied from `superstruct`.
- */
-type Simplify<Type> = Type extends any[] | Date
-  ? Type
-  : {
-      [K in keyof Type]: Type[K];
-      // This was copied from `superstruct`, so we shouldn't change it.
-      // eslint-disable-next-line @typescript-eslint/ban-types
-    } & {};
 
 /**
  * Any JSON-compatible value.
