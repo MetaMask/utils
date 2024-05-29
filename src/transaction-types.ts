@@ -1,5 +1,5 @@
-import type { Bytes } from './bytes.js';
-import type { Hex } from './hex.js';
+import type { Bytes } from './bytes';
+import type { Hex } from './hex';
 
 export type Transaction =
   | LegacyTransaction
