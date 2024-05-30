@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0]
+### Changed
+- **BREAKING:** Replace dependency `superstruct` with `@metamask/superstruct` version `^3.0.0` ([#185](https://github.com/MetaMask/utils/pull/185)).
+
 ## [8.4.0]
 ### Added
 - Add `toCaipChainId` utility function ([#175](https://github.com/MetaMask/utils/pull/175))
@@ -223,7 +227,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v8.4.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/MetaMask/utils/compare/v8.4.0...v9.0.0
 [8.4.0]: https://github.com/MetaMask/utils/compare/v8.3.0...v8.4.0
 [8.3.0]: https://github.com/MetaMask/utils/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/MetaMask/utils/compare/v8.2.0...v8.2.1
