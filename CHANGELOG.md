@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [9.0.0]
 ### Changed
-- Bump devDependency `typescript` from `~4.8.4` to `~5.0.4` ([#185](https://github.com/MetaMask/utils/pull/185)).
 - Bump dependency `semver` from `^5.7.1` to `^7.6.0` ([#181](https://github.com/MetaMask/utils/pull/181)).
 
 ### Fixed
