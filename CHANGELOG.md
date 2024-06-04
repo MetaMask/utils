@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.0.0]
-### Uncategorized
-- Use `@metamask/superstruct`, set `moduleResolution` to `NodeNext` ([#185](https://github.com/MetaMask/utils/pull/185))
-- Bump semver ([#181](https://github.com/MetaMask/utils/pull/181))
-- Use `ts-bridge` for building ([#182](https://github.com/MetaMask/utils/pull/182))
-- Bump tar from 6.1.11 to 6.2.1 ([#180](https://github.com/MetaMask/utils/pull/180))
+### Changed
+- Bump devDependency `typescript` from `~4.8.4` to `~5.0.4` ([#185](https://github.com/MetaMask/utils/pull/185)).
+- Bump dependency `semver` from `^5.7.1` to `^7.6.0` ([#181](https://github.com/MetaMask/utils/pull/181)).
+
+### Fixed
+- **BREAKING:** Use `ts-bridge` for building, which supports entry points `@metamask/utils` and `@metamask/utils/node` for both CJS and ESM, and `@metamask/utils/package.json` for JSON. ([#182](https://github.com/MetaMask/utils/pull/182)).
+  - **BREAKING:** Exposes separate build entry points and type declarations for CommonJS and ESM via package manifest `exports`.
+  - **BREAKING:** It's no longer possible to import files from the dist folder directly.
+- **BREAKING:** Replace dependency `superstruct` `^1.0.3` with ESM-compatible `@metamask/superstruct` `^3.0.0` ([#185](https://github.com/MetaMask/utils/pull/185)).
 
 ## [8.4.0]
 ### Added
