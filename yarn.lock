@@ -1054,10 +1054,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/superstruct@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@metamask/superstruct@npm:2.0.0"
-  checksum: fca5307b7145b89e99b700e3f221eb0c15edcc40f7b4af630a15e8c494145f1715344545388866de09b3d6818c7d228119f76e386ace8489efec42ec6efcf4a1
+"@metamask/superstruct@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@metamask/superstruct@npm:3.0.0"
+  checksum: 667f8f2947186972516bb72b4ba215eaeede257c8beb0450583dd4c8b00c28729ff938267ca8804a3a351277fd627b8607cafeb71eb7045a2b6930639bb6a341
   languageName: node
   linkType: hard
 
@@ -1073,7 +1073,7 @@ __metadata:
     "@metamask/eslint-config-jest": ^12.0.0
     "@metamask/eslint-config-nodejs": ^12.0.0
     "@metamask/eslint-config-typescript": ^12.0.0
-    "@metamask/superstruct": ^2.0.0
+    "@metamask/superstruct": ^3.0.0
     "@noble/hashes": ^1.3.1
     "@scure/base": ^1.1.3
     "@ts-bridge/cli": ^0.1.2
