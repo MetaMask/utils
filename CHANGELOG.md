@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump dependency `semver` from `^5.7.1` to `^7.6.0` ([#181](https://github.com/MetaMask/utils/pull/181)).
 
 ### Fixed
-- **BREAKING:** Use `ts-bridge` for building, which supports entry points `@metamask/utils` and `@metamask/utils/node` for both CJS and ESM, and `@metamask/utils/package.json` for JSON. ([#182](https://github.com/MetaMask/utils/pull/182)).
-  - **BREAKING:** Exposes separate build entry points and type declarations for CommonJS and ESM via package manifest `exports`.
-  - **BREAKING:** It's no longer possible to import files from the dist folder directly.
+- Remove chunk files ([#182](https://github.com/MetaMask/utils/pull/182))
+  - Previously, the build tool we used to generate JavaScript files extracted common code to "chunk" files. While this was intended to make this package more tree-shakeable, it also made debugging more difficult for our development teams. These chunk files are no longer present.
+- Produce and export ESM-compatible TypeScript type declaration files in addition to CommonJS-compatible declaration files ([#182](https://github.com/MetaMask/utils/pull/182))
+  - Previously, this package shipped with only one variant of type declaration files, and these files were only CommonJS-compatible, and the `exports` field in `package.json` linked to these files. This is an anti-pattern and was rightfully flagged by the ["Are the Types Wrong?"](https://arethetypeswrong.github.io/) tool as ["masquerading as CJS"](https://github.com/arethetypeswrong/arethetypeswrong.github.io/blob/main/docs/problems/FalseCJS.md). All of the ATTW checks now pass.
 - **BREAKING:** Replace dependency `superstruct` `^1.0.3` with ESM-compatible `@metamask/superstruct` `^3.0.0` ([#185](https://github.com/MetaMask/utils/pull/185)).
 
 ## [8.4.0]
