@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.5.0]
+### Uncategorized
+- Use `@metamask/superstruct`, set `moduleResolution` to `NodeNext` ([#185](https://github.com/MetaMask/utils/pull/185))
+- Bump semver ([#181](https://github.com/MetaMask/utils/pull/181))
+- Use `ts-bridge` for building ([#182](https://github.com/MetaMask/utils/pull/182))
+- Bump tar from 6.1.11 to 6.2.1 ([#180](https://github.com/MetaMask/utils/pull/180))
+
 ## [8.4.0]
 ### Added
 - Add `toCaipChainId` utility function ([#175](https://github.com/MetaMask/utils/pull/175))
@@ -223,7 +230,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v8.4.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v8.5.0...HEAD
+[8.5.0]: https://github.com/MetaMask/utils/compare/v8.4.0...v8.5.0
 [8.4.0]: https://github.com/MetaMask/utils/compare/v8.3.0...v8.4.0
 [8.3.0]: https://github.com/MetaMask/utils/compare/v8.2.1...v8.3.0
 [8.2.1]: https://github.com/MetaMask/utils/compare/v8.2.0...v8.2.1
