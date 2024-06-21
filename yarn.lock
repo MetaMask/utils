@@ -1098,6 +1098,9 @@ __metadata:
     jest: ^29.2.2
     jest-it-up: ^2.0.2
     jest-when: ^3.6.0
+    loglevel: ^1.9.1
+    loglevel-debug: ^0.0.1
+    loglevel-plugin-prefix: ^0.8.4
     pony-cause: ^2.1.10
     prettier: ^2.7.1
     prettier-plugin-packagejson: ^2.3.0
@@ -5151,6 +5154,38 @@ __metadata:
     chalk: ^4.1.0
     is-unicode-supported: ^0.1.0
   checksum: fce1497b3135a0198803f9f07464165e9eb83ed02ceb2273930a6f8a508951178d8cf4f0378e9d28300a2ed2bc49050995d2bd5f53ab716bb15ac84d58c6ef74
+  languageName: node
+  linkType: hard
+
+"loglevel-debug@npm:0.0.1":
+  version: 0.0.1
+  resolution: "loglevel-debug@npm:0.0.1"
+  dependencies:
+    loglevel: ^1.4.0
+  checksum: b58ce8f0e1f5d64dd2050ae6e3bcff0205db409789edf8a661ff12fc043d5d115daa27577391c8491814f792842285b0120417f56c70444ccd7e839b5f7cf876
+  languageName: node
+  linkType: hard
+
+"loglevel-debug@patch:loglevel-debug@npm%3A0.0.1#./.yarn/patches/loglevel-debug-npm-0.0.1-0267e3ae05.patch::locator=%40metamask%2Futils%40workspace%3A.":
+  version: 0.0.1
+  resolution: "loglevel-debug@patch:loglevel-debug@npm%3A0.0.1#./.yarn/patches/loglevel-debug-npm-0.0.1-0267e3ae05.patch::version=0.0.1&hash=800176&locator=%40metamask%2Futils%40workspace%3A."
+  dependencies:
+    loglevel: ^1.4.0
+  checksum: 01955a518aecfc7d913ab49ae1177864ab6e9130e02dd7dc98b8c5b2ff96292f4a4010e9ca4628a52352daee373cbfb8c1a4628aa970313929b549f07cb3e280
+  languageName: node
+  linkType: hard
+
+"loglevel-plugin-prefix@npm:^0.8.4":
+  version: 0.8.4
+  resolution: "loglevel-plugin-prefix@npm:0.8.4"
+  checksum: 5fe0632fa04263e083f87204107a06aa53e40a3537e08752539f5c0fd9a0ef112fe9ba6bdaed791502156c67a4ff7993a2b2871404615f0163f4c49649c362e4
+  languageName: node
+  linkType: hard
+
+"loglevel@npm:^1.4.0, loglevel@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "loglevel@npm:1.9.1"
+  checksum: e1c8586108c4d566122e91f8a79c8df728920e3a714875affa5120566761a24077ec8ec9e5fc388b022e39fc411ec6e090cde1b5775871241b045139771eeb06
   languageName: node
   linkType: hard
 

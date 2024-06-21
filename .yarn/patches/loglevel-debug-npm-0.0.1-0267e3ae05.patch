@@ -1,0 +1,76 @@
+diff --git a/index.js b/index.js
+index e43815eddc64d855b998c5d8e35b09ea58b7fd42..3e3faea8253ba49eb1eb93a66b70dcd096806c9c 100644
+--- a/index.js
++++ b/index.js
+@@ -27,7 +27,7 @@ var _loggers = {};
+  */
+ function composit(src, target) {
+   var o = {};
+-  Object.keys(src).forEach(function(k) {
++  Object.keys(src).forEach(function (k) {
+     var attr = src[k];
+     target[k] = attr.bind ? attr.bind(k) : attr;
+   });
+@@ -72,7 +72,7 @@ function setEnv(key, val) {
+  * @api public
+  */
+ function getMode() {
+-  return (names.length > 0 || skips.length >0) ?  'debug' : 'production';
++  return (names.length > 0 || skips.length > 0) ? 'debug' : 'production';
+ }
+ 
+ /**
+@@ -99,7 +99,7 @@ function enable(namespaces) {
+     }
+   }
+ 
+-  for(var k in _loggers) {
++  for (var k in _loggers) {
+     var logger = _loggers[k];
+     if (enabled(k)) {
+       logger.setLevel(logger.levels.DEBUG);
+@@ -142,7 +142,7 @@ function enabled(name) {
+ function disable() {
+   names = [];
+   skips = [];
+-  for(var k in _loggers) {
++  for (var k in _loggers) {
+     var logger = _loggers[k];
+     logger.setLevel(logger.levels.INFO);
+   }
+@@ -165,21 +165,23 @@ function loglevelDebug(nameOrLogger) {
+     log = _loggers[nameOrLogger] = require('loglevel').getLogger(nameOrLogger);
+   }
+   else if (typeof nameOrLogger === 'object') {
+-    log = nameOrLogger;
++    // Allow Logger objects to have their levels set
++    // Source: <https://github.com/vectrlabs/loglevel-debug/pull/2>
++    log = _loggers[nameOrLogger.name] = nameOrLogger;
+   }
+   else {
+     log = require('loglevel');
+   }
+ 
+   var originalFactory = log.methodFactory;
+-  log.methodFactory = function(methodName, logLevel, loggerName) {
++  log.methodFactory = function (methodName, logLevel, loggerName) {
+     var rawMethod = originalFactory(methodName, logLevel, loggerName);
+     var prefix = [
+       '[' + methodName.toUpperCase() + ']',
+       new Date(),
+       loggerName
+     ].join(' ');
+-    return function(message) {
++    return function (message) {
+       var args = Array.prototype.slice.call(arguments);
+       args[0] = prefix + ' ' + args[0];
+       return rawMethod.apply(this, args);
+@@ -194,7 +196,7 @@ function loglevelDebug(nameOrLogger) {
+     log.setLevel(log.levels.INFO);
+   }
+ 
+-  var callableLogger = function() {
++  var callableLogger = function () {
+     return log.debug.apply(this, arguments);
+   };
+ 
