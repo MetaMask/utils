@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0]
+### Uncategorized
+- Bump `@metamask/superstruct` from `^3.0.0` to `^3.1.0` ([#194](https://github.com/MetaMask/utils/pull/194))
+- Ensure functions that should return Hex, do ([#193](https://github.com/MetaMask/utils/pull/193))
+- Bump `braces` from `3.0.2` to `3.0.3` ([#192](https://github.com/MetaMask/utils/pull/192))
+
 ## [8.5.0]
 ### Changed
 - Bump dependency `semver` from `^5.7.1` to `^7.6.0` ([#181](https://github.com/MetaMask/utils/pull/181)).
@@ -235,7 +241,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v8.5.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/MetaMask/utils/compare/v8.5.0...v9.0.0
 [8.5.0]: https://github.com/MetaMask/utils/compare/v8.4.0...v8.5.0
 [8.4.0]: https://github.com/MetaMask/utils/compare/v8.3.0...v8.4.0
 [8.3.0]: https://github.com/MetaMask/utils/compare/v8.2.1...v8.3.0
