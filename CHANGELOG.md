@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This is resolved by updating `@metamask/utils` to `8.5.1`.
 
 ### Fixed
-- Ensure functions that should return Hex, do ([#193](https://github.com/MetaMask/utils/pull/193))
+- The return types of functions `getChecksumAddress`, `numberToHex`, `bigIntToHex` are explicitly set to `Hex` ([#193](https://github.com/MetaMask/utils/pull/193))
 
 ## [8.5.0]
 ### Changed
