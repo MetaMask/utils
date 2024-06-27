@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [9.0.0]
 ### Changed
-- **BREAKING:** The return types of functions `getChecksumAddress`, `numberToHex`, `bigIntToHex` are explicitly set to `Hex` ([#193](https://github.com/MetaMask/utils/pull/193))
+- **BREAKING:** The return types of functions `getChecksumAddress`, `numberToHex`, `bigIntToHex` are narrowed from `string` to `Hex` ([#193](https://github.com/MetaMask/utils/pull/193))
 - Bump `@metamask/superstruct` from `^3.0.0` to `^3.1.0` ([#194](https://github.com/MetaMask/utils/pull/194))
   - If `@metamask/utils` `<=8.5.0` is used with `@metamask/superstruct` `>=3.1.0` the following error may be encountered:
   ```ts
