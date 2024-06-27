@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.0.0]
-### Uncategorized
+### Changed
+- **BREAKING:** The return types of functions `getChecksumAddress`, `numberToHex`, `bigIntToHex` are explicitly set to `Hex` ([#193](https://github.com/MetaMask/utils/pull/193))
 - Bump `@metamask/superstruct` from `^3.0.0` to `^3.1.0` ([#194](https://github.com/MetaMask/utils/pull/194))
-- Ensure functions that should return Hex, do ([#193](https://github.com/MetaMask/utils/pull/193))
-- Bump `braces` from `3.0.2` to `3.0.3` ([#192](https://github.com/MetaMask/utils/pull/192))
+  - If `@metamask/utils` `<=8.5.0` is used with `@metamask/superstruct` `>=3.1.0` the following error may be encountered:
+  ```ts
+  error TS2742: The inferred type of 'ExampleType' cannot be named without a reference to '@metamask/utils/node_modules/@metamask/superstruct'. This is likely not portable. A type annotation is necessary.
+  ```
+  This can be resolved by updating `@metamask/utils` to `8.5.1`.
 
 ## [8.5.0]
 ### Changed
