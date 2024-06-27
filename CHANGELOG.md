@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```ts
   error TS2742: The inferred type of 'ExampleType' cannot be named without a reference to '@metamask/utils/node_modules/@metamask/superstruct'. This is likely not portable. A type annotation is necessary.
   ```
-  This can be resolved by updating `@metamask/utils` to `8.5.1`.
+  This can be resolved by updating `@metamask/utils` to `>=9.0.0`.
 
 ## [8.5.0]
 ### Changed
