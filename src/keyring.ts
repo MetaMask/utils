@@ -11,7 +11,7 @@ import type { Json } from './json';
  * static property on Keyring classes. See the {@link Keyring} type for more
  * information.
  */
-export type KeyringClass<State extends Json> = {
+export type KeyringClass<Type extends string, State extends Json> = {
   /**
    * The Keyring constructor. Takes a single parameter, an "options" object.
    * See the documentation for the specific keyring for more information about
@@ -20,13 +20,13 @@ export type KeyringClass<State extends Json> = {
    * @param options - The constructor options. Differs between keyring
    * implementations.
    */
-  new (options?: Record<string, unknown>): Keyring<State>;
+  new (options?: Record<string, unknown>): Keyring<Type, State>;
 
   /**
    * The name of this type of keyring. This must uniquely identify the
    * keyring type.
    */
-  type: string;
+  type: Type;
 };
 
 /**
@@ -44,12 +44,12 @@ export type KeyringClass<State extends Json> = {
  * should be treated with care though, just in case it does contain sensitive
  * material such as a private key.
  */
-export type Keyring<State extends Json> = {
+export type Keyring<Type extends string, State extends Json> = {
   /**
    * The name of this type of keyring. This must match the `type` property of
    * the keyring class.
    */
-  type: string;
+  type: Type;
 
   /**
    * Get the addresses for all accounts in this keyring.
@@ -263,4 +263,12 @@ export type Keyring<State extends Json> = {
    * Destroy the keyring.
    */
   destroy?(): Promise<void>;
+};
+
+/**
+ * A Keyring factory function.
+ */
+export type KeyringBuilder<Type extends string, State extends Json> = {
+  (): Keyring<Type, State>;
+  type: Type;
 };
