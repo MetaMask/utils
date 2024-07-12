@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.1.0]
-### Uncategorized
-- chore(devdeps): @lavamoat/allow-scripts@^2.3.1->^3.0.4 ([#184](https://github.com/MetaMask/utils/pull/184))
-- feat: Add PublicInterface type ([#197](https://github.com/MetaMask/utils/pull/197))
+### Added
+- Add PublicInterface type ([#197](https://github.com/MetaMask/utils/pull/197))
 
 ## [9.0.0]
 ### Changed
