@@ -8,7 +8,7 @@ import {
   max,
   number,
   optional,
-} from 'superstruct';
+} from '@metamask/superstruct';
 
 import {
   assert,
