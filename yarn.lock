@@ -1103,6 +1103,7 @@ __metadata:
     prettier-plugin-packagejson: ^2.3.0
     semver: ^7.5.4
     stdio-mock: ^1.2.0
+    superstruct: 2.0.3-1
     ts-jest: ^29.0.3
     ts-node: ^10.7.0
     tsd: ^0.29.0
@@ -6942,6 +6943,13 @@ __metadata:
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
+  languageName: node
+  linkType: hard
+
+"superstruct@npm:2.0.3-1":
+  version: 2.0.3-1
+  resolution: "superstruct@npm:2.0.3-1"
+  checksum: 474af27b2b69f1556f085b07061d09ba2ff065fccb4a1b1f934669d0dba1c5f9c797fc379d9051a9bc345f1aadcf466534e3e0298f4b0020a5328f2a067c8df6
   languageName: node
   linkType: hard
 
