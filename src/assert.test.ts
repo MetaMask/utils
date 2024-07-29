@@ -1,4 +1,4 @@
-import { string, assert as superstructAssert } from '@metamask/superstruct';
+import { string, assert as superstructAssert } from 'superstruct';
 
 import {
   assert,

@@ -1,3 +1,8 @@
+import type {
+  ObjectSchema,
+  Simplify,
+  Optionalize,
+} from '@metamask/superstruct';
 import {
   any,
   array,
@@ -18,14 +23,8 @@ import {
   union,
   unknown,
   Struct,
-} from '@metamask/superstruct';
-import type {
-  Context,
-  Infer,
-  ObjectSchema,
-  Simplify,
-  Optionalize,
-} from '@metamask/superstruct';
+} from 'superstruct';
+import type { Context, Infer } from 'superstruct';
 
 import type { AssertionErrorConstructor } from './assert';
 import { assertStruct } from './assert';

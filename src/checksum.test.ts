@@ -1,4 +1,4 @@
-import { is } from '@metamask/superstruct';
+import { is } from 'superstruct';
 
 import { ChecksumStruct } from './checksum';
 

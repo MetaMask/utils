@@ -1,4 +1,4 @@
-import type { Infer } from '@metamask/superstruct';
+import type { Infer } from 'superstruct';
 import {
   bigint,
   coerce,
@@ -8,7 +8,7 @@ import {
   string,
   StructError,
   union,
-} from '@metamask/superstruct';
+} from 'superstruct';
 
 import { assert } from './assert';
 import { bytesToHex, hexToBytes } from './bytes';
