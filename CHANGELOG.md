@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.2.0]
-### Uncategorized
-- Add Wallet member to KnownCaipNamespace enum ([#207](https://github.com/MetaMask/utils/pull/207))
+### Added
+- Add `Wallet` member to `KnownCaipNamespace` enum ([#207](https://github.com/MetaMask/utils/pull/207))
 
 ## [9.1.0]
 ### Added
