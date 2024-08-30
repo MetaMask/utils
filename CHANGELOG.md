@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.2.1]
-### Uncategorized
-- fix: Cast CAIP-2 and CAIP-10 structs to their proper types ([#210](https://github.com/MetaMask/utils/pull/210))
-- Bump micromatch from 4.0.5 to 4.0.8 in the npm_and_yarn group ([#209](https://github.com/MetaMask/utils/pull/209))
+### Fixed
+- Cast CAIP-2 and CAIP-10 structs to their proper types ([#210](https://github.com/MetaMask/utils/pull/210))
 
 ## [9.2.0]
 ### Added
