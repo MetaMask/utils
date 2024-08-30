@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.1]
+### Uncategorized
+- fix: Cast CAIP-2 and CAIP-10 structs to their proper types ([#210](https://github.com/MetaMask/utils/pull/210))
+- Bump micromatch from 4.0.5 to 4.0.8 in the npm_and_yarn group ([#209](https://github.com/MetaMask/utils/pull/209))
+
 ## [9.2.0]
 ### Added
 - Add `Wallet` member to `KnownCaipNamespace` enum ([#207](https://github.com/MetaMask/utils/pull/207))
@@ -255,7 +260,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v9.2.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v9.2.1...HEAD
+[9.2.1]: https://github.com/MetaMask/utils/compare/v9.2.0...v9.2.1
 [9.2.0]: https://github.com/MetaMask/utils/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/MetaMask/utils/compare/v9.0.0...v9.1.0
 [9.0.0]: https://github.com/MetaMask/utils/compare/v8.5.0...v9.0.0
