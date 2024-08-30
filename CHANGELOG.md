@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [9.2.1]
 ### Fixed
-- Cast CAIP-2 and CAIP-10 structs to their proper types ([#210](https://github.com/MetaMask/utils/pull/210))
+- Fix wrong types for CAIP-2 and CAIP-10 structs ([#210](https://github.com/MetaMask/utils/pull/210))
 
 ## [9.2.0]
 ### Added
