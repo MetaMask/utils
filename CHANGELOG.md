@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [9.3.0]
-### Uncategorized
-- feat(caip): add support for CAIP-19 ([#183](https://github.com/MetaMask/utils/pull/183))
-- feat: add `KnownCaipNamespace.Bip122` for Bitcoin family ([#213](https://github.com/MetaMask/utils/pull/213))
+### Added
+- Add support for CAIP-19 ([#183](https://github.com/MetaMask/utils/pull/183))
+- Add `Bip122` member to `KnownCaipNamespace` ([#213](https://github.com/MetaMask/utils/pull/213))
 
 ## [9.2.1]
 ### Fixed
