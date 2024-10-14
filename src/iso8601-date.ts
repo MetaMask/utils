@@ -224,7 +224,7 @@ export function parseDateTime(value: string): Date | TZDate {
     }
   }
 
-  assert(Y !== undefined);
+  assert(Y !== undefined, 'Invalid ISO-8601 parser state');
   M = M ?? '01';
   D = D ?? '01';
   H = H ?? '00';
