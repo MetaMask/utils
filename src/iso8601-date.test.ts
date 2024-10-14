@@ -1,7 +1,7 @@
 import { TZDate } from '@date-fns/tz';
 import assert from 'assert';
 
-import { InvalidIso8601Date, parseDateTime } from './iso8601-date';
+import { InvalidIso8601Date, parseIso8601DateTime } from './iso8601-date';
 
 describe('parseDateTime', () => {
   it.each([
@@ -19,7 +19,7 @@ describe('parseDateTime', () => {
     ['20300606T0603', new Date(2030, 5, 6, 6, 3)],
     ['20310707T070402', new Date(2031, 6, 7, 7, 4, 2)],
   ])('parses %s local-time correctly', (testIso, expectedDate) => {
-    const result = parseDateTime(testIso);
+    const result = parseIso8601DateTime(testIso);
 
     expect(result).toBeInstanceOf(Date);
     expect(result.toISOString()).toStrictEqual(expectedDate.toISOString());
@@ -44,7 +44,7 @@ describe('parseDateTime', () => {
     ['2023-04-04T04:04:04-01:01', new TZDate(2023, 3, 4, 4, 4, 4, '-01:01')],
     ['2023-04-04T04:04:04+02:02', new TZDate(2023, 3, 4, 4, 4, 4, '+02:02')],
   ])('parses %s with time-zone correctly', (testIso, expectedDate) => {
-    const result = parseDateTime(testIso);
+    const result = parseIso8601DateTime(testIso);
 
     assert(result instanceof TZDate);
     expect(result.timeZone).toStrictEqual(expectedDate.timeZone);
@@ -92,6 +92,6 @@ describe('parseDateTime', () => {
     '2020-01-01T23:59:59-11:60',
     '2020-01-01T23:59:59a',
   ])('throws on invalid date time "%s"', (testIso) => {
-    expect(() => parseDateTime(testIso)).toThrow(InvalidIso8601Date);
+    expect(() => parseIso8601DateTime(testIso)).toThrow(InvalidIso8601Date);
   });
 });

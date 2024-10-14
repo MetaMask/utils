@@ -32,7 +32,7 @@ export const InvalidIso8601Date = new Error('Invalid ISO-8601 date');
  * @param value - An ISO-8601 formatted string.
  * @returns A date if value is in local-time, a TZDate if timezone data provided.
  */
-export function parseDateTime(value: string): Date | TZDate {
+export function parseIso8601DateTime(value: string): Date | TZDate {
   let at = 0;
   let hasSeparators: boolean | null = null;
   let state: ParseDateState = ParseDateState.YEAR;
