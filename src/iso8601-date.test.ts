@@ -91,7 +91,7 @@ describe('parseDateTime', () => {
     '2020-01-01T23:59:59+13',
     '2020-01-01T23:59:59-11:60',
     '2020-01-01T23:59:59a',
-  ])('throws on invalid datetiime "%s"', (testIso) => {
+  ])('throws on invalid date time "%s"', (testIso) => {
     expect(() => parseDateTime(testIso)).toThrow(InvalidIso8601Date);
   });
 });
