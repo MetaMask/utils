@@ -21,6 +21,7 @@ const RE_MONTH = /(?:0[1-9])|(?:1[0-2])/u;
 const RE_DATE = /(?:[1-9])|(?:[1-2][0-9])|(?:3[0-1])/u;
 const RE_HOUR = /(?:[0-1][0-9])|(?:2[0-3])/u;
 const RE_MINUTE_SECOND = /[0-5][0-9]/u;
+const RE_Z_HOUR = /(?:0[0-9])|(?:1[0-2])/u;
 
 export const InvalidIso8601Date = new Error('Invalid ISO-8601 date');
 
@@ -51,16 +52,12 @@ export function parseDateTime(value: string): Date | TZDate {
     return value[at] as string;
   };
   const skip = (count = 1) => {
-    if (at + count >= value.length) {
-      throw InvalidIso8601Date;
-    }
+    assert(at + count <= value.length, 'Invalid ISO-8601 parser state');
     at += count;
   };
   const consumeSeparator = (sep: '-' | ':') => {
     const next = peek();
-    if (next === END) {
-      throw InvalidIso8601Date;
-    }
+    assert(next !== END, 'Invalid ISO-8601 parser state');
     if (next === '-' || next === ':') {
       if (hasSeparators === false || next !== sep) {
         throw InvalidIso8601Date;
@@ -185,6 +182,9 @@ export function parseDateTime(value: string): Date | TZDate {
         Z = consume();
 
         if (Z === 'Z') {
+          if (peek() !== END) {
+            throw InvalidIso8601Date;
+          }
           state = ParseDateState.END;
         } else if (['-', '+'].includes(Z)) {
           state = ParseDateState.ZHOUR;
@@ -194,7 +194,7 @@ export function parseDateTime(value: string): Date | TZDate {
         break;
       case ParseDateState.ZHOUR:
         OH = consume() + consume();
-        if (!RE_MINUTE_SECOND.test(OH)) {
+        if (!RE_Z_HOUR.test(OH)) {
           throw InvalidIso8601Date;
         }
 
@@ -218,8 +218,9 @@ export function parseDateTime(value: string): Date | TZDate {
           throw InvalidIso8601Date;
         }
         break;
+      /* istanbul ignore next */
       default:
-        assert('Invalid ISO-8601 parser state');
+        assert(false, 'Invalid ISO-8601 parser state');
     }
   }
 
@@ -238,7 +239,7 @@ export function parseDateTime(value: string): Date | TZDate {
     }
     return new TZDate(
       parseInt(Y, 10),
-      parseInt(M, 10),
+      parseInt(M, 10) - 1,
       parseInt(D, 10),
       parseInt(H, 10),
       parseInt(m, 10),
@@ -248,7 +249,7 @@ export function parseDateTime(value: string): Date | TZDate {
   }
   return new Date(
     parseInt(Y, 10),
-    parseInt(M, 10),
+    parseInt(M, 10) - 1,
     parseInt(D, 10),
     parseInt(H, 10),
     parseInt(m, 10),
