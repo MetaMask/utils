@@ -426,6 +426,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@date-fns/tz@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@date-fns/tz@npm:1.1.2"
+  checksum: 4b2b3d3f062e456c51d5dec5332266c27d9a136352f75fdfd5769be25bcd02ababd9b5e809ae3f9c5e8c3fad1831d11a79a03c87b0f566a48bf9fec084df7665
+  languageName: node
+  linkType: hard
+
 "@es-joy/jsdoccomment@npm:~0.36.1":
   version: 0.36.1
   resolution: "@es-joy/jsdoccomment@npm:0.36.1"
@@ -1065,6 +1072,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@metamask/utils@workspace:."
   dependencies:
+    "@date-fns/tz": ^1.1.2
     "@ethereumjs/tx": ^4.2.0
     "@lavamoat/allow-scripts": ^3.0.4
     "@lavamoat/preinstall-always-fail": ^1.0.0
