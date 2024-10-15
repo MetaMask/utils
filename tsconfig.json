@@ -10,7 +10,11 @@
     "noErrorTruncation": true,
     "noUncheckedIndexedAccess": true,
     "strict": true,
-    "target": "es2020"
+    "target": "es2020",
+    // TODO(ritave): A temporary measure to support date-fns
+    //               which has a problem with CommonJS support
+    //               https://github.com/date-fns/tz/issues/21
+    "skipLibCheck": true
   },
   "exclude": ["./dist/**/*"]
 }
