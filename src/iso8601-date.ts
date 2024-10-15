@@ -1,4 +1,4 @@
-import { TZDate } from '@date-fns/tz';
+import { TZDate } from '@date-fns/tz/date';
 
 import { assert } from './assert';
 
