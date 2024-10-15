@@ -3,16 +3,16 @@ import { TZDate } from '@date-fns/tz';
 import { assert } from './assert';
 
 enum ParseDateState {
-  YEAR = 1,
-  MONTH = 2,
-  DATE = 3,
-  HOUR = 4,
-  MINUTE = 5,
-  SECOND = 6,
-  Z = 7,
-  ZHOUR = 8,
-  ZMINUTE = 9,
-  END = 0,
+  Year = 1,
+  Month = 2,
+  CalendarDate = 3,
+  Hour = 4,
+  Minute = 5,
+  Second = 6,
+  Timezone = 7,
+  TimezoneHour = 8,
+  TimezoneMinute = 9,
+  End = 0,
 }
 const END = Symbol('END');
 
@@ -35,7 +35,7 @@ export const InvalidIso8601Date = new Error('Invalid ISO-8601 date');
 export function parseIso8601DateTime(value: string): Date | TZDate {
   let at = 0;
   let hasSeparators: boolean | null = null;
-  let state: ParseDateState = ParseDateState.YEAR;
+  let state: ParseDateState = ParseDateState.Year;
 
   const consume = () => {
     if (at >= value.length) {
@@ -72,38 +72,36 @@ export function parseIso8601DateTime(value: string): Date | TZDate {
     }
   };
 
-  /* eslint-disable id-length */
-  let Y; // year
-  let M; // month
-  let D; // date
-  let H; // hours
-  let m; // minutes
-  let S; // seconds
-  let Z = null; // null, "Z", "+", "-"
-  let OH; // offset hours
-  let Om; // offset minutes
-  /* eslint-enable id-length */
+  let year: undefined | string;
+  let month: undefined | string;
+  let date: undefined | string;
+  let hours: undefined | string;
+  let minutes: undefined | string;
+  let seconds: undefined | string;
+  let timezone: null | string = null; // null, "Z", "+", "-"
+  let offsetHours: undefined | string;
+  let offsetMinutes: undefined | string;
 
-  while (state !== ParseDateState.END) {
+  while (state !== ParseDateState.End) {
     switch (state) {
-      case ParseDateState.YEAR:
-        Y = '';
+      case ParseDateState.Year:
+        year = '';
         for (let i = 0; i < 4; i++) {
-          Y += consume();
+          year += consume();
         }
-        if (!RE_YEAR.test(Y)) {
+        if (!RE_YEAR.test(year)) {
           throw InvalidIso8601Date;
         }
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else {
           consumeSeparator('-');
-          state = ParseDateState.MONTH;
+          state = ParseDateState.Month;
         }
         break;
-      case ParseDateState.MONTH:
-        M = consume() + consume();
-        if (!RE_MONTH.test(M)) {
+      case ParseDateState.Month:
+        month = consume() + consume();
+        if (!RE_MONTH.test(month)) {
           throw InvalidIso8601Date;
         }
 
@@ -112,107 +110,107 @@ export function parseIso8601DateTime(value: string): Date | TZDate {
         if (hasSeparators === false && (peek() === END || peek() === 'T')) {
           throw InvalidIso8601Date;
         } else if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else if (peek() === 'T') {
-          state = ParseDateState.HOUR;
+          state = ParseDateState.Hour;
         } else {
           consumeSeparator('-');
-          state = ParseDateState.DATE;
+          state = ParseDateState.CalendarDate;
         }
         break;
-      case ParseDateState.DATE:
-        D = consume() + consume();
-        if (!RE_DATE.test(D)) {
+      case ParseDateState.CalendarDate:
+        date = consume() + consume();
+        if (!RE_DATE.test(date)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else {
-          state = ParseDateState.HOUR;
+          state = ParseDateState.Hour;
         }
         break;
-      case ParseDateState.HOUR:
+      case ParseDateState.Hour:
         if (consume() !== 'T') {
           throw InvalidIso8601Date;
         }
 
-        H = consume() + consume();
-        if (!RE_HOUR.test(H)) {
+        hours = consume() + consume();
+        if (!RE_HOUR.test(hours)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else if (['Z', '-', '+'].includes(peek() as string)) {
-          state = ParseDateState.Z;
+          state = ParseDateState.Timezone;
         } else {
           consumeSeparator(':');
-          state = ParseDateState.MINUTE;
+          state = ParseDateState.Minute;
         }
         break;
-      case ParseDateState.MINUTE:
-        m = consume() + consume();
-        if (!RE_MINUTE_SECOND.test(m)) {
+      case ParseDateState.Minute:
+        minutes = consume() + consume();
+        if (!RE_MINUTE_SECOND.test(minutes)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else if (['Z', '-', '+'].includes(peek() as string)) {
-          state = ParseDateState.Z;
+          state = ParseDateState.Timezone;
         } else {
           consumeSeparator(':');
-          state = ParseDateState.SECOND;
+          state = ParseDateState.Second;
         }
         break;
-      case ParseDateState.SECOND:
-        S = consume() + consume();
-        if (!RE_MINUTE_SECOND.test(S)) {
+      case ParseDateState.Second:
+        seconds = consume() + consume();
+        if (!RE_MINUTE_SECOND.test(seconds)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else {
-          state = ParseDateState.Z;
+          state = ParseDateState.Timezone;
         }
         break;
-      case ParseDateState.Z:
-        Z = consume();
+      case ParseDateState.Timezone:
+        timezone = consume();
 
-        if (Z === 'Z') {
+        if (timezone === 'Z') {
           if (peek() !== END) {
             throw InvalidIso8601Date;
           }
-          state = ParseDateState.END;
-        } else if (['-', '+'].includes(Z)) {
-          state = ParseDateState.ZHOUR;
+          state = ParseDateState.End;
+        } else if (['-', '+'].includes(timezone)) {
+          state = ParseDateState.TimezoneHour;
         } else {
           throw InvalidIso8601Date;
         }
         break;
-      case ParseDateState.ZHOUR:
-        OH = consume() + consume();
-        if (!RE_Z_HOUR.test(OH)) {
+      case ParseDateState.TimezoneHour:
+        offsetHours = consume() + consume();
+        if (!RE_Z_HOUR.test(offsetHours)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else {
           consumeSeparator(':');
-          state = ParseDateState.ZMINUTE;
+          state = ParseDateState.TimezoneMinute;
         }
         break;
-      case ParseDateState.ZMINUTE:
-        Om = consume() + consume();
-        if (!RE_MINUTE_SECOND.test(Om)) {
+      case ParseDateState.TimezoneMinute:
+        offsetMinutes = consume() + consume();
+        if (!RE_MINUTE_SECOND.test(offsetMinutes)) {
           throw InvalidIso8601Date;
         }
 
         if (peek() === END) {
-          state = ParseDateState.END;
+          state = ParseDateState.End;
         } else {
           // Garbage at the end
           throw InvalidIso8601Date;
@@ -224,35 +222,35 @@ export function parseIso8601DateTime(value: string): Date | TZDate {
     }
   }
 
-  assert(Y !== undefined, 'Invalid ISO-8601 parser state');
-  M = M ?? '01';
-  D = D ?? '01';
-  H = H ?? '00';
-  m = m ?? '00';
-  S = S ?? '00';
-  OH = OH ?? '00';
-  Om = Om ?? '00';
+  assert(year !== undefined, 'Invalid ISO-8601 parser state');
+  month = month ?? '01';
+  date = date ?? '01';
+  hours = hours ?? '00';
+  minutes = minutes ?? '00';
+  seconds = seconds ?? '00';
+  offsetHours = offsetHours ?? '00';
+  offsetMinutes = offsetMinutes ?? '00';
 
-  if (Z !== null) {
-    if (Z === 'Z') {
-      Z = '+';
+  if (timezone !== null) {
+    if (timezone === 'Z') {
+      timezone = '+';
     }
     return new TZDate(
-      parseInt(Y, 10),
-      parseInt(M, 10) - 1,
-      parseInt(D, 10),
-      parseInt(H, 10),
-      parseInt(m, 10),
-      parseInt(S, 10),
-      `${Z}${OH}:${Om}`,
+      parseInt(year, 10),
+      parseInt(month, 10) - 1,
+      parseInt(date, 10),
+      parseInt(hours, 10),
+      parseInt(minutes, 10),
+      parseInt(seconds, 10),
+      `${timezone}${offsetHours}:${offsetMinutes}`,
     );
   }
   return new Date(
-    parseInt(Y, 10),
-    parseInt(M, 10) - 1,
-    parseInt(D, 10),
-    parseInt(H, 10),
-    parseInt(m, 10),
-    parseInt(S, 10),
+    parseInt(year, 10),
+    parseInt(month, 10) - 1,
+    parseInt(date, 10),
+    parseInt(hours, 10),
+    parseInt(minutes, 10),
+    parseInt(seconds, 10),
   );
 }
