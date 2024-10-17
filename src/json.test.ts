@@ -418,6 +418,26 @@ describe('json', () => {
         assertIsJsonRpcRequest(JSON_RPC_REQUEST_FIXTURES.invalid[0]),
       ).toThrow('Invalid JSON-RPC request: oops');
     });
+
+    it('is fast for large inputs', () => {
+      const request = {
+        jsonrpc: '2.0',
+        id: 'foo',
+        method: 'wallet_invokeSnap',
+        params: {
+          snapId: 'npm:@metamask/manage-state-example-snap',
+          request: {
+            method: 'setState',
+            params: { items: new Array(9999999).fill(2) },
+          },
+        },
+      };
+      const now = performance.now();
+      expect(() =>
+        assertIsJsonRpcRequest(request),
+      ).not.toThrow();
+      console.log('Asserting took', performance.now() - now);
+    });
   });
 
   describe('isJsonRpcSuccess', () => {
