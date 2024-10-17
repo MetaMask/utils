@@ -165,6 +165,48 @@ const finiteNumber = () =>
   });
 
 /**
+ * Validate an unknown input to be valid JSON.
+ *
+ * Useful for constructing JSON structs.
+ *
+ * @param json - An unknown value.
+ * @returns True if the value is valid JSON, otherwise false.
+ */
+function validateJson(json: unknown): boolean {
+  if (json === null || typeof json === 'boolean' || typeof json === 'string') {
+    return true;
+  }
+
+  if (typeof json === 'number' && Number.isFinite(json)) {
+    return true;
+  }
+
+  if (typeof json === 'object') {
+    if (Array.isArray(json)) {
+      return json.every((value) => validateJson(value));
+    }
+
+    const entries = Object.entries(json);
+    return entries.every(
+      ([key, value]) => typeof key === 'string' && validateJson(value),
+    );
+  }
+
+  return false;
+}
+
+/**
+ * A struct to check if the given value is a valid JSON-serializable value.
+ * 
+ * A faster alternative to {@link UnsafeJsonStruct}.
+ *
+ * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.
+ */
+export const UnsafeFastJsonStruct: Struct<Json> = define('JSON', (json) =>
+  validateJson(json),
+);
+
+/**
  * A struct to check if the given value is a valid JSON-serializable value.
  *
  * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.
@@ -188,8 +230,8 @@ export const UnsafeJsonStruct: Struct<Json> = union([
  * This struct sanitizes the value before validating it, so that it is safe to
  * use with untrusted input.
  */
-export const JsonStruct = coerce(UnsafeJsonStruct, any(), (value) => {
-  assertStruct(value, UnsafeJsonStruct);
+export const JsonStruct = coerce(UnsafeFastJsonStruct, any(), (value) => {
+  assertStruct(value, UnsafeFastJsonStruct);
   return JSON.parse(
     JSON.stringify(value, (propKey, propValue) => {
       // Strip __proto__ and constructor properties to prevent prototype pollution.
