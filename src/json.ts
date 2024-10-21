@@ -171,6 +171,8 @@ function validateJson(json: unknown): boolean {
   if (typeof json === 'object') {
     let every = true;
     if (Array.isArray(json)) {
+      // Ignoring linting error since for-of is significantly slower than a normal for-loop 
+      // and performance is important in this specific function.
       // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < json.length; i++) {
         if (!validateJson(json[i])) {
@@ -182,6 +184,8 @@ function validateJson(json: unknown): boolean {
     }
 
     const entries = Object.entries(json);
+    // Ignoring linting errors since for-of is significantly slower than a normal for-loop 
+    // and performance is important in this specific function.
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < entries.length; i++) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
