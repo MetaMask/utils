@@ -182,14 +182,28 @@ function validateJson(json: unknown): boolean {
   }
 
   if (typeof json === 'object') {
+    let every = true;
     if (Array.isArray(json)) {
-      return json.every((value) => validateJson(value));
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
+      for (let i = 0; i < json.length; i++) {
+        if (!validateJson(json[i])) {
+          every = false;
+          break;
+        }
+      }
+      return every;
     }
 
     const entries = Object.entries(json);
-    return entries.every(
-      ([key, value]) => typeof key === 'string' && validateJson(value),
-    );
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < entries.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      if (typeof entries[i]![0] !== 'string' || !validateJson(entries[i]![1])) {
+        every = false;
+        break;
+      }
+    }
+    return every;
   }
 
   return false;
@@ -197,7 +211,7 @@ function validateJson(json: unknown): boolean {
 
 /**
  * A struct to check if the given value is a valid JSON-serializable value.
- * 
+ *
  * A faster alternative to {@link UnsafeJsonStruct}.
  *
  * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.

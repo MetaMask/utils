@@ -41,6 +41,7 @@ describe('node', () => {
         "KnownCaipNamespace",
         "PendingJsonRpcResponseStruct",
         "StrictHexStruct",
+        "UnsafeFastJsonStruct",
         "UnsafeJsonStruct",
         "VersionRangeStruct",
         "VersionStruct",

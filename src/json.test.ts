@@ -236,7 +236,7 @@ describe('json', () => {
       const [error] = validate(undefined, JsonStruct);
       assert(error !== undefined);
       expect(error.message).toBe(
-        'Expected the value to satisfy a union of `literal | boolean | finite number | string | array | record`, but received: undefined',
+        'Expected a value of type `JSON`, but received: `undefined`',
       );
     });
   });
@@ -432,11 +432,7 @@ describe('json', () => {
           },
         },
       };
-      const now = performance.now();
-      expect(() =>
-        assertIsJsonRpcRequest(request),
-      ).not.toThrow();
-      console.log('Asserting took', performance.now() - now);
+      expect(() => assertIsJsonRpcRequest(request)).not.toThrow();
     });
   });
 

@@ -41,6 +41,7 @@ describe('index', () => {
         "KnownCaipNamespace",
         "PendingJsonRpcResponseStruct",
         "StrictHexStruct",
+        "UnsafeFastJsonStruct",
         "UnsafeJsonStruct",
         "VersionRangeStruct",
         "VersionStruct",
