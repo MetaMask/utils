@@ -1,13 +1,11 @@
 import {
   any,
   array,
-  boolean,
   coerce,
   create,
   define,
   integer,
   is,
-  lazy,
   literal,
   nullable,
   number,
@@ -200,8 +198,6 @@ function validateJson(json: unknown): boolean {
 
 /**
  * A struct to check if the given value is a valid JSON-serializable value.
- *
- * A faster alternative to {@link UnsafeJsonStruct}.
  *
  * Note that this struct is unsafe. For safe validation, use {@link JsonStruct}.
  */
