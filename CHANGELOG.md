@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [10.0.0]
 ### Changed
-- **BREAKING** Drop support for Node.js versions 16, 21 ([#212](https://github.com/MetaMask/utils/pull/212))
+- **BREAKING:** Drop support for Node.js versions 16, 21 ([#212](https://github.com/MetaMask/utils/pull/212))
 - Improved JSON validation performance ([#218](https://github.com/MetaMask/utils/pull/218))
 
 ## [9.3.0]
