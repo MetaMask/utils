@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [10.0.1]
-### Uncategorized
-- chore: add Solana CAIP namespace ([#219](https://github.com/MetaMask/utils/pull/219))
-- chore: yarn@3.8.5 ([#217](https://github.com/MetaMask/utils/pull/217))
+### Added
+- Add Solana CAIP namespace ([#219](https://github.com/MetaMask/utils/pull/219))
 
 ## [10.0.0]
 ### Changed
