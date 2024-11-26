@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.0.0]
 ### Changed
-- **BREAIKING:** `generateRandomMnemonic` now returns `Promise<void>` instead of `void` ([#222](https://github.com/MetaMask/utils/pull/222))
+- **BREAKING:** `generateRandomMnemonic` now returns `Promise<void>` instead of `void` ([#222](https://github.com/MetaMask/utils/pull/222))
 
 ## [10.0.1]
 ### Added
