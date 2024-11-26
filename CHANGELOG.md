@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [11.0.0]
-### Uncategorized
-- refactor!: make `generateRandomMnemonic` async ([#222](https://github.com/MetaMask/utils/pull/222))
+### Changed
+- **BREAIKING:** `generateRandomMnemonic` now returns `Promise<void>` instead of `void` ([#222](https://github.com/MetaMask/utils/pull/222))
 
 ## [10.0.1]
 ### Added
