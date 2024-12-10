@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.0.1]
+### Uncategorized
+- Bump cross-spawn from 7.0.3 to 7.0.6 in the npm_and_yarn group ([#221](https://github.com/MetaMask/utils/pull/221))
+- Improve error message for invalid JSON values ([#224](https://github.com/MetaMask/utils/pull/224))
+
 ## [11.0.0]
 ### Changed
 - **BREAKING:** `generateRandomMnemonic` now returns `Promise<void>` instead of `void` ([#222](https://github.com/MetaMask/utils/pull/222))
@@ -277,7 +282,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.0.1...HEAD
+[11.0.1]: https://github.com/MetaMask/utils/compare/v11.0.0...v11.0.1
 [11.0.0]: https://github.com/MetaMask/utils/compare/v10.0.1...v11.0.0
 [10.0.1]: https://github.com/MetaMask/utils/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/MetaMask/utils/compare/v9.3.0...v10.0.0
