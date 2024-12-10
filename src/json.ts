@@ -16,7 +16,6 @@ import {
   union,
   unknown,
   Struct,
-  assert,
   refine,
 } from '@metamask/superstruct';
 import type {
