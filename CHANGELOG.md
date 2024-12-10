@@ -7,8 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [11.0.1]
-### Uncategorized
-- Bump cross-spawn from 7.0.3 to 7.0.6 in the npm_and_yarn group ([#221](https://github.com/MetaMask/utils/pull/221))
+### Fixed
 - Improve error message for invalid JSON values ([#224](https://github.com/MetaMask/utils/pull/224))
 
 ## [11.0.0]
