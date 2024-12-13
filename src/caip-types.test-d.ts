@@ -53,16 +53,10 @@ expectAssignable<CaipAssetType>(
 );
 
 expectAssignable<CaipAssetId>(
-  'namespace:reference/assetNamespace:assetReference',
-);
-expectAssignable<CaipAssetId>(
   'namespace:reference/assetNamespace:assetReference/tokenId',
 );
 expectAssignable<CaipAssetId>('namespace:reference/:assetReference/');
-expectAssignable<CaipAssetId>(':reference/assetNamespace:');
-expectAssignable<CaipAssetId>(
-  `${embeddedString}:${embeddedString}/${embeddedString}:${embeddedString}`,
-);
+expectAssignable<CaipAssetId>(':reference/assetNamespace:/');
 expectAssignable<CaipAssetId>(
   `${embeddedString}:${embeddedString}/${embeddedString}:${embeddedString}/${embeddedString}`,
 );

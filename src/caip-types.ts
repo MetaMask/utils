@@ -23,7 +23,7 @@ export const CAIP_ASSET_TYPE_REGEX =
   /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-_a-zA-Z0-9]{1,32}))\/(?<assetNamespace>[-a-z0-9]{3,8}):(?<assetReference>[-.%a-zA-Z0-9]{1,128})$/u;
 
 export const CAIP_ASSET_ID_REGEX =
-  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-_a-zA-Z0-9]{1,32}))\/(?<assetNamespace>[-a-z0-9]{3,8}):(?<assetReference>[-.%a-zA-Z0-9]{1,128})(\/(?<tokenId>[-.%a-zA-Z0-9]{1,78}))?$/u;
+  /^(?<chainId>(?<namespace>[-a-z0-9]{3,8}):(?<reference>[-_a-zA-Z0-9]{1,32}))\/(?<assetNamespace>[-a-z0-9]{3,8}):(?<assetReference>[-.%a-zA-Z0-9]{1,128})\/(?<tokenId>[-.%a-zA-Z0-9]{1,78})$/u;
 
 /**
  * A CAIP-2 chain ID, i.e., a human-readable namespace and reference.
@@ -104,9 +104,7 @@ export const CaipAssetIdStruct = pattern(
   string(),
   CAIP_ASSET_ID_REGEX,
 ) as Struct<CaipAssetId, null>;
-export type CaipAssetId =
-  | `${string}:${string}/${string}:${string}`
-  | `${string}:${string}/${string}:${string}/${string}`;
+export type CaipAssetId = `${string}:${string}/${string}:${string}/${string}`;
 
 /** Known CAIP namespaces. */
 export enum KnownCaipNamespace {
@@ -275,6 +273,37 @@ export function parseCaipAccountId(caipAccountId: CaipAccountId): {
 }
 
 /**
+ * Parse a CAIP-19 asset type to an object containing the chain ID, parsed chain ID,
+ * asset namespace, and asset reference
+ *
+ * This validates the CAIP-19 asset type before parsing it.
+ *
+ * @param caipAssetType - The CAIP-19 asset type to validate and parse.
+ * @returns The parsed CAIP-19 asset type.
+ */
+export function parseCaipAssetType(caipAssetType: CaipAssetType): {
+  assetNamespace: CaipAssetNamespace;
+  assetReference: CaipAssetReference;
+  chainId: CaipChainId;
+  chain: { namespace: CaipNamespace; reference: CaipReference };
+} {
+  const match = CAIP_ASSET_TYPE_REGEX.exec(caipAssetType);
+  if (!match?.groups) {
+    throw new Error('Invalid CAIP asset type.');
+  }
+
+  return {
+    assetNamespace: match.groups.assetNamespace as CaipAssetNamespace,
+    assetReference: match.groups.assetReference as CaipAssetReference,
+    chainId: match.groups.chainId as CaipChainId,
+    chain: {
+      namespace: match.groups.namespace as CaipNamespace,
+      reference: match.groups.reference as CaipReference,
+    },
+  };
+}
+
+/**
  * Parse a CAIP-19 asset ID to an object containing the chain ID, parsed chain ID,
  * asset namespace, asset reference, and token ID.
  *
@@ -286,7 +315,7 @@ export function parseCaipAccountId(caipAccountId: CaipAccountId): {
 export function parseCaipAssetId(caipAssetId: CaipAssetId): {
   assetNamespace: CaipAssetNamespace;
   assetReference: CaipAssetReference;
-  tokenId?: CaipTokenId;
+  tokenId: CaipTokenId;
   chainId: CaipChainId;
   chain: { namespace: CaipNamespace; reference: CaipReference };
 } {
@@ -295,12 +324,10 @@ export function parseCaipAssetId(caipAssetId: CaipAssetId): {
     throw new Error('Invalid CAIP asset ID.');
   }
 
-  const tokenId = match.groups.tokenId as CaipTokenId;
-
   return {
     assetNamespace: match.groups.assetNamespace as CaipAssetNamespace,
     assetReference: match.groups.assetReference as CaipAssetReference,
-    ...(tokenId ? { tokenId } : {}),
+    tokenId: match.groups.tokenId as CaipTokenId,
     chainId: match.groups.chainId as CaipChainId,
     chain: {
       namespace: match.groups.namespace as CaipNamespace,
@@ -386,7 +413,7 @@ export function toCaipAccountId(
 }
 
 /**
- * Asset ID as defined per the CAIP-19
+ * Asset Type as defined per the CAIP-19
  * {@link https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-19.md}.
  *
  * It defines a way to uniquely identify any blockchain asset in a human-readable
@@ -396,20 +423,18 @@ export function toCaipAccountId(
  * @param reference - Identity of a blockchain within a given namespace.
  * @param assetNamespace - The namespace domain of an asset.
  * @param assetReference - The identity of an asset within a given namespace.
- * @param tokenId - The unique identifier for an addressable asset of a given type.
  * @throws {@link Error}
  * This exception is thrown if the inputs do not comply with the CAIP-19
  * syntax specification
  * {@link https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-19.md#syntax}.
- * @returns A CAIP asset ID.
+ * @returns A CAIP asset type.
  */
-export function toCaipAssetId(
+export function toCaipAssetType(
   namespace: CaipNamespace,
   reference: CaipReference,
   assetNamespace: CaipAssetNamespace,
   assetReference: CaipAssetReference,
-  tokenId?: CaipTokenId,
-): CaipAccountId {
+): CaipAssetType {
   if (!isCaipNamespace(namespace)) {
     throw new Error(
       `Invalid "namespace", must match: ${CAIP_NAMESPACE_REGEX.toString()}`,
@@ -434,14 +459,63 @@ export function toCaipAssetId(
     );
   }
 
-  // do not throw if tokenId is falsy unless it is an empty string
-  if ((tokenId && !isCaipTokenId(tokenId)) || tokenId === '') {
+  return `${namespace}:${reference}/${assetNamespace}:${assetReference}`;
+}
+
+/**
+ * Asset ID as defined per the CAIP-19
+ * {@link https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-19.md}.
+ *
+ * It defines a way to uniquely identify any blockchain asset in a human-readable
+ * way.
+ *
+ * @param namespace - The standard (ecosystem) of similar blockchains.
+ * @param reference - Identity of a blockchain within a given namespace.
+ * @param assetNamespace - The namespace domain of an asset.
+ * @param assetReference - The identity of an asset within a given namespace.
+ * @param tokenId - The unique identifier for an addressable asset of a given type.
+ * @throws {@link Error}
+ * This exception is thrown if the inputs do not comply with the CAIP-19
+ * syntax specification
+ * {@link https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-19.md#syntax}.
+ * @returns A CAIP asset ID.
+ */
+export function toCaipAssetId(
+  namespace: CaipNamespace,
+  reference: CaipReference,
+  assetNamespace: CaipAssetNamespace,
+  assetReference: CaipAssetReference,
+  tokenId: CaipTokenId,
+): CaipAssetId {
+  if (!isCaipNamespace(namespace)) {
+    throw new Error(
+      `Invalid "namespace", must match: ${CAIP_NAMESPACE_REGEX.toString()}`,
+    );
+  }
+
+  if (!isCaipReference(reference)) {
+    throw new Error(
+      `Invalid "reference", must match: ${CAIP_REFERENCE_REGEX.toString()}`,
+    );
+  }
+
+  if (!isCaipAssetNamespace(assetNamespace)) {
+    throw new Error(
+      `Invalid "assetNamespace", must match: ${CAIP_ASSET_NAMESPACE_REGEX.toString()}`,
+    );
+  }
+
+  if (!isCaipAssetReference(assetReference)) {
+    throw new Error(
+      `Invalid "assetReference", must match: ${CAIP_ASSET_REFERENCE_REGEX.toString()}`,
+    );
+  }
+
+  if (!isCaipTokenId(tokenId)) {
     throw new Error(
       `Invalid "tokenId", must match: ${CAIP_TOKEN_ID_REGEX.toString()}`,
     );
   }
 
-  return `${namespace}:${reference}/${assetNamespace}:${assetReference}${
-    tokenId ? `/${tokenId}` : ''
-  }`;
+  return `${namespace}:${reference}/${assetNamespace}:${assetReference}/${tokenId}`;
 }
