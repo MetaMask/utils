@@ -27,9 +27,7 @@ export function definePattern<Pattern extends string = string>(
   name: string,
   pattern: RegExp,
 ): Struct<Pattern, null> {
-  return define<Pattern>(
-    name,
-    (value: unknown): boolean =>
-      typeof value === 'string' && pattern.test(value),
-  );
+  return define<Pattern>(name, (value: unknown): boolean | string => {
+    return typeof value === 'string' && pattern.test(value);
+  });
 }
