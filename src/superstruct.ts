@@ -15,7 +15,6 @@ import { define } from '@metamask/superstruct';
  *   /^[-a-z0-9]{3,8}:[-_a-zA-Z0-9]{1,32}$/u;
  * );
  * type CaipChainId = Infer<typeof CaipChainIdStruct>; // `${string}:${string}`
- *
  * ```
  *
  * @param name - Type name.
