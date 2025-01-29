@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.1.0]
+### Uncategorized
+- feat: add `CaipAssetTypeOrId` struct ([#229](https://github.com/MetaMask/utils/pull/229))
+- feat: named CAIP structs ([#228](https://github.com/MetaMask/utils/pull/228))
+- feat: add additional CAIP-19 types and parsing functions to align with proposal ([#227](https://github.com/MetaMask/utils/pull/227))
+- Bump nanoid from 3.3.6 to 3.3.8  ([#226](https://github.com/MetaMask/utils/pull/226))
+
 ## [11.0.1]
 ### Fixed
 - Improve error message for invalid JSON values ([#224](https://github.com/MetaMask/utils/pull/224))
@@ -281,7 +288,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.0.1...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.1.0...HEAD
+[11.1.0]: https://github.com/MetaMask/utils/compare/v11.0.1...v11.1.0
 [11.0.1]: https://github.com/MetaMask/utils/compare/v11.0.0...v11.0.1
 [11.0.0]: https://github.com/MetaMask/utils/compare/v10.0.1...v11.0.0
 [10.0.1]: https://github.com/MetaMask/utils/compare/v10.0.0...v10.0.1
