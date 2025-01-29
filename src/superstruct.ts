@@ -13,7 +13,6 @@ import { define } from '@metamask/superstruct';
  *   /^[-a-z0-9]{3,8}:[-_a-zA-Z0-9]{1,32}$/u;
  * );
  * type CaipChainId = Infer<typeof CaipChainIdStruct>; // `${string}:${string}`
- *
  * @param name - Type name.
  * @param pattern - Regular expression to match.
  * @template Pattern - The pattern type, defaults to `string`.
