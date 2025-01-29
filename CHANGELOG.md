@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [11.1.0]
-### Uncategorized
-- feat: add `CaipAssetTypeOrId` struct ([#229](https://github.com/MetaMask/utils/pull/229))
-- feat: named CAIP structs ([#228](https://github.com/MetaMask/utils/pull/228))
-- feat: add additional CAIP-19 types and parsing functions to align with proposal ([#227](https://github.com/MetaMask/utils/pull/227))
-- Bump nanoid from 3.3.6 to 3.3.8  ([#226](https://github.com/MetaMask/utils/pull/226))
+### Added
+- Add additional CAIP-19 types (`CaipAsset{Namespace,Reference,TokenId}` support ([#227](https://github.com/MetaMask/utils/pull/227))
+- Add CAIP-19 `CaipAssetTypeOrId` ([#229](https://github.com/MetaMask/utils/pull/229))
+  - This one combines both `CaipAssetType` and `CaipAssetId` to avoid relying on `superstruct.union`, resulting in better error messages.
+- Add `definePattern` superstruct helper ([#228](https://github.com/MetaMask/utils/pull/228))
+  - Allow to define a `superstruct.pattern` while naming the struct and enforcing its type.
+
+### Changed
+- Use named structs for all CAIP types ([#228](https://github.com/MetaMask/utils/pull/228))
 
 ## [11.0.1]
 ### Fixed
