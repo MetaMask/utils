@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [12.0.0]
-### Uncategorized
-- fix!: `Keyring.serialize` and `Keyring.deserialize` types ([#232](https://github.com/MetaMask/utils/pull/232))
+### Changed
+- **BREAKING:** The `State` generic has been removed from the `KeyringClass` and `Keyring` types ([#232](https://github.com/MetaMask/utils/pull/232))
+  - The `serialize` method of the `Keyring` type now returns a `Promise<Json>`
+  - The `deserialize` method of the `Keyring` type now accepts `Json` as its argument
 
 ## [11.1.0]
 ### Added
