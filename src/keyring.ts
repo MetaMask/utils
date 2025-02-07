@@ -179,7 +179,7 @@ export type Keyring<State extends Json> = {
    * @param options - Signing options; differs between keyrings.
    * @returns The signed authorization as a hex string.
    */
-  signEIP7702Authorization?(
+  signEip7702Authorization?(
     address: Hex,
     authorization: [chainId: number, contractAddress: Hex, nonce: number],
     options?: Record<string, unknown>,
