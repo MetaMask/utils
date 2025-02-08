@@ -19,3 +19,4 @@ export * from './superstruct';
 export * from './time';
 export * from './transaction-types';
 export * from './versions';
+export * from './iso8601-date';
