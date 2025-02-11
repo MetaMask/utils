@@ -27,6 +27,9 @@ not guaranteed. Some keyrings delegate signing, so they don&#39;t need the
 private key directly. The keyring (and in particular the keyring state)
 should be treated with care though, just in case it does contain sensitive
 material such as a private key.</p>
+
+<h3>Deprecated</h3><p>This type has been moved to the <code>@metamask/keyring-utils</code> package.
+See <a href="https://github.com/MetaMask/accounts/tree/main/packages/keyring-utils">Keyring Utils</a>.</p>
 </div>
 <section class="tsd-panel tsd-type-parameters">
 <h4>Type Parameters</h4>
@@ -59,7 +62,7 @@ the keyring class.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L67">src/keyring.ts:67</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L73">src/keyring.ts:73</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>decrypt<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -85,7 +88,7 @@ the message.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L267">src/keyring.ts:267</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L273">src/keyring.ts:273</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>deserialize<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -103,7 +106,7 @@ the serialized state provided.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L82">src/keyring.ts:82</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L88">src/keyring.ts:88</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>destroy<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -113,7 +116,7 @@ the serialized state provided.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L283">src/keyring.ts:283</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L289">src/keyring.ts:289</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>export<wbr/>Account<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -141,7 +144,7 @@ that account&#39;s private key directly.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L109">src/keyring.ts:109</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L115">src/keyring.ts:115</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>generate<wbr/>Random<wbr/>Mnemonic<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -154,7 +157,7 @@ BIP39-compliant mnemonic.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L278">src/keyring.ts:278</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L284">src/keyring.ts:284</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>Accounts<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -166,7 +169,7 @@ BIP39-compliant mnemonic.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L59">src/keyring.ts:59</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L65">src/keyring.ts:65</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>App<wbr/>Key<wbr/>Address<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -193,7 +196,7 @@ part of the key derivation process.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-type">0x</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L125">src/keyring.ts:125</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L131">src/keyring.ts:131</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>get<wbr/>Encryption<wbr/>Public<wbr/>Key<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -220,7 +223,7 @@ used (e.g. encrypting with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L252">src/keyring.ts:252</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L258">src/keyring.ts:258</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>init<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -230,7 +233,7 @@ used (e.g. encrypting with app keys).</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L87">src/keyring.ts:87</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L93">src/keyring.ts:93</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>remove<wbr/>Account<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -247,7 +250,7 @@ used (e.g. encrypting with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L94">src/keyring.ts:94</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L100">src/keyring.ts:100</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>serialize<span class="tsd-signature-symbol">:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -259,7 +262,7 @@ used (e.g. encrypting with app keys).</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">State</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L74">src/keyring.ts:74</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L80">src/keyring.ts:80</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Eip7702<wbr/>Authorization<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -288,7 +291,7 @@ and nonce.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L182">src/keyring.ts:182</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L188">src/keyring.ts:188</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -323,7 +326,7 @@ used for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L166">src/keyring.ts:166</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L172">src/keyring.ts:172</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Personal<wbr/>Message<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -358,7 +361,7 @@ used for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L206">src/keyring.ts:206</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L212">src/keyring.ts:212</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Transaction<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -391,7 +394,7 @@ used for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TxData</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L142">src/keyring.ts:142</a></li></ul></aside></li></ul></li>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L148">src/keyring.ts:148</a></li></ul></aside></li></ul></li>
 <li class="tsd-parameter">
 <h5>sign<wbr/>Typed<wbr/>Data<span class="tsd-signature-symbol">?:</span>function</h5>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
@@ -429,9 +432,9 @@ for signing (e.g. signing with app keys).</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L233">src/keyring.ts:233</a></li></ul></aside></li></ul></li></ul></div><aside class="tsd-sources">
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L239">src/keyring.ts:239</a></li></ul></aside></li></ul></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/MetaMask/utils/blob/daa2270/src/keyring.ts#L47">src/keyring.ts:47</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/MetaMask/utils/blob/cba07ff/src/keyring.ts#L53">src/keyring.ts:53</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -492,7 +495,7 @@ for signing (e.g. signing with app keys).</p>
 <li class="tsd-kind-type-alias"><a href="JsonRpcResponse.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Json<wbr/>Rpc<wbr/>Response</a></li>
 <li class="tsd-kind-type-alias"><a href="JsonRpcSuccess.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Json<wbr/>Rpc<wbr/>Success</a></li>
 <li class="tsd-kind-type-alias"><a href="JsonRpcVersion2.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Json<wbr/>Rpc<wbr/>Version2</a></li>
-<li class="current tsd-kind-type-alias"><a href="Keyring.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Keyring</a></li>
+<li class="deprecated current tsd-kind-type-alias"><a href="Keyring.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Keyring</a></li>
 <li class="tsd-kind-type-alias"><a href="KeyringClass.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Keyring<wbr/>Class</a></li>
 <li class="tsd-kind-type-alias"><a href="LegacyTransaction.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Legacy<wbr/>Transaction</a></li>
 <li class="tsd-kind-type-alias"><a href="Mutable.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Mutable</a></li>
