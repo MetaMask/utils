@@ -7,12 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [11.2.0]
-### Uncategorized
-- feat: add optional `signEip7702Authorization` method to `Keyring` type ([#231](https://github.com/MetaMask/utils/pull/231))
-- Revert "fix!: `Keyring.serialize` and `Keyring.deserialize` types ([#235](https://github.com/MetaMask/utils/pull/235))
-- Revert "12.0.0 (#233)" ([#233](https://github.com/MetaMask/utils/pull/233))
-- 12.0.0 ([#233](https://github.com/MetaMask/utils/pull/233))
-- fix!: `Keyring.serialize` and `Keyring.deserialize` types ([#232](https://github.com/MetaMask/utils/pull/232))
+### Added
+- Add optional `signEip7702Authorization` method to `Keyring` type ([#231](https://github.com/MetaMask/utils/pull/231))
 
 ## [11.1.0]
 ### Added
