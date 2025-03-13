@@ -43,7 +43,12 @@ function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
  * @param message - The error message.
  * @returns The error object.
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ * @param ErrorWrapper
+ * @param message
+ */
 function getError(ErrorWrapper: AssertionErrorConstructor, message: string) {
   if (isConstructable(ErrorWrapper)) {
     return new ErrorWrapper({
@@ -81,7 +86,7 @@ export class AssertionError extends Error {
 export function assert(
   value: any,
   message: string | Error = 'Assertion failed.',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   ErrorWrapper: AssertionErrorConstructor = AssertionError,
 ): asserts value {
   if (!value) {
@@ -108,7 +113,7 @@ export function assertStruct<Type, Schema>(
   value: unknown,
   struct: Struct<Type, Schema>,
   errorPrefix = 'Assertion failed',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   ErrorWrapper: AssertionErrorConstructor = AssertionError,
 ): asserts value is Type {
   try {
