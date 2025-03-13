@@ -32,6 +32,9 @@ jobs:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
       - run: yarn build
+      # This step is dependent on the TypeScript build output, so it's run
+      # here, rather than in the test job.
+      - run: yarn test:types
       - name: Require clean working directory
         shell: bash
         run: |
@@ -81,7 +84,7 @@ jobs:
         with:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
-      - run: yarn test
+      - run: yarn test:source
       - name: Require clean working directory
         shell: bash
         run: |
