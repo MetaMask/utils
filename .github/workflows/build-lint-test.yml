@@ -108,7 +108,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies via Yarn
         run: rm yarn.lock && YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
-      - run: yarn test
+      - run: yarn test:source
       - name: Restore lockfile
         run: git restore yarn.lock
       - name: Require clean working directory
