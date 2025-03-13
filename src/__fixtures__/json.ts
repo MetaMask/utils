@@ -1054,7 +1054,6 @@ export const JSON_RPC_PENDING_RESPONSE_FIXTURES = {
   ],
 };
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export const CHARACTER_MAP = {
   '"': '\\"',
   '\\': '\\\\',
@@ -1091,7 +1090,6 @@ export const CHARACTER_MAP = {
   '\x1E': '\\u001e',
   '\x1F': '\\u001f',
 };
-/* eslint-enable @typescript-eslint/naming-convention */
 
 const DIRECT_CIRCULAR_REFERENCE_ARRAY: unknown[] = [];
 DIRECT_CIRCULAR_REFERENCE_ARRAY.push(DIRECT_CIRCULAR_REFERENCE_ARRAY);
