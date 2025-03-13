@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.3.0]
 
-### Uncategorized
+### Added
 
-- refactor: Add Json default parameter to JSON-RPC types ([#241](https://github.com/MetaMask/utils/pull/241))
-- Update workflows to use `MetaMask/action-checkout-and-setup` ([#240](https://github.com/MetaMask/utils/pull/240))
-- chore: add workflow_dispatch to security-code-scanner ([#239](https://github.com/MetaMask/utils/pull/239))
-- chore: deprecate `Keyring` type ([#236](https://github.com/MetaMask/utils/pull/236))
+- Add default JSON-RPC generics that extend `Json` to `Json` ([#241](https://github.com/MetaMask/utils/pull/241))
+
+### Changed
+
+- Deprecate `Keyring` types ([#236](https://github.com/MetaMask/utils/pull/236))
+  - These should now be imported from `@metamask/keyring-utils`.
 
 ## [11.2.0]
 
