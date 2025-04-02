@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.4.0]
 
-### Uncategorized
+### Changed
 
-- refactor: Deprecate local exactOptional implementation ([#244](https://github.com/MetaMask/utils/pull/244))
+- Deprecate local `exactOptional` implementation ([#244](https://github.com/MetaMask/utils/pull/244))
+  - Use the one from `@metamask/superstruct@>=3.2.0` instead.
 
 ## [11.3.0]
 
