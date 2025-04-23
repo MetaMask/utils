@@ -8,7 +8,7 @@ import { isObject, hasProperty, getKnownPropertyNames } from './misc';
 //=============================================================================
 
 class ClassWithPrivateProperties {
-  #foo: string;
+  readonly #foo: string;
 
   bar: string;
 
@@ -47,7 +47,7 @@ if (hasProperty(constObjectType, 'foo')) {
 //=============================================================================
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const unknownObject = {} as Object;
+const unknownObject = {} as object;
 
 // Establish that `Object` is not accepted when a specific property is needed.
 expectNotAssignable<Record<'foo', unknown>>(unknownObject);
@@ -143,7 +143,6 @@ expectAssignable<RuntimeObject>({});
 
 expectAssignable<RuntimeObject>({ foo: 'foo' });
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 expectAssignable<RuntimeObject>({ 0: 'foo' });
 
 expectAssignable<RuntimeObject>({ [Symbol('foo')]: 'foo' });

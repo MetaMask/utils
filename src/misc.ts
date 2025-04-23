@@ -97,7 +97,7 @@ export function isObject(value: unknown): value is RuntimeObject {
  */
 export const hasProperty = <
   // eslint-disable-next-line @typescript-eslint/ban-types
-  ObjectToCheck extends Object,
+  ObjectToCheck extends object,
   Property extends PropertyKey,
 >(
   objectToCheck: ObjectToCheck,
