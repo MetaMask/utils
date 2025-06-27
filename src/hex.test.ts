@@ -9,6 +9,7 @@ import {
   isValidHexAddress,
   remove0x,
   getChecksumAddressUnmemoized as getChecksumAddress,
+  getChecksumAddress as getChecksumAddressMemoized,
 } from './hex';
 
 describe('isHexString', () => {
@@ -234,6 +235,36 @@ describe('getChecksumAddress', () => {
 
   it('throws for an invalid hex address', () => {
     expect(() => getChecksumAddress('0x')).toThrow('Invalid hex address.');
+  });
+});
+
+describe('getChecksumAddress (memoized)', () => {
+  it('memoizes results for repeated calls with the same input', () => {
+    const address = '0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed' as Hex;
+    const expected = '0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed';
+
+    // First call should compute the result
+    const result1 = getChecksumAddressMemoized(address);
+    expect(result1).toBe(expected);
+
+    // Second call with the same input should return the cached result
+    const result2 = getChecksumAddressMemoized(address);
+    expect(result2).toBe(expected);
+
+    // Results should be the same object reference (memoized)
+    expect(result1).toBe(result2);
+  });
+
+  it('handles different inputs correctly', () => {
+    const address1 = '0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed' as Hex;
+    const address2 = '0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359' as Hex;
+
+    const result1 = getChecksumAddressMemoized(address1);
+    const result2 = getChecksumAddressMemoized(address2);
+
+    expect(result1).toBe('0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed');
+    expect(result2).toBe('0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359');
+    expect(result1).not.toBe(result2);
   });
 });
 
