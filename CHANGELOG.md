@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.4.1]
 
-### Uncategorized
+### Fixed
 
-- chore: getChecksumAddress memoized and faster ([#246](https://github.com/MetaMask/utils/pull/246))
+- Improve performance of `getChecksumAddress` function ([#246](https://github.com/MetaMask/utils/pull/246))
 
 ## [11.4.0]
 
