@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.4.2]
 
-### Uncategorized
+### Fixed
 
-- chore: faster address validation ([#248](https://github.com/MetaMask/utils/pull/248))
+- Improve performance of `isValidChecksumAddress` and `isValidHexAddress` functions ([#248](https://github.com/MetaMask/utils/pull/248))
 
 ## [11.4.1]
 
