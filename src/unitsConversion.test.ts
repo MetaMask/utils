@@ -4,6 +4,9 @@ import { utils as web3Utils } from 'web3';
 
 import { toWei, fromWei, numberToString, unitMap } from './unitsConversion';
 
+// Import the internal function for testing (note: this would normally be exported for testing)
+// For now we'll test it indirectly through the public functions
+
 const totalTypes = Object.keys(unitMap).length;
 
 /**
@@ -39,8 +42,6 @@ function testRandomValueAgainstWeb3FromWei(negative: boolean) {
   const unitsValue = fromWei(stringTestValue, randomunitsType);
   const web3Value = web3Utils.fromWei(stringTestValue, randomunitsType);
 
-  // it(`fromWei should work like web3 rounded val ${unitsValue.substr(0, web3Value.length - 1)} should equal ${web3Value.substr(0, web3Value.length - 1)} for unit type ${randomunitsType}`, () => {
-
   // Skip test cases where web3 has a formatting bug that makes the value unparseable
   // Web3 formats negative decimals incorrectly as "0.000-123" instead of "-0.000123"
   if (web3Value.includes('-') && !web3Value.startsWith('-')) {
@@ -72,6 +73,16 @@ describe('getValueOfUnit', () => {
     }
     expect(invalidFromWei).toThrow(Error);
   });
+
+  it('should handle optimized unit lookups correctly', () => {
+    // Test that invalid units throw errors with optimized lookups
+    expect(() => toWei(BigInt(1), 'invalidunit' as any)).toThrow(Error);
+    expect(() => fromWei(BigInt(1000), 'invalidunit' as any)).toThrow(Error);
+
+    // Test case insensitive lookups work
+    expect(() => toWei(1, 'ETHER' as any)).not.toThrow();
+    expect(() => fromWei(1000000000000000000, 'GWEI' as any)).not.toThrow();
+  });
 });
 
 describe('toWei', () => {
@@ -84,6 +95,96 @@ describe('toWei', () => {
       Error,
     );
     expect(() => toWei('8723.98234.98234', 'ether')).toThrow(Error);
+  });
+
+  it('should handle BigInt inputs with fast path optimizations', () => {
+    // Fast path: BigInt + 'wei' unit (should return input directly)
+    expect(toWei(BigInt(123), 'wei')).toBe(BigInt(123));
+    expect(toWei(BigInt(0), 'wei')).toBe(BigInt(0));
+    expect(toWei(BigInt(-456), 'wei')).toBe(BigInt(-456));
+
+    // Fast path: BigInt + other units (should multiply by base)
+    expect(toWei(BigInt(1), 'ether')).toBe(BigInt('1000000000000000000'));
+    expect(toWei(BigInt(2), 'gwei')).toBe(BigInt('2000000000'));
+    expect(toWei(BigInt(5), 'kwei')).toBe(BigInt('5000'));
+    expect(toWei(BigInt(-1), 'ether')).toBe(BigInt('-1000000000000000000'));
+
+    // Test case sensitivity with BigInt (should work with optimized lookup)
+    expect(toWei(BigInt(1), 'Gwei')).toBe(BigInt('1000000000'));
+    expect(toWei(BigInt(1), 'ETHER' as any)).toBe(
+      BigInt('1000000000000000000'),
+    );
+  });
+
+  it('should handle large BigInt values', () => {
+    const largeBigInt = BigInt('999999999999999999999999999999');
+    expect(toWei(largeBigInt, 'wei')).toBe(largeBigInt);
+    expect(toWei(BigInt(1000), 'tether')).toBe(
+      BigInt('1000000000000000000000000000000000'),
+    );
+  });
+
+  it('should handle fractional input edge cases', () => {
+    // Empty whole part (leading decimal)
+    expect(toWei('.5', 'ether')).toBe(BigInt('500000000000000000'));
+    expect(toWei('.123', 'ether')).toBe(BigInt('123000000000000000'));
+    expect(toWei('.000000000000000001', 'ether')).toBe(BigInt('1'));
+
+    // Empty fractional part (trailing decimal)
+    expect(toWei('5.', 'ether')).toBe(BigInt('5000000000000000000'));
+    expect(toWei('123.', 'gwei')).toBe(BigInt('123000000000'));
+
+    // Maximum decimal places for different units
+    expect(toWei('1.000000000000000000', 'ether')).toBe(
+      BigInt('1000000000000000000'),
+    ); // 18 decimals for ether
+    expect(toWei('1.000000000', 'gwei')).toBe(BigInt('1000000000')); // 9 decimals for gwei
+    expect(toWei('1.000', 'kwei')).toBe(BigInt('1000')); // 3 decimals for kwei
+
+    // Negative fractional values
+    expect(toWei('-.5', 'ether')).toBe(BigInt('-500000000000000000'));
+    expect(toWei('-0.123', 'ether')).toBe(BigInt('-123000000000000000'));
+    expect(toWei('-5.', 'ether')).toBe(BigInt('-5000000000000000000'));
+
+    // Edge case: just a decimal point should throw
+    expect(() => toWei('.', 'ether')).toThrow(Error);
+    expect(() => toWei('-.', 'ether')).toThrow(Error);
+  });
+
+  it('should handle comprehensive negative value scenarios', () => {
+    // Negative integers
+    expect(toWei(-1, 'ether')).toBe(BigInt('-1000000000000000000'));
+    expect(toWei('-1', 'ether')).toBe(BigInt('-1000000000000000000'));
+
+    // Negative zero handling
+    expect(toWei(-0, 'ether')).toBe(BigInt('0'));
+    expect(toWei('-0', 'ether')).toBe(BigInt('0'));
+    expect(toWei('-0.0', 'ether')).toBe(BigInt('0'));
+
+    // Negative fractional values
+    expect(toWei(-1.5, 'ether')).toBe(BigInt('-1500000000000000000'));
+    expect(toWei('-1.5', 'ether')).toBe(BigInt('-1500000000000000000'));
+
+    // Negative BigInt values (should use fast path)
+    expect(toWei(BigInt(-123), 'wei')).toBe(BigInt(-123));
+    expect(toWei(BigInt(-456), 'gwei')).toBe(BigInt('-456000000000'));
+  });
+
+  it('should handle decimal precision edge cases', () => {
+    // Test maximum precision for each major unit type
+    const maxEtherDecimals = '0.123456789012345678'; // 18 decimal places
+    expect(toWei(maxEtherDecimals, 'ether')).toBe(BigInt('123456789012345678'));
+
+    const maxGweiDecimals = '0.123456789'; // 9 decimal places
+    expect(toWei(maxGweiDecimals, 'gwei')).toBe(BigInt('123456789'));
+
+    // Too many decimal places should throw
+    expect(() => toWei('1.1234567890123456789', 'ether')).toThrow(Error); // 19 decimals
+    expect(() => toWei('1.1234567890', 'gwei')).toThrow(Error); // 10 decimals
+
+    // Multiple decimal points should throw
+    expect(() => toWei('1.2.3', 'ether')).toThrow(Error);
+    expect(() => toWei('1..2', 'ether')).toThrow(Error);
   });
 
   it('should return the correct value', () => {
@@ -156,11 +257,139 @@ describe('numberToString', () => {
     expect(numberToString(BigInt('1'))).toBe('1');
     expect(numberToString(BigInt(0))).toBe('0');
   });
+
+  it('should handle regex edge cases for string validation', () => {
+    // Valid patterns that should pass (based on regex /^-?[0-9.]+$/u)
+    expect(numberToString('123')).toBe('123');
+    expect(numberToString('-123')).toBe('-123');
+    expect(numberToString('123.456')).toBe('123.456');
+    expect(numberToString('-123.456')).toBe('-123.456');
+    expect(numberToString('0')).toBe('0');
+    expect(numberToString('0.0')).toBe('0.0');
+    expect(numberToString('-0')).toBe('-0');
+    expect(numberToString('123.')).toBe('123.'); // Trailing dot is actually valid per regex
+    expect(numberToString('.123')).toBe('.123'); // Leading dot is valid per regex
+    expect(numberToString('12.34.56')).toBe('12.34.56'); // Multiple dots are valid per regex
+
+    // Invalid patterns that should throw
+    expect(() => numberToString('abc')).toThrow(Error);
+    expect(() => numberToString('123abc')).toThrow(Error);
+    expect(() => numberToString('.123abc')).toThrow(Error);
+    expect(() => numberToString('--123')).toThrow(Error); // Double negative
+    expect(() => numberToString('123-')).toThrow(Error); // Trailing negative
+    expect(() => numberToString(' 123 ')).toThrow(Error); // Whitespace
+    expect(() => numberToString('1e10')).toThrow(Error); // Scientific notation
+    expect(() => numberToString('123a')).toThrow(Error); // Letters
+    expect(() => numberToString('a123')).toThrow(Error); // Letters at start
+  });
 });
 
 describe('fromWei', () => {
   it('should handle options', () => {
     expect(fromWei(10000000, 'wei', { commify: true })).toBe('10,000,000');
+  });
+
+  it('should handle BigInt inputs with optimized lookups', () => {
+    // Test BigInt inputs with various units
+    expect(fromWei(BigInt('1000000000000000000'), 'ether')).toBe('1');
+    expect(fromWei(BigInt('2000000000'), 'gwei')).toBe('2');
+    expect(fromWei(BigInt('5000'), 'kwei')).toBe('5');
+    expect(fromWei(BigInt(0), 'ether')).toBe('0');
+
+    // Test negative BigInt values
+    expect(fromWei(BigInt('-1000000000000000000'), 'ether')).toBe('-1');
+    expect(fromWei(BigInt('-5000000000'), 'gwei')).toBe('-5');
+
+    // Test case sensitivity with BigInt
+    expect(fromWei(BigInt('1000000000'), 'Gwei')).toBe('1');
+    expect(fromWei(BigInt('1000000000000000000'), 'ETHER' as any)).toBe('1');
+
+    // Test large BigInt values
+    expect(fromWei(BigInt('999000000000000000000'), 'ether')).toBe('999');
+    expect(
+      fromWei(BigInt('1000000000000000000000000000000000'), 'tether'),
+    ).toBe('1000');
+  });
+
+  it('should handle BigInt with padding and commify options', () => {
+    // Test pad option with BigInt
+    expect(fromWei(BigInt('1500000000000000000'), 'ether', { pad: true })).toBe(
+      '1.500000000000000000',
+    );
+    expect(
+      fromWei(BigInt('1500000000000000000'), 'ether', { pad: false }),
+    ).toBe('1.5');
+
+    // Test commify option with BigInt
+    expect(
+      fromWei(BigInt('1000000000000000000000'), 'wei', { commify: true }),
+    ).toBe('1,000,000,000,000,000,000,000');
+    expect(
+      fromWei(BigInt('123456789000000000000000'), 'ether', { commify: true }),
+    ).toBe('123,456.789');
+  });
+
+  it('should handle fractional padding edge cases', () => {
+    // Test different padding scenarios
+    expect(fromWei('1500000000000000000', 'ether', { pad: true })).toBe(
+      '1.500000000000000000',
+    );
+    expect(fromWei('1500000000000000000', 'ether', { pad: false })).toBe('1.5');
+    expect(fromWei('1500000000000000000', 'ether')).toBe('1.5'); // Default is no pad
+
+    // Test zero fractional parts
+    expect(fromWei('1000000000000000000', 'ether', { pad: true })).toBe(
+      '1.000000000000000000',
+    );
+    expect(fromWei('1000000000000000000', 'ether', { pad: false })).toBe('1');
+    expect(fromWei('1000000000000000000', 'ether')).toBe('1'); // Default
+
+    // Test very small fractions
+    expect(fromWei('1', 'ether', { pad: true })).toBe('0.000000000000000001');
+    expect(fromWei('1', 'ether', { pad: false })).toBe('0.000000000000000001');
+    expect(fromWei('1', 'ether')).toBe('0.000000000000000001');
+
+    // Test trailing zeros removal
+    expect(fromWei('1230000000000000000', 'ether', { pad: false })).toBe(
+      '1.23',
+    );
+    expect(fromWei('1230000000000000000', 'ether', { pad: true })).toBe(
+      '1.230000000000000000',
+    );
+  });
+
+  it('should handle negative values with various formatting', () => {
+    // Negative values with padding
+    expect(fromWei('-1500000000000000000', 'ether', { pad: true })).toBe(
+      '-1.500000000000000000',
+    );
+    expect(fromWei('-1500000000000000000', 'ether', { pad: false })).toBe(
+      '-1.5',
+    );
+
+    // Negative values with commify
+    expect(fromWei('-1000000000000000000000', 'wei', { commify: true })).toBe(
+      '-1,000,000,000,000,000,000,000',
+    );
+
+    // Negative zero (special case)
+    expect(fromWei('-0', 'ether')).toBe('0');
+    expect(fromWei(BigInt(-0), 'ether')).toBe('0');
+  });
+
+  it('should handle very large and very small values', () => {
+    // Very large values
+    const largeWei = '999999999999999999999999999999';
+    expect(fromWei(largeWei, 'wei')).toBe(largeWei);
+    expect(fromWei(largeWei, 'ether')).toBe('999999999999.999999999999999999');
+
+    // Very small values
+    expect(fromWei('1', 'tether')).toBe('0.000000000000000000000000000001');
+    expect(fromWei('999', 'tether')).toBe('0.000000000000000000000000000999');
+
+    // Edge case: zero
+    expect(fromWei('0', 'ether')).toBe('0');
+    expect(fromWei(BigInt(0), 'ether')).toBe('0');
   });
 
   it('should return the correct value', () => {
@@ -190,6 +419,109 @@ describe('units', () => {
       }
       // Ensure we've run the test loop
       expect(true).toBe(true);
+    });
+  });
+
+  describe('performance optimizations', () => {
+    it('should handle mixed input types efficiently', () => {
+      // Test that all optimizations work together without breaking functionality
+      const testCases = [
+        { input: BigInt(1), unit: 'wei', expected: BigInt(1) },
+        {
+          input: BigInt(1),
+          unit: 'ether',
+          expected: BigInt('1000000000000000000'),
+        },
+        { input: '1', unit: 'ether', expected: BigInt('1000000000000000000') },
+        { input: 1, unit: 'ether', expected: BigInt('1000000000000000000') },
+        { input: BigInt(-1), unit: 'gwei', expected: BigInt('-1000000000') },
+      ];
+
+      testCases.forEach(({ input, unit, expected }) => {
+        expect(toWei(input, unit as any)).toBe(expected);
+      });
+    });
+
+    it('should handle all unit types with BigInt inputs', () => {
+      const units = Object.keys(unitMap) as (keyof typeof unitMap)[];
+
+      units.forEach((unit) => {
+        // Skip noether as it's a special case (base = 0)
+        if (unit === 'noether') {
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(toWei(BigInt(1), unit)).toBe(BigInt(0));
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(fromWei(BigInt(1000), unit)).toBe('0');
+          return;
+        }
+
+        // Test that BigInt conversion works for all units
+        const result = toWei(BigInt(1), unit);
+        expect(typeof result).toBe('bigint');
+        expect(result).toBeGreaterThanOrEqual(BigInt(0));
+
+        // Test round trip conversion
+        const backToWei = fromWei(result, unit);
+        expect(parseFloat(backToWei)).toBe(1);
+      });
+    });
+
+    it('should maintain precision with large numbers', () => {
+      // Test that optimizations don't lose precision
+      const largeValue = BigInt('999999999999999999999999999999');
+      expect(toWei(largeValue, 'wei')).toBe(largeValue);
+
+      const largeEther = BigInt('999999999999999999999999999999');
+      const largeWei = toWei(largeEther, 'ether');
+      expect(fromWei(largeWei, 'ether')).toBe(largeEther.toString());
+    });
+
+    it('should handle boundary conditions and edge cases', () => {
+      // Test switching between fast and slow paths
+      expect(toWei(BigInt(0), 'wei')).toBe(BigInt(0)); // Fast path
+      expect(toWei('0', 'wei')).toBe(BigInt(0)); // Slow path
+      expect(toWei(0, 'wei')).toBe(BigInt(0)); // Slow path
+
+      // Test case sensitivity extensively
+      const testUnits = [
+        'wei',
+        'Wei',
+        'WEI',
+        'gwei',
+        'Gwei',
+        'GWEI',
+        'ether',
+        'Ether',
+        'ETHER',
+      ];
+      testUnits.forEach((unit) => {
+        expect(() => toWei(BigInt(1), unit as any)).not.toThrow();
+        expect(() => fromWei(BigInt(1000), unit as any)).not.toThrow();
+      });
+
+      // Test that optimized paths produce identical results to original paths
+      const testValues = [BigInt(1), '1', 1];
+      const testUnitsForComparison = ['wei', 'gwei', 'ether'];
+
+      testUnitsForComparison.forEach((unit) => {
+        const results = testValues.map((value) => toWei(value, unit as any));
+        // All results should be identical
+        expect(results[0]).toBe(results[1]);
+        expect(results[1]).toBe(results[2]);
+      });
+    });
+
+    it('should handle internal function edge cases', () => {
+      // Test numberToBigInt indirectly through toWei with various input types
+      expect(typeof toWei(BigInt(123), 'wei')).toBe('bigint');
+      expect(typeof toWei('123', 'wei')).toBe('bigint');
+      expect(typeof toWei(123, 'wei')).toBe('bigint');
+
+      // Test that invalid types would throw (tested through public API)
+      expect(() => toWei({} as any, 'wei')).toThrow(Error);
+      expect(() => toWei([] as any, 'wei')).toThrow(Error);
+      expect(() => toWei(null as any, 'wei')).toThrow(Error);
+      expect(() => toWei(undefined as any, 'wei')).toThrow(Error);
     });
   });
 });

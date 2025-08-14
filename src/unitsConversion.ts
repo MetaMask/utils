@@ -62,6 +62,19 @@ export const unitMap = {
   tether: '1000000000000000000000000000000',
 } as const;
 
+// Pre-computed unit values as BigInt for performance
+const unitMapBigInt = Object.fromEntries(
+  Object.entries(unitMap).map(([key, value]) => [key, BigInt(value)]),
+) as Record<EthereumUnit, bigint>;
+
+const unitLengths = Object.fromEntries(
+  Object.entries(unitMap).map(([key, value]) => [key, value.length - 1 || 1]),
+) as Record<EthereumUnit, number>;
+
+const NUMBER_REGEX = /^-?[0-9.]+$/u;
+const FRACTION_REGEX = /^([0-9]*[1-9]|0)(0*)/u;
+const COMMIFY_REGEX = /\B(?=(\d{3})+(?!\d))/gu;
+
 type EthereumUnit = keyof typeof unitMap;
 
 /**
@@ -73,9 +86,9 @@ type EthereumUnit = keyof typeof unitMap;
  */
 export function getValueOfUnit(unitInput: EthereumUnit = 'ether'): bigint {
   const unit = unitInput.toLowerCase() as EthereumUnit;
-  const unitValue = unitMap[unit];
+  const unitValue = unitMapBigInt[unit];
 
-  if (typeof unitValue !== 'string') {
+  if (unitValue === undefined) {
     throw new Error(
       `[ethjs-unit] the unit provided ${unitInput} doesn't exists, please use the one of the following units ${JSON.stringify(
         unitMap,
@@ -85,7 +98,7 @@ export function getValueOfUnit(unitInput: EthereumUnit = 'ether'): bigint {
     );
   }
 
-  return BigInt(unitValue);
+  return unitValue;
 }
 
 /**
@@ -97,7 +110,7 @@ export function getValueOfUnit(unitInput: EthereumUnit = 'ether'): bigint {
  */
 export function numberToString(arg: string | number | bigint) {
   if (typeof arg === 'string') {
-    if (!arg.match(/^-?[0-9.]+$/u)) {
+    if (!NUMBER_REGEX.test(arg)) {
       throw new Error(
         `while converting number to string, invalid number value '${arg}', should be a number matching (^-?[0-9.]+).`,
       );
@@ -136,9 +149,25 @@ export function fromWei(
 ) {
   var wei = numberToBigInt(weiInput); // eslint-disable-line
   var negative = wei < zero; // eslint-disable-line
-  const base = getValueOfUnit(unit);
-  const baseLength = unitMap[unit].length - 1 || 1;
+  const unitLower = unit.toLowerCase() as EthereumUnit;
+  const base = unitMapBigInt[unitLower];
+  const baseLength = unitLengths[unitLower];
   const options = optionsInput ?? {};
+
+  if (base === undefined) {
+    throw new Error(
+      `[ethjs-unit] the unit provided ${unit} doesn't exists, please use the one of the following units ${JSON.stringify(
+        unitMap,
+        null,
+        2,
+      )}`,
+    );
+  }
+
+  // Handle special case of noether (base = 0)
+  if (base === zero) {
+    return negative ? '-0' : '0';
+  }
 
   if (negative) {
     wei = wei * negative1;
@@ -146,19 +175,17 @@ export function fromWei(
 
   var fraction = (wei % base).toString(); // eslint-disable-line
 
-  while (fraction.length < baseLength) {
-    fraction = `0${fraction}`;
-  }
+  fraction = fraction.padStart(baseLength, '0');
 
   if (!options.pad) {
-    const fractionMatch = fraction.match(/^([0-9]*[1-9]|0)(0*)/u);
+    const fractionMatch = fraction.match(FRACTION_REGEX);
     fraction = fractionMatch?.[1] ?? '0';
   }
 
   var whole = (wei / base).toString(); // eslint-disable-line
 
   if (options.commify) {
-    whole = whole.replace(/\B(?=(\d{3})+(?!\d))/gu, ',');
+    whole = whole.replace(COMMIFY_REGEX, ',');
   }
 
   var value = `${whole}${fraction == '0' ? '' : `.${fraction}`}`; // eslint-disable-line
@@ -182,9 +209,36 @@ export function toWei(
   etherInput: string | number | bigint,
   unit: EthereumUnit,
 ): bigint {
+  const unitLower = unit.toLowerCase() as EthereumUnit;
+  const base = unitMapBigInt[unitLower];
+  const baseLength = unitLengths[unitLower];
+
+  if (base === undefined) {
+    throw new Error(
+      `[ethjs-unit] the unit provided ${unit} doesn't exists, please use the one of the following units ${JSON.stringify(
+        unitMap,
+        null,
+        2,
+      )}`,
+    );
+  }
+
+  // Handle special case of noether (base = 0)
+  if (base === zero) {
+    return zero;
+  }
+
+  // Fast path for bigint inputs when unit is wei (no conversion needed)
+  if (typeof etherInput === 'bigint' && unitLower === 'wei') {
+    return etherInput;
+  }
+
+  // Fast path for bigint inputs with whole units (no fractional part)
+  if (typeof etherInput === 'bigint') {
+    return etherInput * base;
+  }
+
   var ether = numberToString(etherInput); // eslint-disable-line
-  const base = getValueOfUnit(unit);
-  const baseLength = unitMap[unit].length - 1 || 1;
 
   // Is it negative?
   var negative = ether.substring(0, 1) === '-'; // eslint-disable-line
@@ -221,9 +275,7 @@ export function toWei(
     );
   }
 
-  while (fraction.length < baseLength) {
-    fraction += '0';
-  }
+  fraction = fraction.padEnd(baseLength, '0');
 
   const wholeBigInt = BigInt(whole);
   const fractionBigInt = BigInt(fraction);
