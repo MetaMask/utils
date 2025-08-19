@@ -103,7 +103,7 @@ describe('FrozenMap', () => {
       const frozenMap = new FrozenMap([['a', 1]]);
       frozenMap.forEach(function () {
         // @ts-expect-error: We have to shadow `this` here.
-        expect(this).toBeUndefined(); // eslint-disable-line no-invalid-this
+        expect(this).toBeUndefined();
       });
     });
 
@@ -113,7 +113,7 @@ describe('FrozenMap', () => {
       const thisArg = {};
       frozenMap.forEach(function () {
         // @ts-expect-error: We have to shadow `this` here.
-        expect(this).toBe(thisArg); // eslint-disable-line no-invalid-this
+        expect(this).toBe(thisArg);
       }, thisArg);
     });
 
@@ -317,7 +317,7 @@ describe('FrozenSet', () => {
       const frozenSet = new FrozenSet(['a']);
       frozenSet.forEach(function () {
         // @ts-expect-error: We have to shadow `this` here.
-        expect(this).toBeUndefined(); // eslint-disable-line no-invalid-this
+        expect(this).toBeUndefined();
       });
     });
 
@@ -327,7 +327,7 @@ describe('FrozenSet', () => {
       const thisArg = {};
       frozenSet.forEach(function () {
         // @ts-expect-error: We have to shadow `this` here.
-        expect(this).toBe(thisArg); // eslint-disable-line no-invalid-this
+        expect(this).toBe(thisArg);
       }, thisArg);
     });
 
