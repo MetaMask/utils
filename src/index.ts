@@ -36,4 +36,10 @@ export * from './superstruct';
 export * from './time';
 export * from './transaction-types';
 export * from './versions';
-export * from './unitsConversion';
+export {
+  toWei,
+  fromWei,
+  numberToString,
+  getValueOfUnit,
+  unitMap,
+} from './unitsConversion';

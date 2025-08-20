@@ -17,7 +17,7 @@ const negative1 = BigInt(-1);
  * @returns The bigint representation of the input.
  * @throws Error if the input type cannot be converted to bigint.
  */
-function numberToBigInt(arg: string | number | bigint): bigint {
+export function numberToBigInt(arg: string | number | bigint): bigint {
   if (typeof arg === 'string') {
     return BigInt(arg);
   }
@@ -179,6 +179,7 @@ export function fromWei(
 
   if (!options.pad) {
     const fractionMatch = fraction.match(FRACTION_REGEX);
+    // istanbul ignore next: defensive fallback that's never reachable but necessary to satisfy TS
     fraction = fractionMatch?.[1] ?? '0';
   }
 

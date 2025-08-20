@@ -2,7 +2,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { utils as web3Utils } from 'web3';
 
-import { toWei, fromWei, numberToString, unitMap } from './unitsConversion';
+import {
+  toWei,
+  fromWei,
+  numberToString,
+  numberToBigInt,
+  getValueOfUnit,
+  unitMap,
+} from './unitsConversion';
 
 // Import the internal function for testing (note: this would normally be exported for testing)
 // For now we'll test it indirectly through the public functions
@@ -64,14 +71,72 @@ function testRandomValueAgainstWeb3FromWei(negative: boolean) {
 }
 
 describe('getValueOfUnit', () => {
-  it('should throw when undefined or not string', () => {
-    /**
-     * Helper function to test invalid unit.
-     */
-    function invalidFromWei() {
-      fromWei(1000000000000000000, 'something' as any);
-    }
-    expect(invalidFromWei).toThrow(Error);
+  it('should return correct values for all units', () => {
+    expect(getValueOfUnit('noether')).toBe(BigInt('0'));
+    expect(getValueOfUnit('wei')).toBe(BigInt('1'));
+    expect(getValueOfUnit('kwei')).toBe(BigInt('1000'));
+    expect(getValueOfUnit('Kwei')).toBe(BigInt('1000'));
+    expect(getValueOfUnit('babbage')).toBe(BigInt('1000'));
+    expect(getValueOfUnit('femtoether')).toBe(BigInt('1000'));
+    expect(getValueOfUnit('mwei')).toBe(BigInt('1000000'));
+    expect(getValueOfUnit('Mwei')).toBe(BigInt('1000000'));
+    expect(getValueOfUnit('lovelace')).toBe(BigInt('1000000'));
+    expect(getValueOfUnit('picoether')).toBe(BigInt('1000000'));
+    expect(getValueOfUnit('gwei')).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('Gwei')).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('shannon')).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('nanoether')).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('nano')).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('szabo')).toBe(BigInt('1000000000000'));
+    expect(getValueOfUnit('microether')).toBe(BigInt('1000000000000'));
+    expect(getValueOfUnit('micro')).toBe(BigInt('1000000000000'));
+    expect(getValueOfUnit('finney')).toBe(BigInt('1000000000000000'));
+    expect(getValueOfUnit('milliether')).toBe(BigInt('1000000000000000'));
+    expect(getValueOfUnit('milli')).toBe(BigInt('1000000000000000'));
+    expect(getValueOfUnit('ether')).toBe(BigInt('1000000000000000000'));
+    expect(getValueOfUnit('kether')).toBe(BigInt('1000000000000000000000'));
+    expect(getValueOfUnit('grand')).toBe(BigInt('1000000000000000000000'));
+    expect(getValueOfUnit('mether')).toBe(BigInt('1000000000000000000000000'));
+    expect(getValueOfUnit('gether')).toBe(
+      BigInt('1000000000000000000000000000'),
+    );
+    expect(getValueOfUnit('tether')).toBe(
+      BigInt('1000000000000000000000000000000'),
+    );
+  });
+
+  it('should use ether as default unit', () => {
+    expect(getValueOfUnit()).toBe(BigInt('1000000000000000000'));
+    expect(getValueOfUnit()).toBe(getValueOfUnit('ether'));
+  });
+
+  it('should handle case insensitive input', () => {
+    expect(getValueOfUnit('ETHER' as any)).toBe(BigInt('1000000000000000000'));
+    expect(getValueOfUnit('Ether' as any)).toBe(BigInt('1000000000000000000'));
+    expect(getValueOfUnit('GWEI' as any)).toBe(BigInt('1000000000'));
+    expect(getValueOfUnit('Gwei')).toBe(BigInt('1000000000'));
+  });
+
+  it('should throw error for invalid units', () => {
+    expect(() => getValueOfUnit('invalidunit' as any)).toThrow(
+      "[ethjs-unit] the unit provided invalidunit doesn't exists",
+    );
+    expect(() => getValueOfUnit('' as any)).toThrow(
+      "[ethjs-unit] the unit provided  doesn't exists",
+    );
+  });
+
+  it('should handle edge cases', () => {
+    // Test noether (special case with value 0)
+    expect(getValueOfUnit('noether')).toBe(BigInt(0));
+
+    // Test that all units from unitMap are supported
+    Object.keys(unitMap).forEach((unit) => {
+      expect(() => getValueOfUnit(unit as any)).not.toThrow();
+      expect(getValueOfUnit(unit as any)).toBe(
+        BigInt(unitMap[unit as keyof typeof unitMap]),
+      );
+    });
   });
 
   it('should handle optimized unit lookups correctly', () => {
@@ -289,6 +354,60 @@ describe('fromWei', () => {
     expect(fromWei(10000000, 'wei', { commify: true })).toBe('10,000,000');
   });
 
+  it('should handle pad option true', () => {
+    expect(fromWei('1500000000000000000', 'ether', { pad: true })).toBe(
+      '1.500000000000000000',
+    );
+  });
+
+  it('should handle commify option with large numbers', () => {
+    expect(fromWei('123456789000000000000000', 'wei', { commify: true })).toBe(
+      '123,456,789,000,000,000,000,000',
+    );
+  });
+
+  it('should handle combined pad and commify options', () => {
+    expect(
+      fromWei('1234567890123456789000', 'ether', { pad: true, commify: true }),
+    ).toBe('1,234.567890123456789000');
+  });
+
+  it('should handle options with different units', () => {
+    expect(fromWei('1234567890', 'gwei', { pad: true })).toBe('1.234567890');
+  });
+
+  it('should handle zero values with padding', () => {
+    expect(fromWei('0', 'ether', { pad: true })).toBe('0.000000000000000000');
+  });
+
+  it('should handle noether special case (base = 0)', () => {
+    // Test positive values with noether always return '0'
+    expect(fromWei(0, 'noether')).toBe('0');
+    expect(fromWei(1, 'noether')).toBe('0');
+    expect(fromWei(100, 'noether')).toBe('0');
+    expect(fromWei(999999999, 'noether')).toBe('0');
+    expect(fromWei('0', 'noether')).toBe('0');
+    expect(fromWei('123', 'noether')).toBe('0');
+    expect(fromWei('999999999999999999999', 'noether')).toBe('0');
+    expect(fromWei(BigInt(0), 'noether')).toBe('0');
+    expect(fromWei(BigInt(456), 'noether')).toBe('0');
+    expect(fromWei(BigInt('999999999999999999999'), 'noether')).toBe('0');
+
+    // Test negative values with noether always return '-0'
+    expect(fromWei(-1, 'noether')).toBe('-0');
+    expect(fromWei(-100, 'noether')).toBe('-0');
+    expect(fromWei(-999999999, 'noether')).toBe('-0');
+    expect(fromWei('-123', 'noether')).toBe('-0');
+    expect(fromWei('-999999999999999999999', 'noether')).toBe('-0');
+    expect(fromWei(BigInt(-456), 'noether')).toBe('-0');
+    expect(fromWei(BigInt('-999999999999999999999'), 'noether')).toBe('-0');
+
+    // Test edge case: negative zero should return '0', not '-0'
+    expect(fromWei(-0, 'noether')).toBe('0');
+    expect(fromWei('-0', 'noether')).toBe('0');
+    expect(fromWei(BigInt(-0), 'noether')).toBe('0');
+  });
+
   it('should handle BigInt inputs with optimized lookups', () => {
     // Test BigInt inputs with various units
     expect(fromWei(BigInt('1000000000000000000'), 'ether')).toBe('1');
@@ -405,6 +524,69 @@ describe('fromWei', () => {
     expect(fromWei(1000000000000000000, 'mether')).toBe('0.000001');
     expect(fromWei(1000000000000000000, 'gether')).toBe('0.000000001');
     expect(fromWei(1000000000000000000, 'tether')).toBe('0.000000000001');
+  });
+});
+
+describe('numberToBigInt', () => {
+  it('should convert string/numbers to BigInt', () => {
+    expect(numberToBigInt('123')).toBe(BigInt(123));
+    expect(numberToBigInt('0')).toBe(BigInt(0));
+    expect(numberToBigInt('-456')).toBe(BigInt(-456));
+    expect(numberToBigInt('999999999999999999999')).toBe(
+      BigInt('999999999999999999999'),
+    );
+    expect(numberToBigInt(123)).toBe(BigInt(123));
+    expect(numberToBigInt(0)).toBe(BigInt(0));
+    expect(numberToBigInt(-456)).toBe(BigInt(-456));
+    expect(numberToBigInt(42.0)).toBe(BigInt(42));
+    // special cases
+    expect(numberToBigInt('')).toBe(BigInt(0));
+    expect(numberToBigInt('  123  ')).toBe(BigInt(123));
+  });
+
+  it('should return BigInt inputs unchanged', () => {
+    expect(numberToBigInt(BigInt(123))).toBe(BigInt(123));
+  });
+
+  it('should handle edge cases with numbers', () => {
+    expect(numberToBigInt(-0)).toBe(BigInt(0));
+    expect(numberToBigInt(Number.MAX_SAFE_INTEGER)).toBe(
+      BigInt(Number.MAX_SAFE_INTEGER),
+    );
+    expect(numberToBigInt(Number.MIN_SAFE_INTEGER)).toBe(
+      BigInt(Number.MIN_SAFE_INTEGER),
+    );
+  });
+
+  it('should throw error for invalid input types', () => {
+    expect(() => numberToBigInt(null as any)).toThrow(
+      'Cannot convert object to BigInt',
+    );
+    expect(() => numberToBigInt(undefined as any)).toThrow(
+      'Cannot convert undefined to BigInt',
+    );
+    expect(() => numberToBigInt({} as any)).toThrow(
+      'Cannot convert object to BigInt',
+    );
+    expect(() => numberToBigInt(true as any)).toThrow(
+      'Cannot convert boolean to BigInt',
+    );
+  });
+
+  it('should throw error for invalid string formats', () => {
+    expect(() => numberToBigInt('abc')).toThrow(SyntaxError);
+    expect(() => numberToBigInt('123abc')).toThrow(SyntaxError);
+    expect(() => numberToBigInt('12.34')).toThrow(SyntaxError); // Decimal strings not supported by BigInt
+    expect(() => numberToBigInt('1e10')).toThrow(SyntaxError); // Scientific notation not supported
+  });
+
+  it('should throw error for non-integer numbers', () => {
+    expect(() => numberToBigInt(12.34)).toThrow(RangeError);
+    expect(() => numberToBigInt(0.5)).toThrow(RangeError);
+    expect(() => numberToBigInt(-7.89)).toThrow(RangeError);
+    expect(() => numberToBigInt(NaN)).toThrow(RangeError);
+    expect(() => numberToBigInt(Infinity)).toThrow(RangeError);
+    expect(() => numberToBigInt(-Infinity)).toThrow(RangeError);
   });
 });
 
