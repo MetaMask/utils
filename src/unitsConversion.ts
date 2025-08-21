@@ -17,7 +17,7 @@ const negative1 = BigInt(-1);
  * @returns The bigint representation of the input.
  * @throws Error if the input type cannot be converted to bigint.
  */
-export function numberToBigInt(arg: string | number | bigint): bigint {
+export function numericToBigInt(arg: string | number | bigint): bigint {
   if (typeof arg === 'string') {
     return BigInt(arg);
   }
@@ -90,7 +90,7 @@ export function getValueOfUnit(unitInput: EthereumUnit = 'ether'): bigint {
 
   if (unitValue === undefined) {
     throw new Error(
-      `[ethjs-unit] the unit provided ${unitInput} doesn't exists, please use the one of the following units ${JSON.stringify(
+      `The unit provided ${unitInput} doesn't exist, please use the one of the following units ${JSON.stringify(
         unitMap,
         null,
         2,
@@ -120,7 +120,6 @@ export function numberToString(arg: string | number | bigint) {
   if (typeof arg === 'number') {
     return String(arg);
   }
-  // eslint-disable-next-line valid-typeof
   if (typeof arg === 'bigint') {
     return arg.toString();
   }
@@ -147,8 +146,8 @@ export function fromWei(
   unit: EthereumUnit,
   optionsInput?: { pad?: boolean; commify?: boolean },
 ) {
-  var wei = numberToBigInt(weiInput); // eslint-disable-line
-  var negative = wei < zero; // eslint-disable-line
+  let wei = numericToBigInt(weiInput);
+  const negative = wei < zero;
   const unitLower = unit.toLowerCase() as EthereumUnit;
   const base = unitMapBigInt[unitLower];
   const baseLength = unitLengths[unitLower];
@@ -156,7 +155,7 @@ export function fromWei(
 
   if (base === undefined) {
     throw new Error(
-      `[ethjs-unit] the unit provided ${unit} doesn't exists, please use the one of the following units ${JSON.stringify(
+      `The unit provided ${unit} doesn't exist, please use the one of the following units ${JSON.stringify(
         unitMap,
         null,
         2,
@@ -173,7 +172,7 @@ export function fromWei(
     wei = wei * negative1;
   }
 
-  var fraction = (wei % base).toString(); // eslint-disable-line
+  let fraction = (wei % base).toString();
 
   fraction = fraction.padStart(baseLength, '0');
 
@@ -183,13 +182,13 @@ export function fromWei(
     fraction = fractionMatch?.[1] ?? '0';
   }
 
-  var whole = (wei / base).toString(); // eslint-disable-line
+  let whole = (wei / base).toString();
 
   if (options.commify) {
     whole = whole.replace(COMMIFY_REGEX, ',');
   }
 
-  var value = `${whole}${fraction == '0' ? '' : `.${fraction}`}`; // eslint-disable-line
+  let value = `${whole}${fraction === '0' ? '' : `.${fraction}`}`;
 
   if (negative) {
     value = `-${value}`;
@@ -216,7 +215,7 @@ export function toWei(
 
   if (base === undefined) {
     throw new Error(
-      `[ethjs-unit] the unit provided ${unit} doesn't exists, please use the one of the following units ${JSON.stringify(
+      `The unit provided ${unit} doesn't exist, please use the one of the following units ${JSON.stringify(
         unitMap,
         null,
         2,
@@ -239,25 +238,25 @@ export function toWei(
     return etherInput * base;
   }
 
-  var ether = numberToString(etherInput); // eslint-disable-line
+  let ether = numberToString(etherInput);
 
   // Is it negative?
-  var negative = ether.substring(0, 1) === '-'; // eslint-disable-line
+  const negative = ether.startsWith('-');
   if (negative) {
     ether = ether.substring(1);
   }
 
   if (ether === '.') {
     throw new Error(
-      `[ethjs-unit] while converting number ${etherInput} to wei, invalid value`,
+      `While converting number ${etherInput} to wei, invalid value`,
     );
   }
 
   // Split it into a whole and fractional part
-  var comps = ether.split('.'); // eslint-disable-line
+  const comps = ether.split('.');
   if (comps.length > 2) {
     throw new Error(
-      `[ethjs-unit] while converting number ${etherInput} to wei,  too many decimal points`,
+      `While converting number ${etherInput} to wei,  too many decimal points`,
     );
   }
 
@@ -272,7 +271,7 @@ export function toWei(
   }
   if (fraction.length > baseLength) {
     throw new Error(
-      `[ethjs-unit] while converting number ${etherInput} to wei, too many decimal places`,
+      `While converting number ${etherInput} to wei, too many decimal places`,
     );
   }
 

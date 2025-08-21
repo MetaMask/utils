@@ -4,7 +4,7 @@ import {
   toWei,
   fromWei,
   numberToString,
-  numberToBigInt,
+  numericToBigInt,
   getValueOfUnit,
   unitMap,
 } from './unitsConversion';
@@ -117,10 +117,10 @@ describe('getValueOfUnit', () => {
 
   it('should throw error for invalid units', () => {
     expect(() => getValueOfUnit('invalidunit' as any)).toThrow(
-      "[ethjs-unit] the unit provided invalidunit doesn't exists",
+      "The unit provided invalidunit doesn't exist",
     );
     expect(() => getValueOfUnit('' as any)).toThrow(
-      "[ethjs-unit] the unit provided  doesn't exists",
+      "The unit provided  doesn't exist",
     );
   });
 
@@ -525,66 +525,66 @@ describe('fromWei', () => {
   });
 });
 
-describe('numberToBigInt', () => {
+describe('numericToBigInt', () => {
   it('should convert string/numbers to BigInt', () => {
-    expect(numberToBigInt('123')).toBe(BigInt(123));
-    expect(numberToBigInt('0')).toBe(BigInt(0));
-    expect(numberToBigInt('-456')).toBe(BigInt(-456));
-    expect(numberToBigInt('999999999999999999999')).toBe(
+    expect(numericToBigInt('123')).toBe(BigInt(123));
+    expect(numericToBigInt('0')).toBe(BigInt(0));
+    expect(numericToBigInt('-456')).toBe(BigInt(-456));
+    expect(numericToBigInt('999999999999999999999')).toBe(
       BigInt('999999999999999999999'),
     );
-    expect(numberToBigInt(123)).toBe(BigInt(123));
-    expect(numberToBigInt(0)).toBe(BigInt(0));
-    expect(numberToBigInt(-456)).toBe(BigInt(-456));
-    expect(numberToBigInt(42.0)).toBe(BigInt(42));
+    expect(numericToBigInt(123)).toBe(BigInt(123));
+    expect(numericToBigInt(0)).toBe(BigInt(0));
+    expect(numericToBigInt(-456)).toBe(BigInt(-456));
+    expect(numericToBigInt(42.0)).toBe(BigInt(42));
     // special cases
-    expect(numberToBigInt('')).toBe(BigInt(0));
-    expect(numberToBigInt('  123  ')).toBe(BigInt(123));
+    expect(numericToBigInt('')).toBe(BigInt(0));
+    expect(numericToBigInt('  123  ')).toBe(BigInt(123));
   });
 
   it('should return BigInt inputs unchanged', () => {
-    expect(numberToBigInt(BigInt(123))).toBe(BigInt(123));
+    expect(numericToBigInt(BigInt(123))).toBe(BigInt(123));
   });
 
   it('should handle edge cases with numbers', () => {
-    expect(numberToBigInt(-0)).toBe(BigInt(0));
-    expect(numberToBigInt(Number.MAX_SAFE_INTEGER)).toBe(
+    expect(numericToBigInt(-0)).toBe(BigInt(0));
+    expect(numericToBigInt(Number.MAX_SAFE_INTEGER)).toBe(
       BigInt(Number.MAX_SAFE_INTEGER),
     );
-    expect(numberToBigInt(Number.MIN_SAFE_INTEGER)).toBe(
+    expect(numericToBigInt(Number.MIN_SAFE_INTEGER)).toBe(
       BigInt(Number.MIN_SAFE_INTEGER),
     );
   });
 
   it('should throw error for invalid input types', () => {
-    expect(() => numberToBigInt(null as any)).toThrow(
+    expect(() => numericToBigInt(null as any)).toThrow(
       'Cannot convert object to BigInt',
     );
-    expect(() => numberToBigInt(undefined as any)).toThrow(
+    expect(() => numericToBigInt(undefined as any)).toThrow(
       'Cannot convert undefined to BigInt',
     );
-    expect(() => numberToBigInt({} as any)).toThrow(
+    expect(() => numericToBigInt({} as any)).toThrow(
       'Cannot convert object to BigInt',
     );
-    expect(() => numberToBigInt(true as any)).toThrow(
+    expect(() => numericToBigInt(true as any)).toThrow(
       'Cannot convert boolean to BigInt',
     );
   });
 
   it('should throw error for invalid string formats', () => {
-    expect(() => numberToBigInt('abc')).toThrow(SyntaxError);
-    expect(() => numberToBigInt('123abc')).toThrow(SyntaxError);
-    expect(() => numberToBigInt('12.34')).toThrow(SyntaxError); // Decimal strings not supported by BigInt
-    expect(() => numberToBigInt('1e10')).toThrow(SyntaxError); // Scientific notation not supported
+    expect(() => numericToBigInt('abc')).toThrow(SyntaxError);
+    expect(() => numericToBigInt('123abc')).toThrow(SyntaxError);
+    expect(() => numericToBigInt('12.34')).toThrow(SyntaxError); // Decimal strings not supported by BigInt
+    expect(() => numericToBigInt('1e10')).toThrow(SyntaxError); // Scientific notation not supported
   });
 
   it('should throw error for non-integer numbers', () => {
-    expect(() => numberToBigInt(12.34)).toThrow(RangeError);
-    expect(() => numberToBigInt(0.5)).toThrow(RangeError);
-    expect(() => numberToBigInt(-7.89)).toThrow(RangeError);
-    expect(() => numberToBigInt(NaN)).toThrow(RangeError);
-    expect(() => numberToBigInt(Infinity)).toThrow(RangeError);
-    expect(() => numberToBigInt(-Infinity)).toThrow(RangeError);
+    expect(() => numericToBigInt(12.34)).toThrow(RangeError);
+    expect(() => numericToBigInt(0.5)).toThrow(RangeError);
+    expect(() => numericToBigInt(-7.89)).toThrow(RangeError);
+    expect(() => numericToBigInt(NaN)).toThrow(RangeError);
+    expect(() => numericToBigInt(Infinity)).toThrow(RangeError);
+    expect(() => numericToBigInt(-Infinity)).toThrow(RangeError);
   });
 });
 
@@ -692,7 +692,7 @@ describe('units', () => {
     });
 
     it('should handle internal function edge cases', () => {
-      // Test numberToBigInt indirectly through toWei with various input types
+      // Test numericToBigInt indirectly through toWei with various input types
       expect(typeof toWei(BigInt(123), 'wei')).toBe('bigint');
       expect(typeof toWei('123', 'wei')).toBe('bigint');
       expect(typeof toWei(123, 'wei')).toBe('bigint');
