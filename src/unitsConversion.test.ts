@@ -1,5 +1,3 @@
-// web3 dependency is not used in the codebase, but only in tests
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { utils as web3Utils } from 'web3';
 
 import {
