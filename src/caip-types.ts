@@ -143,11 +143,11 @@ export enum KnownCaipNamespace {
 }
 
 /**
- * A CAIP chain ID namespaced by a known CAIP namespace (@see {@link KnownCaipNamespace}).
- * This is a narrower alternative to {@link CaipChainId}.
+ * A CAIP-2 chain ID that is guaranteed to have a known CAIP namespace
+ * (@see {@link KnownCaipNamespace}).
  *
- * This type is necessary because `const` strings are not assignable to the `string` type.
- * Because of this, e.g. `eip155:${string}` is not assignable to (is not a subtype of) `${string}:${string}`.
+ * This is a narrower, more type-safe alternative to {@link CaipChainId} for use cases
+ * where the chain namespace must be one of the known standards.
  */
 export type KnownCaipNamespacedChainId = `${KnownCaipNamespace}:${string}`;
 
