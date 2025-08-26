@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.5.0]
 
-### Uncategorized
+### Added
 
-- feat: Add `KnownCaipNamespacedChainId` type ([#258](https://github.com/MetaMask/utils/pull/258))
-- chore: Move lodash types to deps ([#257](https://github.com/MetaMask/utils/pull/257))
-- chore: Use full `lodash` package ([#253](https://github.com/MetaMask/utils/pull/253))
+- Add `KnownCaipNamespacedChainId` type as narrower subtype of `CaipChainId` ([#258](https://github.com/MetaMask/utils/pull/258))
+
+### Changed
+
+- Add `@types/lodash` as dependency ([#257](https://github.com/MetaMask/utils/pull/257))
+- Add `lodash` as dependency and remove `lodash.memoize` ([#253](https://github.com/MetaMask/utils/pull/253))
 
 ## [11.4.2]
 
