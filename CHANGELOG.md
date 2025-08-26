@@ -15,7 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add `@types/lodash` as dependency ([#257](https://github.com/MetaMask/utils/pull/257))
 - Add `lodash` and `@types/lodash` as dependencies ([#253](https://github.com/MetaMask/utils/pull/253), [#257](https://github.com/MetaMask/utils/pull/257))
 
 ### Removed
