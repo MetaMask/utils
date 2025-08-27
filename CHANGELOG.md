@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.6.0]
+
+### Uncategorized
+
+- Feat/migrate units conversion utils ([#255](https://github.com/MetaMask/utils/pull/255))
+
 ## [11.5.0]
 
 ### Added
@@ -441,7 +447,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.5.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.6.0...HEAD
+[11.6.0]: https://github.com/MetaMask/utils/compare/v11.5.0...v11.6.0
 [11.5.0]: https://github.com/MetaMask/utils/compare/v11.4.2...v11.5.0
 [11.4.2]: https://github.com/MetaMask/utils/compare/v11.4.1...v11.4.2
 [11.4.1]: https://github.com/MetaMask/utils/compare/v11.4.0...v11.4.1
