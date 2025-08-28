@@ -149,7 +149,9 @@ export enum KnownCaipNamespace {
  * This is a narrower, more type-safe alternative to {@link CaipChainId} for use cases
  * where the chain namespace must be one of the known standards.
  */
-export type KnownCaipNamespacedChainId = `${KnownCaipNamespace}:${string}`;
+export type KnownCaipNamespacedChainId<
+  Namespace extends `${KnownCaipNamespace}` = `${KnownCaipNamespace}`,
+> = `${Namespace}:${string}`;
 
 /**
  * Check if the given value is a {@link CaipChainId}.
