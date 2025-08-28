@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.6.0]
 
-### Uncategorized
+### Added
 
-- Feat/migrate units conversion utils ([#255](https://github.com/MetaMask/utils/pull/255))
+- Migrate units conversion utils from `@metamask/ethjs-unit` ([#255](https://github.com/MetaMask/utils/pull/255))
+
+### Changed
+
+- Make `KnownCaipNamespacedChainId` type generic over `Namespace` type parameter ([#262](https://github.com/MetaMask/utils/pull/262))
 
 ## [11.5.0]
 
