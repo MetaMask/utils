@@ -9,9 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.7.0]
 
-### Uncategorized
+### Added
 
-- chore: adds Tron CAIP ([#266](https://github.com/MetaMask/utils/pull/266))
+- Add Tron CAIP namespace ([#266](https://github.com/MetaMask/utils/pull/266))
+
+### Fixed
+
 - Fix API docs generation ([#264](https://github.com/MetaMask/utils/pull/264))
 
 ## [11.6.0]
