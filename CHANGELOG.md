@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.7.0]
+
+### Added
+
+- Add Tron CAIP namespace ([#266](https://github.com/MetaMask/utils/pull/266))
+
+### Fixed
+
+- Fix API docs generation ([#264](https://github.com/MetaMask/utils/pull/264))
+
+## [11.6.0]
+
+### Added
+
+- Migrate units conversion utils from `@metamask/ethjs-unit` ([#255](https://github.com/MetaMask/utils/pull/255))
+
+### Changed
+
+- Make `KnownCaipNamespacedChainId` type generic over `Namespace` type parameter ([#262](https://github.com/MetaMask/utils/pull/262))
+
+## [11.5.0]
+
+### Added
+
+- Add `KnownCaipNamespacedChainId` type as narrower subtype of `CaipChainId` ([#258](https://github.com/MetaMask/utils/pull/258))
+
+### Changed
+
+- Add `lodash` and `@types/lodash` as dependencies ([#253](https://github.com/MetaMask/utils/pull/253), [#257](https://github.com/MetaMask/utils/pull/257))
+
+### Removed
+
+- Remove `lodash.memoize` (dependency) and `@types/lodash.memoize` (devDependency) ([#253](https://github.com/MetaMask/utils/pull/253)).
+
 ## [11.4.2]
 
 ### Fixed
@@ -427,7 +461,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.4.2...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.7.0...HEAD
+[11.7.0]: https://github.com/MetaMask/utils/compare/v11.6.0...v11.7.0
+[11.6.0]: https://github.com/MetaMask/utils/compare/v11.5.0...v11.6.0
+[11.5.0]: https://github.com/MetaMask/utils/compare/v11.4.2...v11.5.0
 [11.4.2]: https://github.com/MetaMask/utils/compare/v11.4.1...v11.4.2
 [11.4.1]: https://github.com/MetaMask/utils/compare/v11.4.0...v11.4.1
 [11.4.0]: https://github.com/MetaMask/utils/compare/v11.3.0...v11.4.0

@@ -137,10 +137,25 @@ export enum KnownCaipNamespace {
   Bip122 = 'bip122',
   /** Solana compatible chains */
   Solana = 'solana',
+  /** Tron compatible chains */
+  Tron = 'tron',
   /** EIP-155 compatible chains. */
   Eip155 = 'eip155',
   Wallet = 'wallet',
 }
+
+/**
+ * A CAIP-2 chain ID that is guaranteed to have a known CAIP namespace
+ * (@see {@link KnownCaipNamespace}).
+ *
+ * This is a narrower, more type-safe alternative to {@link CaipChainId} for use cases
+ * where the chain namespace must be one of the known standards.
+ *
+ * @template Namespace - The namespace of the CAIP-2 chain ID. Must be a known namespace specified in {@link KnownCaipNamespace}.
+ */
+export type KnownCaipNamespacedChainId<
+  Namespace extends `${KnownCaipNamespace}` = `${KnownCaipNamespace}`,
+> = `${Namespace}:${string}`;
 
 /**
  * Check if the given value is a {@link CaipChainId}.
