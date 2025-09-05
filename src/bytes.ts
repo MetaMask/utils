@@ -468,17 +468,17 @@ export function createDataView(bytes: Uint8Array): DataView {
  * @returns Whether the Uint8Arrays are equal.
  */
 export function areUint8ArraysEqual(a: Uint8Array, b: Uint8Array): boolean {
-  if (a.byteLength !== b.byteLength) {
-    return false;
-  }
+  const viewA = createDataView(a);
+  const viewB = createDataView(b);
 
-  const viewA = new DataView(a.buffer, a.byteOffset, a.byteLength);
-  const viewB = new DataView(b.buffer, b.byteOffset, b.byteLength);
+  const maxLength = Math.max(a.byteLength, b.byteLength);
 
-  let diff = 0;
+  let diff = Math.abs(a.byteLength - b.byteLength);
 
-  for (let i = 0; i < a.byteLength; i++) {
-    diff += viewA.getUint8(i) === viewB.getUint8(i) ? 0 : 1;
+  for (let i = 0; i < maxLength; i++) {
+    const aByte = i < a.byteLength ? viewA.getUint8(i) : 0;
+    const bByte = i < b.byteLength ? viewB.getUint8(i) : 0;
+    diff += Math.abs(aByte - bByte);
   }
 
   return diff === 0;

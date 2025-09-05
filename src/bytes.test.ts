@@ -565,5 +565,14 @@ describe('createDataView', () => {
         ),
       ).toBe(false);
     });
+
+    it('returns false if the first Uint8Array is shorter than the second', () => {
+      expect(
+        areUint8ArraysEqual(
+          new Uint8Array(31).fill(1),
+          new Uint8Array(32).fill(1),
+        ),
+      ).toBe(false);
+    });
   });
 });
