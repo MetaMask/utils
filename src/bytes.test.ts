@@ -7,6 +7,7 @@ import {
   UTF_8_BYTES_FIXTURES,
 } from './__fixtures__';
 import {
+  areUint8ArraysEqual,
   assertIsBytes,
   base64ToBytes,
   bigIntToBytes,
@@ -534,6 +535,35 @@ describe('createDataView', () => {
       expect(dataView.getUint8(0)).toBe(2);
       expect(dataView.getUint8(1)).toBe(3);
       expect(dataView.getUint8(2)).toBe(4);
+    });
+  });
+
+  describe('areUint8ArraysEqual', () => {
+    it('returns true if the Uint8Arrays are equal', () => {
+      expect(
+        areUint8ArraysEqual(
+          new Uint8Array(32).fill(1),
+          new Uint8Array(32).fill(1),
+        ),
+      ).toBe(true);
+    });
+
+    it('returns false if the Uint8Arrays are not equal', () => {
+      expect(
+        areUint8ArraysEqual(
+          new Uint8Array(32).fill(1),
+          new Uint8Array(32).fill(2),
+        ),
+      ).toBe(false);
+    });
+
+    it('returns false if the Uint8Arrays length is different', () => {
+      expect(
+        areUint8ArraysEqual(
+          new Uint8Array(32).fill(1),
+          new Uint8Array(31).fill(1),
+        ),
+      ).toBe(false);
     });
   });
 });

@@ -459,3 +459,27 @@ export function createDataView(bytes: Uint8Array): DataView {
 
   return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 }
+
+/**
+ * Compares two Uint8Arrays in a timing-safe manner.
+ *
+ * @param a - The first Uint8Array to compare.
+ * @param b - The second Uint8Array to compare.
+ * @returns Whether the Uint8Arrays are equal.
+ */
+export function areUint8ArraysEqual(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.byteLength !== b.byteLength) {
+    return false;
+  }
+
+  const viewA = new DataView(a.buffer, a.byteOffset, a.byteLength);
+  const viewB = new DataView(b.buffer, b.byteOffset, b.byteLength);
+
+  let diff = 0;
+
+  for (let i = 0; i < a.byteLength; i++) {
+    diff += viewA.getUint8(i) === viewB.getUint8(i) ? 0 : 1;
+  }
+
+  return diff === 0;
+}
