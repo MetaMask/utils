@@ -574,5 +574,71 @@ describe('createDataView', () => {
         ),
       ).toBe(false);
     });
+
+    it('returns true if the Uint8Arrays are both empty', () => {
+      expect(areUint8ArraysEqual(new Uint8Array(), new Uint8Array())).toBe(
+        true,
+      );
+    });
+
+    it('returns false if there is a subtle difference in the Uint8Arrays', () => {
+      expect(
+        areUint8ArraysEqual(
+          new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+          new Uint8Array([1, 2, 3, 4, 5, 6, 2, 8, 9, 10, 11, 12]),
+        ),
+      ).toBe(false);
+    });
+
+    it('has similar runtime for early vs late differences on large arrays', () => {
+      const LENGTH = 100_000;
+      const ITERATIONS = 200;
+
+      const base = new Uint8Array(LENGTH).fill(7);
+      const early = base.slice();
+      const late = base.slice();
+      early[0] = 6; // first element differs
+      late[LENGTH - 1] = 6; // last element differs
+
+      // Warm up JIT
+      for (let i = 0; i < 20; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        areUint8ArraysEqual(base, base);
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        areUint8ArraysEqual(early, base);
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        areUint8ArraysEqual(late, base);
+      }
+
+      const now = () => Number(process.hrtime.bigint());
+
+      let earlyTotal = 0;
+      let lateTotal = 0;
+
+      // Measure early difference
+      const startEarly = now();
+      for (let i = 0; i < ITERATIONS; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        areUint8ArraysEqual(early, base);
+      }
+      earlyTotal = now() - startEarly;
+
+      // Measure late difference
+      const startLate = now();
+      for (let i = 0; i < ITERATIONS; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        areUint8ArraysEqual(late, base);
+      }
+      lateTotal = now() - startLate;
+
+      // Ratio ≈ 1.0 ⇒ similar runtimes regardless of diff position.
+      // The threshold enforces the same order of magnitude while allowing normal system jitter.
+      // It's an empirical upper bound (~p95). To tune: run multiple trials, take a high percentile, and set slightly above it.
+      const ratio =
+        earlyTotal > lateTotal
+          ? earlyTotal / lateTotal
+          : lateTotal / earlyTotal;
+      expect(ratio).toBeLessThan(1.1);
+    });
   });
 });

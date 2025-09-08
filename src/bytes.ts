@@ -461,24 +461,29 @@ export function createDataView(bytes: Uint8Array): DataView {
 }
 
 /**
- * Compares two Uint8Arrays in a timing-safe manner.
+ * Compare two Uint8Arrays using a constant-time style loop to reduce timing
+ * side-channels when comparing sensitive data (e.g., mnemonic bytes, keys,
+ * authentication tags). Does not early-return on the first difference:
+ * work done depends only on the input lengths, so byte content does not affect timing.
+ *
+ * When to use:
+ * - Use for secret or security-sensitive byte comparisons to avoid content-based timing leaks.
+ * - Prefer when inputs are fixed-length (or validated to equal length) at the API boundary.
  *
  * @param a - The first Uint8Array to compare.
  * @param b - The second Uint8Array to compare.
  * @returns Whether the Uint8Arrays are equal.
  */
 export function areUint8ArraysEqual(a: Uint8Array, b: Uint8Array): boolean {
-  const viewA = createDataView(a);
-  const viewB = createDataView(b);
+  // eslint-disable-next-line no-bitwise
+  let diff = a.byteLength ^ b.byteLength;
+  const len = Math.max(a.byteLength, b.byteLength);
 
-  const maxLength = Math.max(a.byteLength, b.byteLength);
-
-  let diff = Math.abs(a.byteLength - b.byteLength);
-
-  for (let i = 0; i < maxLength; i++) {
-    const aByte = i < a.byteLength ? viewA.getUint8(i) : 0;
-    const bByte = i < b.byteLength ? viewB.getUint8(i) : 0;
-    diff += Math.abs(aByte - bByte);
+  for (let i = 0; i < len; i++) {
+    const aByte = a[i] ?? 0;
+    const bByte = b[i] ?? 0;
+    // eslint-disable-next-line no-bitwise
+    diff |= aByte ^ bByte;
   }
 
   return diff === 0;
