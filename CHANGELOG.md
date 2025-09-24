@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- chore: replace calls of the slow superstruct "is" with faster regex ([#270](https://github.com/MetaMask/utils/pull/270))
+- Replace `superstruct.is` with faster regex checks for `isCaip*` functions ([#270](https://github.com/MetaMask/utils/pull/270))
+  - Those calls were slow especially on our mobile client.
 
 ## [11.8.0]
 
