@@ -5,6 +5,7 @@ export const CAIP_CHAIN_ID_FIXTURES = [
   'bip122:fdbe99b90c90bae7505796461471d89a',
   'cosmos:cosmoshub-2',
   'cosmos:cosmoshub-3',
+  'cosmos:columbus-5',
   'cosmos:Binance-Chain-Tigris',
   'cosmos:iov-mainnet',
   'starknet:SN_GOERLI',
