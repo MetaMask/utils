@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.8.1]
+
+### Uncategorized
+
+- chore: replace calls of the slow superstruct "is" with faster regex ([#270](https://github.com/MetaMask/utils/pull/270))
+
 ## [11.8.0]
 
 ### Added
@@ -467,7 +473,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.8.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.8.1...HEAD
+[11.8.1]: https://github.com/MetaMask/utils/compare/v11.8.0...v11.8.1
 [11.8.0]: https://github.com/MetaMask/utils/compare/v11.7.0...v11.8.0
 [11.7.0]: https://github.com/MetaMask/utils/compare/v11.6.0...v11.7.0
 [11.6.0]: https://github.com/MetaMask/utils/compare/v11.5.0...v11.6.0
