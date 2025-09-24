@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.8.1]
 
-### Uncategorized
+### Changed
 
 - chore: replace calls of the slow superstruct "is" with faster regex ([#270](https://github.com/MetaMask/utils/pull/270))
 
