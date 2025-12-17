@@ -1,9 +1,12 @@
 import * as nobleHashes from '@noble/hashes/sha256';
+import { parse } from 'semver';
 
 import { bytesToHex, stringToBytes } from './bytes';
 import { sha256 } from './hashing';
 
 describe('sha256', () => {
+  const isNode18 = parse(process.version)?.major === 18;
+
   it('returns a digest for a byte array', async () => {
     const digest = await sha256(stringToBytes('foo bar'));
     expect(bytesToHex(digest)).toBe(
@@ -21,10 +24,14 @@ describe('sha256', () => {
   it('falls back to noble when digest function is unavailable', async () => {
     const nobleSpy = jest.spyOn(nobleHashes, 'sha256');
 
-    Object.defineProperty(globalThis.crypto.subtle, 'digest', {
-      value: undefined,
-      writable: true,
-    });
+    // The global does not exist in Node 18, so we cannot remove it.
+    // eslint-disable-next-line jest/no-if
+    if (!isNode18) {
+      Object.defineProperty(globalThis.crypto.subtle, 'digest', {
+        value: undefined,
+        writable: true,
+      });
+    }
 
     const digest = await sha256(stringToBytes('foo bar'));
     expect(bytesToHex(digest)).toBe(
@@ -37,10 +44,14 @@ describe('sha256', () => {
   it('falls back to noble when subtle APIs are unavailable', async () => {
     const nobleSpy = jest.spyOn(nobleHashes, 'sha256');
 
-    Object.defineProperty(globalThis.crypto, 'subtle', {
-      value: undefined,
-      writable: true,
-    });
+    // The global does not exist in Node 18, so we cannot remove it.
+    // eslint-disable-next-line jest/no-if
+    if (!isNode18) {
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: undefined,
+        writable: true,
+      });
+    }
 
     const digest = await sha256(stringToBytes('foo bar'));
     expect(bytesToHex(digest)).toBe(
