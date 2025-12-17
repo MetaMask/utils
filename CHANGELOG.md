@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.9.0]
 
-### Uncategorized
+### Added
 
-- feat: Add SHA-256 utility ([#273](https://github.com/MetaMask/utils/pull/273))
+- Add `sha256` utility function ([#273](https://github.com/MetaMask/utils/pull/273))
 
 ## [11.8.1]
 
