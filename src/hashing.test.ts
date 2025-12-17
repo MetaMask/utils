@@ -1,4 +1,5 @@
 import * as nobleHashes from '@noble/hashes/sha256';
+import { webcrypto } from 'crypto';
 import { parse } from 'semver';
 
 import { bytesToHex, stringToBytes } from './bytes';
@@ -6,6 +7,15 @@ import { sha256 } from './hashing';
 
 describe('sha256', () => {
   const isNode18 = parse(process.version)?.major === 18;
+
+  // The global does not exist in Node 18, so we must add it.
+  // eslint-disable-next-line jest/no-if
+  if (isNode18) {
+    Object.defineProperty(globalThis, 'crypto', {
+      value: webcrypto,
+      writable: true,
+    });
+  }
 
   it('returns a digest for a byte array', async () => {
     const digest = await sha256(stringToBytes('foo bar'));
