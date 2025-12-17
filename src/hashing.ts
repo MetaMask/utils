@@ -17,7 +17,9 @@ export async function sha256(bytes: Uint8Array): Promise<Uint8Array> {
     globalThis.crypto.subtle?.digest
   ) {
     // eslint-disable-next-line no-restricted-globals
-    return new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256', bytes));
+    return new Uint8Array(
+      await globalThis.crypto.subtle.digest('SHA-256', bytes),
+    );
   }
   return nobleSha256(bytes);
 }
