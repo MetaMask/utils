@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import {
+  ensureError,
   getErrorMessage,
   isErrorWithCode,
   isErrorWithMessage,
@@ -318,5 +319,101 @@ describe('getErrorMessage', () => {
 
   it('returns an empty string if given undefined', () => {
     expect(getErrorMessage(undefined)).toBe('');
+  });
+});
+
+describe('ensureError', () => {
+  it('returns Error instance unchanged', () => {
+    const originalError = new Error('original message');
+    const result = ensureError(originalError);
+
+    expect(result).toBe(originalError);
+    expect(result.message).toBe('original message');
+  });
+
+  it('returns fs.promises-style error unchanged', async () => {
+    let originalError;
+    try {
+      await fs.promises.readFile('/tmp/nonexistent', 'utf8');
+    } catch (error: unknown) {
+      originalError = error;
+    }
+
+    const result = ensureError(originalError);
+
+    expect(result).toBe(originalError);
+  });
+
+  it('converts string to Error with string as message', () => {
+    const result = ensureError('something went wrong');
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('something went wrong');
+  });
+
+  it('converts number to Error', () => {
+    const result = ensureError(42);
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('42');
+  });
+
+  it('converts object to Error using String()', () => {
+    const result = ensureError({ some: 'object' });
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('[object Object]');
+  });
+
+  it('handles null with descriptive message', () => {
+    const result = ensureError(null);
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('Unknown error');
+  });
+
+  it('handles undefined with descriptive message', () => {
+    const result = ensureError(undefined);
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('Unknown error');
+  });
+
+  it('appends context to message for null', () => {
+    const result = ensureError(null, 'fetchData');
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('Unknown error (fetchData)');
+  });
+
+  it('appends context to message for undefined', () => {
+    const result = ensureError(undefined, 'processInput');
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('Unknown error (processInput)');
+  });
+
+  it('appends context for non-Error values', () => {
+    const result = ensureError('network failure', 'apiCall');
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('network failure (apiCall)');
+  });
+
+  it('does NOT add context to existing Error instances', () => {
+    const originalError = new Error('original message');
+    const result = ensureError(originalError, 'someContext');
+
+    expect(result).toBe(originalError);
+    expect(result.message).toBe('original message');
+  });
+
+  it('preserves stack trace for Error instances', () => {
+    const originalError = new Error('original message');
+    const originalStack = originalError.stack;
+
+    const result = ensureError(originalError);
+
+    expect(result.stack).toBe(originalStack);
   });
 });
