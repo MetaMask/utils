@@ -361,15 +361,16 @@ describe('ensureError', () => {
     expect(result.cause).toBe(originalObject);
   });
 
-  it('handles null with descriptive message and preserves as cause', () => {
+  it('handles null with descriptive message', () => {
     const result = ensureError(null);
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error');
-    expect(result.cause).toBeNull();
+    // Note: ErrorWithCause polyfill converts null to undefined
+    expect(result.cause).toBeUndefined();
   });
 
-  it('handles undefined with descriptive message and preserves as cause', () => {
+  it('handles undefined with descriptive message', () => {
     const result = ensureError(undefined);
 
     expect(result).toBeInstanceOf(Error);
@@ -382,7 +383,8 @@ describe('ensureError', () => {
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error (fetchData)');
-    expect(result.cause).toBeNull();
+    // Note: ErrorWithCause polyfill converts null to undefined
+    expect(result.cause).toBeUndefined();
   });
 
   it('appends context to message for undefined', () => {

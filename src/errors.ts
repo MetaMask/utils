@@ -136,5 +136,15 @@ export function ensureError(error: unknown, context?: string): Error {
   }
 
   const message = context ? `Unknown error (${context})` : 'Unknown error';
-  return new Error(message, { cause: error });
+
+  // Error causes are not supported by our current tsc target (ES2020, we need ES2022)
+  /* istanbul ignore if -- @preserve runtime-dependent branch */
+  if (Error.length === 2) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return new Error(message, { cause: error });
+  }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return new ErrorWithCause(message, { cause: error });
 }
