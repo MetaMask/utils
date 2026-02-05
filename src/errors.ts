@@ -123,7 +123,8 @@ export function wrapError<Throwable>(
 /**
  * Ensures we have a proper Error object.
  * If the input is already an Error, returns it unchanged.
- * Otherwise, converts to an Error with an appropriate message.
+ * Otherwise, converts to an Error with an appropriate message and preserves
+ * the original value as the cause.
  *
  * @param error - The caught error (could be Error, string, or unknown).
  * @param context - Optional context to help identify the error source.
@@ -134,11 +135,6 @@ export function ensureError(error: unknown, context?: string): Error {
     return error;
   }
 
-  if (isNullOrUndefined(error)) {
-    const message = context ? `Unknown error (${context})` : 'Unknown error';
-    return new Error(message);
-  }
-
-  const message = context ? `${String(error)} (${context})` : String(error);
-  return new Error(message);
+  const message = context ? `Unknown error (${context})` : 'Unknown error';
+  return new Error(message, { cause: error });
 }

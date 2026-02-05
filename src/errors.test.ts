@@ -344,39 +344,37 @@ describe('ensureError', () => {
     expect(result).toBe(originalError);
   });
 
-  it('converts string to Error with string as message', () => {
+  it('converts string to Error and preserves original as cause', () => {
     const result = ensureError('something went wrong');
 
     expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('something went wrong');
+    expect(result.message).toBe('Unknown error');
+    expect(result.cause).toBe('something went wrong');
   });
 
-  it('converts number to Error', () => {
-    const result = ensureError(42);
+  it('converts object to Error and preserves original as cause', () => {
+    const originalObject = { some: 'object' };
+    const result = ensureError(originalObject);
 
     expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('42');
+    expect(result.message).toBe('Unknown error');
+    expect(result.cause).toBe(originalObject);
   });
 
-  it('converts object to Error using String()', () => {
-    const result = ensureError({ some: 'object' });
-
-    expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('[object Object]');
-  });
-
-  it('handles null with descriptive message', () => {
+  it('handles null with descriptive message and preserves as cause', () => {
     const result = ensureError(null);
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error');
+    expect(result.cause).toBeNull();
   });
 
-  it('handles undefined with descriptive message', () => {
+  it('handles undefined with descriptive message and preserves as cause', () => {
     const result = ensureError(undefined);
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error');
+    expect(result.cause).toBeUndefined();
   });
 
   it('appends context to message for null', () => {
@@ -384,6 +382,7 @@ describe('ensureError', () => {
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error (fetchData)');
+    expect(result.cause).toBeNull();
   });
 
   it('appends context to message for undefined', () => {
@@ -391,13 +390,15 @@ describe('ensureError', () => {
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('Unknown error (processInput)');
+    expect(result.cause).toBeUndefined();
   });
 
-  it('appends context for non-Error values', () => {
+  it('appends context for non-Error values and preserves original as cause', () => {
     const result = ensureError('network failure', 'apiCall');
 
     expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('network failure (apiCall)');
+    expect(result.message).toBe('Unknown error (apiCall)');
+    expect(result.cause).toBe('network failure');
   });
 
   it('does NOT add context to existing Error instances', () => {
