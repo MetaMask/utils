@@ -377,38 +377,6 @@ describe('ensureError', () => {
     expect(result.cause).toBeUndefined();
   });
 
-  it('appends context to message for null', () => {
-    const result = ensureError(null, 'fetchData');
-
-    expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('Unknown error (fetchData)');
-    expect(result.cause).toBeNull();
-  });
-
-  it('appends context to message for undefined', () => {
-    const result = ensureError(undefined, 'processInput');
-
-    expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('Unknown error (processInput)');
-    expect(result.cause).toBeUndefined();
-  });
-
-  it('appends context for non-Error values and preserves original as cause', () => {
-    const result = ensureError('network failure', 'apiCall');
-
-    expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('Unknown error (apiCall)');
-    expect(result.cause).toBe('network failure');
-  });
-
-  it('does NOT add context to existing Error instances', () => {
-    const originalError = new Error('original message');
-    const result = ensureError(originalError, 'someContext');
-
-    expect(result).toBe(originalError);
-    expect(result.message).toBe('original message');
-  });
-
   it('preserves stack trace for Error instances', () => {
     const originalError = new Error('original message');
     const originalStack = originalError.stack;

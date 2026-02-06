@@ -127,16 +127,14 @@ export function wrapError<Throwable>(
  * the original value as the cause.
  *
  * @param error - The caught error (could be Error, string, or unknown).
- * @param context - Optional context to help identify the error source.
  * @returns A proper Error instance.
  */
-export function ensureError(error: unknown, context?: string): Error {
+export function ensureError(error: unknown): Error {
   if (isError(error)) {
     return error;
   }
 
-  const message = context ? `Unknown error (${context})` : 'Unknown error';
-  const newError: Error & { cause?: unknown } = new Error(message);
+  const newError: Error & { cause?: unknown } = new Error('Unknown error');
   newError.cause = error;
   return newError;
 }
