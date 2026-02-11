@@ -305,7 +305,12 @@ describe('parseCaipChainId', () => {
         "reference": "cosmoshub-3",
       }
     `);
-
+    expect(parseCaipChainId('cosmos:columbus-5')).toMatchInlineSnapshot(`
+      {
+        "namespace": "cosmos",
+        "reference": "columbus-5",
+      }
+    `);
     expect(parseCaipChainId('polkadot:b0a8d493285c2df73290dfb7e61f870f'))
       .toMatchInlineSnapshot(`
       {
