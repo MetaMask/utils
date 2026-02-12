@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.10.0]
 
-### Uncategorized
+### Added
 
-- feat: Add ensureError utility for converting unknown values to error ([#275](https://github.com/MetaMask/utils/pull/275))
+- Add ensureError utility for converting unknown values to error ([#275](https://github.com/MetaMask/utils/pull/275))
 
 ## [11.9.0]
 
