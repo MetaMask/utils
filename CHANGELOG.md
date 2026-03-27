@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add Stellar CAIP namespace ([#TODO](https://github.com/MetaMask/utils/pull/TODO))
+- Add Stellar CAIP namespace ([#278](https://github.com/MetaMask/utils/pull/278))
 
 ## [11.10.0]
 
