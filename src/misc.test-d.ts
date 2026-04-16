@@ -124,13 +124,13 @@ if (hasProperty(hasPropertyTypeExample, 'a')) {
 // getKnownPropertyNames
 //=============================================================================
 
-enum GetKnownPropertyNamesEnumExample {
-  Foo = 'bar',
-  Baz = 'qux',
-}
+const GetKnownPropertyNamesExample = {
+  Foo: 'bar',
+  Baz: 'qux',
+} as const;
 
 expectType<('Foo' | 'Baz')[]>(
-  getKnownPropertyNames(GetKnownPropertyNamesEnumExample),
+  getKnownPropertyNames(GetKnownPropertyNamesExample),
 );
 
 //=============================================================================
