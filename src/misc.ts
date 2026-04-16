@@ -130,17 +130,18 @@ export type PlainObject = Record<number | string | symbol, unknown>;
 /**
  * Predefined sizes (in Bytes) of specific parts of JSON structure.
  */
-export enum JsonSize {
-  Null = 4,
-  Comma = 1,
-  Wrapper = 1,
-  True = 4,
-  False = 5,
-  Quote = 1,
-  Colon = 1,
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  Date = 24,
-}
+export const JsonSize = {
+  Null: 4,
+  Comma: 1,
+  Wrapper: 1,
+  True: 4,
+  False: 5,
+  Quote: 1,
+  Colon: 1,
+  Date: 24,
+} as const;
+
+export type JsonSize = (typeof JsonSize)[keyof typeof JsonSize];
 
 /**
  * Regular expression with pattern matching for (special) escaped characters.

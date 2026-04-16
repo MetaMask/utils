@@ -30,9 +30,7 @@ describe('time utilities', () => {
 
       Object.values(Duration).forEach((duration) => {
         const count = getRandomCount();
-        expect(inMilliseconds(count, duration as Duration)).toBe(
-          count * (duration as Duration),
-        );
+        expect(inMilliseconds(count, duration)).toBe(count * duration);
       });
     });
   });
