@@ -1,5 +1,4 @@
 import type { Infer } from '@metamask/superstruct';
-import { is } from '@metamask/superstruct';
 
 import { definePattern } from './superstruct';
 
@@ -137,6 +136,8 @@ export enum KnownCaipNamespace {
   Bip122 = 'bip122',
   /** Solana compatible chains */
   Solana = 'solana',
+  /** Stellar compatible chains */
+  Stellar = 'stellar',
   /** Tron compatible chains */
   Tron = 'tron',
   /** EIP-155 compatible chains. */
@@ -164,7 +165,7 @@ export type KnownCaipNamespacedChainId<
  * @returns Whether the value is a {@link CaipChainId}.
  */
 export function isCaipChainId(value: unknown): value is CaipChainId {
-  return is(value, CaipChainIdStruct);
+  return typeof value === 'string' && CAIP_CHAIN_ID_REGEX.test(value);
 }
 
 /**
@@ -174,7 +175,7 @@ export function isCaipChainId(value: unknown): value is CaipChainId {
  * @returns Whether the value is a {@link CaipNamespace}.
  */
 export function isCaipNamespace(value: unknown): value is CaipNamespace {
-  return is(value, CaipNamespaceStruct);
+  return typeof value === 'string' && CAIP_NAMESPACE_REGEX.test(value);
 }
 
 /**
@@ -184,7 +185,7 @@ export function isCaipNamespace(value: unknown): value is CaipNamespace {
  * @returns Whether the value is a {@link CaipReference}.
  */
 export function isCaipReference(value: unknown): value is CaipReference {
-  return is(value, CaipReferenceStruct);
+  return typeof value === 'string' && CAIP_REFERENCE_REGEX.test(value);
 }
 
 /**
@@ -194,7 +195,7 @@ export function isCaipReference(value: unknown): value is CaipReference {
  * @returns Whether the value is a {@link CaipAccountId}.
  */
 export function isCaipAccountId(value: unknown): value is CaipAccountId {
-  return is(value, CaipAccountIdStruct);
+  return typeof value === 'string' && CAIP_ACCOUNT_ID_REGEX.test(value);
 }
 
 /**
@@ -206,7 +207,7 @@ export function isCaipAccountId(value: unknown): value is CaipAccountId {
 export function isCaipAccountAddress(
   value: unknown,
 ): value is CaipAccountAddress {
-  return is(value, CaipAccountAddressStruct);
+  return typeof value === 'string' && CAIP_ACCOUNT_ADDRESS_REGEX.test(value);
 }
 
 /**
@@ -218,7 +219,7 @@ export function isCaipAccountAddress(
 export function isCaipAssetNamespace(
   value: unknown,
 ): value is CaipAssetNamespace {
-  return is(value, CaipAssetNamespaceStruct);
+  return typeof value === 'string' && CAIP_ASSET_NAMESPACE_REGEX.test(value);
 }
 
 /**
@@ -230,7 +231,7 @@ export function isCaipAssetNamespace(
 export function isCaipAssetReference(
   value: unknown,
 ): value is CaipAssetReference {
-  return is(value, CaipAssetReferenceStruct);
+  return typeof value === 'string' && CAIP_ASSET_REFERENCE_REGEX.test(value);
 }
 
 /**
@@ -240,7 +241,7 @@ export function isCaipAssetReference(
  * @returns Whether the value is a {@link CaipTokenId}.
  */
 export function isCaipTokenId(value: unknown): value is CaipTokenId {
-  return is(value, CaipTokenIdStruct);
+  return typeof value === 'string' && CAIP_TOKEN_ID_REGEX.test(value);
 }
 
 /**
@@ -250,7 +251,7 @@ export function isCaipTokenId(value: unknown): value is CaipTokenId {
  * @returns Whether the value is a {@link CaipAssetType}.
  */
 export function isCaipAssetType(value: unknown): value is CaipAssetType {
-  return is(value, CaipAssetTypeStruct);
+  return typeof value === 'string' && CAIP_ASSET_TYPE_REGEX.test(value);
 }
 
 /**
@@ -260,7 +261,7 @@ export function isCaipAssetType(value: unknown): value is CaipAssetType {
  * @returns Whether the value is a {@link CaipAssetId}.
  */
 export function isCaipAssetId(value: unknown): value is CaipAssetId {
-  return is(value, CaipAssetIdStruct);
+  return typeof value === 'string' && CAIP_ASSET_ID_REGEX.test(value);
 }
 
 /**
