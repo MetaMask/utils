@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { when } from 'jest-when';
 import os from 'os';
 import path from 'path';
 import util from 'util';
 import * as uuid from 'uuid';
+import { vi } from 'vitest';
 
 import {
   createSandbox,
@@ -20,14 +20,9 @@ import {
 const { withinSandbox } = createSandbox('utils');
 
 // Clone the `uuid` module so that we can spy on its exports
-jest.mock('uuid', () => {
-  return {
-    // This is how to mock an ES-compatible module in Jest.
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    ...jest.requireActual('uuid'),
-  };
-});
+vi.mock('uuid', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('uuid')>()),
+}));
 
 describe('fs', () => {
   describe('readFile', () => {
@@ -436,9 +431,7 @@ describe('fs', () => {
       const error: any = new Error('oops');
       error.code = 'ESOMETHING';
       error.stack = 'some stack';
-      when(jest.spyOn(fs.promises, 'stat'))
-        .calledWith(entryPath)
-        .mockRejectedValue(error);
+      vi.spyOn(fs.promises, 'stat').mockRejectedValue(error);
 
       await expect(fileExists(entryPath)).rejects.toThrow(
         expect.objectContaining({
@@ -495,9 +488,7 @@ describe('fs', () => {
       const error: any = new Error('oops');
       error.code = 'ESOMETHING';
       error.stack = 'some stack';
-      when(jest.spyOn(fs.promises, 'stat'))
-        .calledWith(entryPath)
-        .mockRejectedValue(error);
+      vi.spyOn(fs.promises, 'stat').mockRejectedValue(error);
 
       await expect(directoryExists(entryPath)).rejects.toThrow(
         expect.objectContaining({
@@ -605,12 +596,7 @@ describe('fs', () => {
         const error: any = new Error('oops');
         error.code = 'ESOMETHING';
         error.stack = 'some stack';
-        when(jest.spyOn(fs.promises, 'rm'))
-          .calledWith(filePath, {
-            recursive: true,
-            force: true,
-          })
-          .mockRejectedValue(error);
+        vi.spyOn(fs.promises, 'rm').mockRejectedValue(error);
 
         await expect(forceRemove(filePath)).rejects.toThrow(
           expect.objectContaining({
@@ -656,12 +642,7 @@ describe('fs', () => {
         const error: any = new Error('oops');
         error.code = 'ESOMETHING';
         error.stack = 'some stack';
-        when(jest.spyOn(fs.promises, 'rm'))
-          .calledWith(directoryPath, {
-            recursive: true,
-            force: true,
-          })
-          .mockRejectedValue(error);
+        vi.spyOn(fs.promises, 'rm').mockRejectedValue(error);
 
         await expect(forceRemove(directoryPath)).rejects.toThrow(
           expect.objectContaining({
@@ -677,15 +658,15 @@ describe('fs', () => {
 
   describe('createSandbox', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it('does not create the sandbox directory immediately', async () => {
-      jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+      vi.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
       createSandbox('utils-fs');
 
       const sandboxDirectoryPath = path.join(
@@ -702,7 +683,7 @@ describe('fs', () => {
     describe('withinSandbox', () => {
       it('creates the sandbox directory and keeps it around before its given function ends', async () => {
         expect.assertions(1);
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        vi.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         await withinTestSandbox(async () => {
@@ -718,7 +699,7 @@ describe('fs', () => {
       });
 
       it('removes the sandbox directory after its given function ends', async () => {
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        vi.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         await withinTestSandbox(async () => {
@@ -736,7 +717,7 @@ describe('fs', () => {
       });
 
       it('throws if the sandbox directory already exists', async () => {
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        vi.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         const sandboxDirectoryPath = path.join(

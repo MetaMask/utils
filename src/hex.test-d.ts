@@ -1,26 +1,26 @@
-import { expectAssignable, expectNotAssignable } from 'tsd';
+import { expectTypeOf } from 'vitest';
 
 import type { Hex } from '.';
 
 // Valid hex strings:
 
-expectAssignable<Hex>('0x');
+expectTypeOf<'0x'>().toMatchTypeOf<Hex>();
 
-expectAssignable<Hex>('0x0');
+expectTypeOf<'0x0'>().toMatchTypeOf<Hex>();
 
-expectAssignable<Hex>('0x😀');
+expectTypeOf<'0x😀'>().toMatchTypeOf<Hex>();
 
-const embeddedString = 'test';
-expectAssignable<Hex>(`0x${embeddedString}`);
+const embeddedString = 'test' as const;
+expectTypeOf<`0x${typeof embeddedString}`>().toMatchTypeOf<Hex>();
 
 // Not valid hex strings:
 
-expectNotAssignable<Hex>(`0X${embeddedString}`);
+expectTypeOf<`0X${typeof embeddedString}`>().not.toMatchTypeOf<Hex>();
 
-expectNotAssignable<Hex>(`1x${embeddedString}`);
+expectTypeOf<`1x${typeof embeddedString}`>().not.toMatchTypeOf<Hex>();
 
-expectNotAssignable<Hex>(0);
+expectTypeOf<number>().not.toMatchTypeOf<Hex>();
 
-expectNotAssignable<Hex>('0');
+expectTypeOf<'0'>().not.toMatchTypeOf<Hex>();
 
-expectNotAssignable<Hex>('🙃');
+expectTypeOf<'🙃'>().not.toMatchTypeOf<Hex>();

@@ -2,74 +2,78 @@
 
 import type { Infer } from '@metamask/superstruct';
 import { boolean, number, optional, string } from '@metamask/superstruct';
-import { expectAssignable, expectNotAssignable } from 'tsd';
+import { expectTypeOf } from 'vitest';
 
 import type { Json } from '.';
 import { exactOptional, object } from '.';
 
 // Valid Json:
 
-expectAssignable<Json>(null);
+expectTypeOf(null).toMatchTypeOf<Json>();
 
-expectAssignable<Json>(false);
+expectTypeOf(false).toMatchTypeOf<Json>();
 
-expectAssignable<Json>('');
+expectTypeOf('').toMatchTypeOf<Json>();
 
-expectAssignable<Json>(0);
+expectTypeOf(0).toMatchTypeOf<Json>();
 
-expectAssignable<Json>([]);
+expectTypeOf([]).toMatchTypeOf<Json>();
 
-expectAssignable<Json>({});
+expectTypeOf({}).toMatchTypeOf<Json>();
 
-expectAssignable<Json>([0]);
+expectTypeOf([0]).toMatchTypeOf<Json>();
 
-expectAssignable<Json>({ a: 0 });
+expectTypeOf({ a: 0 }).toMatchTypeOf<Json>();
 
-expectAssignable<Json>({ deeply: [{ nested: 1 }, 'mixed', 'types', 0] });
+expectTypeOf({ deeply: [{ nested: 1 }, 'mixed', 'types', 0] }).toMatchTypeOf<Json>();
 
-expectAssignable<Json>(['array', { nested: { mixed: true, types: null } }, 0]);
+expectTypeOf([
+  'array',
+  { nested: { mixed: true, types: null } },
+  0,
+]).toMatchTypeOf<Json>();
 
 type JsonCompatibleType = {
   c: number;
 };
 const jsonCompatibleType: JsonCompatibleType = { c: 0 };
-expectAssignable<Json>(jsonCompatibleType);
+expectTypeOf(jsonCompatibleType).toMatchTypeOf<Json>();
 
 // Invalid Json:
 
-expectNotAssignable<Json>(undefined);
+expectTypeOf(undefined).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(new Date());
+expectTypeOf(new Date()).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(() => 0);
+expectTypeOf(() => 0).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(new Set());
+expectTypeOf(new Set()).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(new Map());
+expectTypeOf(new Map()).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(Symbol('test'));
+expectTypeOf(Symbol('test')).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>({ a: new Date() });
+expectTypeOf({ a: new Date() }).not.toMatchTypeOf<Json>();
 
-expectNotAssignable<Json>(5 as number | undefined);
+expectTypeOf(5 as number | undefined).not.toMatchTypeOf<Json>();
 
 interface InterfaceWithOptionalProperty {
   a?: number;
 }
 const interfaceWithOptionalProperty: InterfaceWithOptionalProperty = { a: 0 };
-expectNotAssignable<Json>(interfaceWithOptionalProperty);
+expectTypeOf(interfaceWithOptionalProperty).not.toMatchTypeOf<Json>();
 
 interface InterfaceWithDate {
   a: Date;
 }
 const interfaceWithDate: InterfaceWithDate = { a: new Date() };
-expectNotAssignable<Json>(interfaceWithDate);
+expectTypeOf(interfaceWithDate).not.toMatchTypeOf<Json>();
 
 interface InterfaceWithOptionalDate {
   a?: Date;
 }
 const interfaceWithOptionalDate: InterfaceWithOptionalDate = { a: new Date() };
-expectNotAssignable<Json>(interfaceWithOptionalDate);
+expectTypeOf(interfaceWithOptionalDate).not.toMatchTypeOf<Json>();
 
 interface InterfaceWithUndefinedTypeUnion {
   a: number | undefined;
@@ -77,25 +81,25 @@ interface InterfaceWithUndefinedTypeUnion {
 const interfaceWithUndefinedTypeUnion: InterfaceWithUndefinedTypeUnion = {
   a: 0,
 };
-expectNotAssignable<Json>(interfaceWithUndefinedTypeUnion);
+expectTypeOf(interfaceWithUndefinedTypeUnion).not.toMatchTypeOf<Json>();
 
 interface InterfaceWithFunction {
   a: () => number;
 }
 const interfaceWithFunction: InterfaceWithFunction = { a: () => 0 };
-expectNotAssignable<Json>(interfaceWithFunction);
+expectTypeOf(interfaceWithFunction).not.toMatchTypeOf<Json>();
 
 type TypeWithDate = {
   a: Date;
 };
 const typeWithDate: TypeWithDate = { a: new Date() };
-expectNotAssignable<Json>(typeWithDate);
+expectTypeOf(typeWithDate).not.toMatchTypeOf<Json>();
 
 type TypeWithOptionalDate = {
   a?: Date;
 };
 const typeWithOptionalDate: TypeWithOptionalDate = { a: new Date() };
-expectNotAssignable<Json>(typeWithOptionalDate);
+expectTypeOf(typeWithOptionalDate).not.toMatchTypeOf<Json>();
 
 type TypeWithUndefinedTypeUnion = {
   a: number | undefined;
@@ -103,24 +107,24 @@ type TypeWithUndefinedTypeUnion = {
 const typeWithUndefinedTypeUnion: TypeWithUndefinedTypeUnion = {
   a: 0,
 };
-expectNotAssignable<Json>(typeWithUndefinedTypeUnion);
+expectTypeOf(typeWithUndefinedTypeUnion).not.toMatchTypeOf<Json>();
 
 type TypeWithFunction = {
   a: () => number;
 };
 const typeWithFunction: TypeWithFunction = { a: () => 0 };
-expectNotAssignable<Json>(typeWithFunction);
+expectTypeOf(typeWithFunction).not.toMatchTypeOf<Json>();
 
 type TypeWithOptionalProperty = {
   a?: number | undefined;
 };
 const typeWithOptionalProperty: TypeWithOptionalProperty = { a: undefined };
-expectNotAssignable<Json>(typeWithOptionalProperty);
+expectTypeOf(typeWithOptionalProperty).not.toMatchTypeOf<Json>();
 
 // Edge cases:
 
 // The Json type doesn't protect against the `any` type.
-expectAssignable<Json>(null as any);
+expectTypeOf(null as any).toMatchTypeOf<Json>();
 
 // The Json type gets confused by interfaces. This interface is valid Json,
 // but it's incompatible with the Json type.
@@ -128,7 +132,7 @@ interface A {
   a: number;
 }
 const a: A = { a: 0 };
-expectNotAssignable<Json>(a);
+expectTypeOf(a).not.toMatchTypeOf<Json>();
 
 // The Json type gets confused by classes. This class instance is valid Json,
 // but it's incompatible with the Json type.
@@ -136,7 +140,7 @@ class Foo {
   a!: number;
 }
 const foo = new Foo();
-expectNotAssignable<Json>(foo);
+expectTypeOf(foo).not.toMatchTypeOf<Json>();
 
 // Object using `exactOptional`:
 
@@ -148,12 +152,12 @@ const exactOptionalObject = object({
 
 type ExactOptionalObject = Infer<typeof exactOptionalObject>;
 
-expectAssignable<ExactOptionalObject>({ a: 0 });
-expectAssignable<ExactOptionalObject>({ a: 0, b: 'test' });
-expectAssignable<ExactOptionalObject>({ a: 0, b: 'test', c: true });
-expectNotAssignable<ExactOptionalObject>({ a: 0, b: 'test', c: 0 });
-expectNotAssignable<ExactOptionalObject>({
+expectTypeOf({ a: 0 }).toMatchTypeOf<ExactOptionalObject>();
+expectTypeOf({ a: 0, b: 'test' }).toMatchTypeOf<ExactOptionalObject>();
+expectTypeOf({ a: 0, b: 'test', c: true }).toMatchTypeOf<ExactOptionalObject>();
+expectTypeOf({ a: 0, b: 'test', c: 0 }).not.toMatchTypeOf<ExactOptionalObject>();
+expectTypeOf({
   a: 0,
   b: 'test',
   c: undefined,
-});
+}).not.toMatchTypeOf<ExactOptionalObject>();

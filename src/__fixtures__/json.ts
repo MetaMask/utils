@@ -1170,6 +1170,7 @@ REVOKED_OBJECT_PROXY.revoke();
 
 export const JSON_VALIDATION_FIXTURES = [
   {
+    label: 'object with string value',
     value: {
       a: 'bc',
     },
@@ -1177,6 +1178,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 10,
   },
   {
+    label: 'object with number value',
     value: {
       a: 1234,
     },
@@ -1184,6 +1186,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 10,
   },
   {
+    label: 'object with UTF-8 string value',
     value: {
       a: 'bcšečf',
     },
@@ -1191,6 +1194,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 16,
   },
   {
+    label: 'array of floats',
     value: [
       -5e-11, 5e-9, 0.000000000001, -0.00000000009, 100000.00000008, -100.88888,
       0.333, 1000000000000,
@@ -1199,6 +1203,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 73,
   },
   {
+    label: 'deeply nested object with mixed types and encodings',
     value: {
       data: {
         account: {
@@ -1285,6 +1290,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 1288,
   },
   {
+    label: 'object with Date values',
     value: {
       dates: {
         someDate: new Date(),
@@ -1296,37 +1302,44 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 107,
   },
   {
+    label: 'nested array with null',
     value: ['foo', 'bar', null, ['foo', 'bar', null]],
     valid: true,
     size: 37,
   },
   {
+    label: 'null',
     value: null,
     valid: true,
     size: 4,
   },
   {
+    label: 'true',
     value: true,
     valid: true,
     size: 4,
   },
   {
+    label: 'false',
     value: false,
     valid: true,
     size: 5,
   },
   {
+    label: 'string',
     value: 'str',
     valid: true,
     size: 5,
   },
   {
+    label: 'number',
     value: 123,
     valid: true,
     size: 3,
   },
 
   {
+    label: 'object with undefined value',
     value: {
       a: undefined,
     },
@@ -1334,6 +1347,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 0,
   },
   {
+    label: 'deeply nested object with function value',
     value: {
       levelOne: {
         levelTwo: {
@@ -1351,6 +1365,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 0,
   },
   {
+    label: 'object with Symbol value',
     value: {
       mySymbol: Symbol('MySymbol'),
     },
@@ -1358,6 +1373,7 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 0,
   },
   {
+    label: 'array with function element',
     value: [
       function () {
         return 'whatever';
@@ -1372,82 +1388,98 @@ export const JSON_VALIDATION_FIXTURES = [
   // https://github.com/tc39/test262/tree/main/test/built-ins/JSON/stringify
   /* eslint-disable no-new-wrappers */
   {
+    label: 'Boolean object (true)',
     value: new Boolean(true),
     valid: true,
     size: 4,
   },
   {
+    label: 'object with Boolean object value (false)',
     value: { key: new Boolean(false) },
     valid: true,
     size: 13,
   },
   {
+    label: 'Boolean object (false)',
     value: new Boolean(false),
     valid: true,
     size: 5,
   },
   {
+    label: 'Number object',
     value: new Number(3.14),
     valid: true,
     size: 4,
   },
   {
+    label: 'String object',
     value: new String('str'),
     valid: true,
     size: 5,
   },
   /* eslint-enable no-new-wrappers */
   {
+    label: 'negative zero',
     value: -0,
     valid: true,
     size: 1,
   },
   {
+    label: 'array with negative zero',
     value: ['-0', 0, -0],
     valid: true,
     size: 10,
   },
   {
+    label: 'object with negative zero value',
     value: { key: -0 },
     valid: true,
     size: 9,
   },
   {
+    label: 'Infinity',
     value: Infinity,
     valid: false,
     size: 0,
   },
   {
+    label: 'object with -Infinity value',
     value: { key: -Infinity },
     valid: false,
     size: 0,
   },
   {
+    label: 'character map object',
     value: CHARACTER_MAP,
     valid: true,
     size: 593,
   },
   {
+    label: 'character map keys joined',
     value: Object.keys(CHARACTER_MAP).join(''),
     valid: true,
     size: 178,
   },
   {
+    label: 'character map keys reversed and joined',
     value: Object.keys(CHARACTER_MAP).reverse().join(''),
     valid: true,
     size: 178,
   },
   {
+    label: 'character map values joined',
     value: Object.values(CHARACTER_MAP).join(''),
     valid: true,
     size: 214,
   },
   {
+    label: 'character map values reversed and joined',
     value: Object.values(CHARACTER_MAP).reverse().join(''),
     valid: true,
     size: 214,
   },
   {
+    label: 'object with toJSON: null',
     value: {
       toJSON: null,
     },
@@ -1455,26 +1487,31 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 15,
   },
   {
+    label: 'object with toJSON: false',
     value: { toJSON: false },
     valid: true,
     size: 16,
   },
   {
+    label: 'object with toJSON: []',
     value: { toJSON: [] },
     valid: true,
     size: 13,
   },
   {
+    label: 'object with duplicate references',
     value: DUPLICATE_REFERENCE,
     valid: true,
     size: 552,
   },
   {
+    label: 'object containing a revoked Proxy',
     value: { a: { b: REVOKED_OBJECT_PROXY.proxy } },
     valid: false,
     size: 0,
   },
   {
+    label: 'object with throwing getter',
     value: {
       get key() {
         throw new Error();
@@ -1484,26 +1521,31 @@ export const JSON_VALIDATION_FIXTURES = [
     size: 0,
   },
   {
+    label: 'undefined',
     value: undefined,
     valid: false,
     size: 0,
   },
   {
+    label: 'direct circular reference (array)',
     value: DIRECT_CIRCULAR_REFERENCE_ARRAY,
     valid: false,
     size: 0,
   },
   {
+    label: 'indirect circular reference (array)',
     value: INDIRECT_CIRCULAR_REFERENCE_ARRAY,
     valid: false,
     size: 0,
   },
   {
+    label: 'direct circular reference (object)',
     value: DIRECT_CIRCULAR_REFERENCE_OBJECT,
     valid: false,
     size: 0,
   },
   {
+    label: 'indirect circular reference (object)',
     value: INDIRECT_CIRCULAR_REFERENCE_OBJECT,
     valid: false,
     size: 0,

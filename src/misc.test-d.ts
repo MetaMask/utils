@@ -1,4 +1,4 @@
-import { expectAssignable, expectNotAssignable, expectType } from 'tsd';
+import { expectTypeOf } from 'vitest';
 
 import type { PublicInterface, RuntimeObject } from './misc';
 import { isObject, hasProperty, getKnownPropertyNames } from './misc';
@@ -19,9 +19,13 @@ class ClassWithPrivateProperties {
 }
 
 // Private properties not required
-expectAssignable<PublicInterface<ClassWithPrivateProperties>>({ bar: 'bar' });
+expectTypeOf({ bar: 'bar' }).toMatchTypeOf<
+  PublicInterface<ClassWithPrivateProperties>
+>();
 // Public properties still required
-expectNotAssignable<PublicInterface<ClassWithPrivateProperties>>({});
+expectTypeOf({}).not.toMatchTypeOf<
+  PublicInterface<ClassWithPrivateProperties>
+>();
 
 //=============================================================================
 // isObject
@@ -30,16 +34,16 @@ expectNotAssignable<PublicInterface<ClassWithPrivateProperties>>({});
 // eslint-disable-next-line @typescript-eslint/ban-types
 const unknownValue = {} as unknown;
 
-expectNotAssignable<RuntimeObject>(unknownValue);
+expectTypeOf(unknownValue).not.toMatchTypeOf<RuntimeObject>();
 
 if (isObject(unknownValue)) {
-  expectAssignable<RuntimeObject>(unknownValue);
+  expectTypeOf(unknownValue).toMatchTypeOf<RuntimeObject>();
 }
 
 // Does not interfere with satisfaction of static type
 const constObjectType = { foo: 'foo' } as const;
 if (hasProperty(constObjectType, 'foo')) {
-  expectAssignable<{ foo: 'foo' }>(constObjectType);
+  expectTypeOf(constObjectType).toMatchTypeOf<{ foo: 'foo' }>();
 }
 
 //=============================================================================
@@ -50,16 +54,16 @@ if (hasProperty(constObjectType, 'foo')) {
 const unknownObject = {} as Object;
 
 // Establish that `Object` is not accepted when a specific property is needed.
-expectNotAssignable<Record<'foo', unknown>>(unknownObject);
+expectTypeOf(unknownObject).not.toMatchTypeOf<Record<'foo', unknown>>();
 
 // Establish that `RuntimeObject` is not accepted when a specific property is needed.
 if (isObject(unknownObject)) {
-  expectNotAssignable<Record<'foo', unknown>>(unknownObject);
+  expectTypeOf(unknownObject).not.toMatchTypeOf<Record<'foo', unknown>>();
 }
 
 // An object is accepted after `hasProperty` is used to prove that it has the required property.
 if (isObject(unknownObject) && hasProperty(unknownObject, 'foo')) {
-  expectAssignable<Record<'foo', unknown>>(unknownObject);
+  expectTypeOf(unknownObject).toMatchTypeOf<Record<'foo', unknown>>();
 }
 
 // An object is accepted after `hasProperty` is used to prove that it has all required properties.
@@ -68,18 +72,22 @@ if (
   hasProperty(unknownObject, 'foo') &&
   hasProperty(unknownObject, 'bar')
 ) {
-  expectAssignable<Record<'foo' | 'bar', unknown>>(unknownObject);
+  expectTypeOf(unknownObject).toMatchTypeOf<Record<'foo' | 'bar', unknown>>();
 }
 
 // An object is not accepted after `hasProperty` has only been used to establish that some required properties exist.
 if (isObject(unknownObject) && hasProperty(unknownObject, 'foo')) {
-  expectNotAssignable<Record<'foo' | 'bar', unknown>>(unknownObject);
+  expectTypeOf(unknownObject).not.toMatchTypeOf<
+    Record<'foo' | 'bar', unknown>
+  >();
 }
 
 // Does not interfere with satisfaction of non-overlapping types
 const overlappingTypesExample = { foo: 'foo', baz: 'baz' };
 if (hasProperty(overlappingTypesExample, 'foo')) {
-  expectAssignable<Record<'baz', unknown>>(overlappingTypesExample);
+  expectTypeOf(overlappingTypesExample).toMatchTypeOf<
+    Record<'baz', unknown>
+  >();
 }
 
 const exampleErrorWithCode = new Error('test');
@@ -88,11 +96,11 @@ const exampleErrorWithCode = new Error('test');
 exampleErrorWithCode.code = 999;
 
 // Establish that trying to check for a custom property on an error results in failure
-expectNotAssignable<{ code: any }>(exampleErrorWithCode);
+expectTypeOf(exampleErrorWithCode).not.toMatchTypeOf<{ code: any }>();
 
 // Using custom Error property is allowed after checking with `hasProperty`
 if (hasProperty(exampleErrorWithCode, 'code')) {
-  expectType<unknown>(exampleErrorWithCode.code);
+  expectTypeOf(exampleErrorWithCode.code).toEqualTypeOf<unknown>();
 }
 
 // `hasProperty` is compatible with interfaces
@@ -117,7 +125,7 @@ type HasPropertyTypeExample = {
 // It keeps the original type when defined.
 const hasPropertyTypeExample: HasPropertyTypeExample = {};
 if (hasProperty(hasPropertyTypeExample, 'a')) {
-  expectType<number | undefined>(hasPropertyTypeExample.a);
+  expectTypeOf(hasPropertyTypeExample.a).toEqualTypeOf<number | undefined>();
 }
 
 //=============================================================================
@@ -129,9 +137,9 @@ enum GetKnownPropertyNamesEnumExample {
   Baz = 'qux',
 }
 
-expectType<('Foo' | 'Baz')[]>(
+expectTypeOf(
   getKnownPropertyNames(GetKnownPropertyNamesEnumExample),
-);
+).toEqualTypeOf<('Foo' | 'Baz')[]>();
 
 //=============================================================================
 // RuntimeObject
@@ -139,36 +147,36 @@ expectType<('Foo' | 'Baz')[]>(
 
 // Valid runtime objects:
 
-expectAssignable<RuntimeObject>({});
+expectTypeOf({}).toMatchTypeOf<RuntimeObject>();
 
-expectAssignable<RuntimeObject>({ foo: 'foo' });
+expectTypeOf({ foo: 'foo' }).toMatchTypeOf<RuntimeObject>();
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-expectAssignable<RuntimeObject>({ 0: 'foo' });
+expectTypeOf({ 0: 'foo' }).toMatchTypeOf<RuntimeObject>();
 
-expectAssignable<RuntimeObject>({ [Symbol('foo')]: 'foo' });
+expectTypeOf({ [Symbol('foo')]: 'foo' }).toMatchTypeOf<RuntimeObject>();
 
 // Invalid runtime objects:
 
-expectNotAssignable<RuntimeObject>(null);
+expectTypeOf(null).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(undefined);
+expectTypeOf(undefined).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>('foo');
+expectTypeOf('foo').not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(0);
+expectTypeOf(0).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>([]);
+expectTypeOf([]).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(new Date());
+expectTypeOf(new Date()).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(() => 0);
+expectTypeOf(() => 0).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(new Set());
+expectTypeOf(new Set()).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(new Map());
+expectTypeOf(new Map()).not.toMatchTypeOf<RuntimeObject>();
 
-expectNotAssignable<RuntimeObject>(Symbol('test'));
+expectTypeOf(Symbol('test')).not.toMatchTypeOf<RuntimeObject>();
 
 // The RuntimeObject type gets confused by interfaces. This interface is a valid object,
 // but it's incompatible with the RuntimeObject type.
@@ -177,10 +185,10 @@ interface RuntimeObjectInterfaceExample {
   a: number;
 }
 const runtimeObjectInterfaceExample: RuntimeObjectInterfaceExample = { a: 0 };
-expectNotAssignable<RuntimeObject>(runtimeObjectInterfaceExample);
+expectTypeOf(runtimeObjectInterfaceExample).not.toMatchTypeOf<RuntimeObject>();
 
 class RuntimeObjectClassExample {
   a!: number;
 }
 const runtimeObjectClassExample = new RuntimeObjectClassExample();
-expectNotAssignable<RuntimeObject>(runtimeObjectClassExample);
+expectTypeOf(runtimeObjectClassExample).not.toMatchTypeOf<RuntimeObject>();

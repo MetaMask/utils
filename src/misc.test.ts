@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import type { RuntimeObject } from '.';
 import {
   isNonEmptyArray,
@@ -158,7 +160,7 @@ describe('miscellaneous', () => {
 
     it('should return false if an exception is thrown', () => {
       const someObject = { something: 'anything' };
-      jest.spyOn(Object, 'getPrototypeOf').mockImplementationOnce(() => {
+      vi.spyOn(Object, 'getPrototypeOf').mockImplementationOnce(() => {
         throw new Error();
       });
 

@@ -1,4 +1,4 @@
-import { expectAssignable, expectNotAssignable } from 'tsd';
+import { expectTypeOf } from 'vitest';
 
 import type {
   CaipAccountAddress,
@@ -12,79 +12,69 @@ import type {
   CaipReference,
 } from '.';
 
-const embeddedString = 'test';
+const embeddedString = 'test' as const;
 
 // Valid caip strings:
 
-expectAssignable<CaipChainId>('namespace:reference');
-expectAssignable<CaipChainId>('namespace:');
-expectAssignable<CaipChainId>(':reference');
-expectAssignable<CaipChainId>(`${embeddedString}:${embeddedString}`);
+expectTypeOf<'namespace:reference'>().toMatchTypeOf<CaipChainId>();
+expectTypeOf<'namespace:'>().toMatchTypeOf<CaipChainId>();
+expectTypeOf<':reference'>().toMatchTypeOf<CaipChainId>();
+expectTypeOf<`${typeof embeddedString}:${typeof embeddedString}`>().toMatchTypeOf<CaipChainId>();
 
-expectAssignable<CaipNamespace>('string');
-expectAssignable<CaipNamespace>(`${embeddedString}`);
+expectTypeOf<'string'>().toMatchTypeOf<CaipNamespace>();
+expectTypeOf<`${typeof embeddedString}`>().toMatchTypeOf<CaipNamespace>();
 
-expectAssignable<CaipReference>('string');
-expectAssignable<CaipReference>(`${embeddedString}`);
+expectTypeOf<'string'>().toMatchTypeOf<CaipReference>();
+expectTypeOf<`${typeof embeddedString}`>().toMatchTypeOf<CaipReference>();
 
-expectAssignable<CaipAccountId>('namespace:reference:accountAddress');
-expectAssignable<CaipAccountId>('namespace:reference:');
-expectAssignable<CaipAccountId>(':reference:accountAddress');
-expectAssignable<CaipAccountId>(
-  `${embeddedString}:${embeddedString}:${embeddedString}`,
-);
+expectTypeOf<'namespace:reference:accountAddress'>().toMatchTypeOf<CaipAccountId>();
+expectTypeOf<'namespace:reference:'>().toMatchTypeOf<CaipAccountId>();
+expectTypeOf<':reference:accountAddress'>().toMatchTypeOf<CaipAccountId>();
+expectTypeOf<`${typeof embeddedString}:${typeof embeddedString}:${typeof embeddedString}`>().toMatchTypeOf<CaipAccountId>();
 
-expectAssignable<CaipAccountAddress>('string');
-expectAssignable<CaipAccountAddress>(`${embeddedString}`);
+expectTypeOf<'string'>().toMatchTypeOf<CaipAccountAddress>();
+expectTypeOf<`${typeof embeddedString}`>().toMatchTypeOf<CaipAccountAddress>();
 
-expectAssignable<CaipAssetNamespace>('string');
-expectAssignable<CaipAssetNamespace>(`${embeddedString}`);
+expectTypeOf<'string'>().toMatchTypeOf<CaipAssetNamespace>();
+expectTypeOf<`${typeof embeddedString}`>().toMatchTypeOf<CaipAssetNamespace>();
 
-expectAssignable<CaipAssetReference>('string');
-expectAssignable<CaipAssetReference>(`${embeddedString}`);
+expectTypeOf<'string'>().toMatchTypeOf<CaipAssetReference>();
+expectTypeOf<`${typeof embeddedString}`>().toMatchTypeOf<CaipAssetReference>();
 
-expectAssignable<CaipAssetType>(
-  'namespace:reference/assetNamespace:assetReference',
-);
-expectAssignable<CaipAssetType>('namespace:reference/:');
-expectAssignable<CaipAssetType>(':reference/assetNamespace:');
-expectAssignable<CaipAssetType>(
-  `${embeddedString}:${embeddedString}/${embeddedString}:${embeddedString}`,
-);
+expectTypeOf<'namespace:reference/assetNamespace:assetReference'>().toMatchTypeOf<CaipAssetType>();
+expectTypeOf<'namespace:reference/:'>().toMatchTypeOf<CaipAssetType>();
+expectTypeOf<':reference/assetNamespace:'>().toMatchTypeOf<CaipAssetType>();
+expectTypeOf<`${typeof embeddedString}:${typeof embeddedString}/${typeof embeddedString}:${typeof embeddedString}`>().toMatchTypeOf<CaipAssetType>();
 
-expectAssignable<CaipAssetId>(
-  'namespace:reference/assetNamespace:assetReference/tokenId',
-);
-expectAssignable<CaipAssetId>('namespace:reference/:assetReference/');
-expectAssignable<CaipAssetId>(':reference/assetNamespace:/');
-expectAssignable<CaipAssetId>(
-  `${embeddedString}:${embeddedString}/${embeddedString}:${embeddedString}/${embeddedString}`,
-);
+expectTypeOf<'namespace:reference/assetNamespace:assetReference/tokenId'>().toMatchTypeOf<CaipAssetId>();
+expectTypeOf<'namespace:reference/:assetReference/'>().toMatchTypeOf<CaipAssetId>();
+expectTypeOf<':reference/assetNamespace:/'>().toMatchTypeOf<CaipAssetId>();
+expectTypeOf<`${typeof embeddedString}:${typeof embeddedString}/${typeof embeddedString}:${typeof embeddedString}/${typeof embeddedString}`>().toMatchTypeOf<CaipAssetId>();
 
 // Not valid caip strings:
 
-expectAssignable<CaipChainId>('namespace:😀');
-expectAssignable<CaipChainId>('😀:reference');
-expectNotAssignable<CaipChainId>(0);
-expectNotAssignable<CaipChainId>('🙃');
+expectTypeOf<'namespace:😀'>().toMatchTypeOf<CaipChainId>();
+expectTypeOf<'😀:reference'>().toMatchTypeOf<CaipChainId>();
+expectTypeOf<number>().not.toMatchTypeOf<CaipChainId>();
+expectTypeOf<'🙃'>().not.toMatchTypeOf<CaipChainId>();
 
-expectNotAssignable<CaipNamespace>(0);
+expectTypeOf<number>().not.toMatchTypeOf<CaipNamespace>();
 
-expectNotAssignable<CaipReference>(0);
+expectTypeOf<number>().not.toMatchTypeOf<CaipReference>();
 
-expectAssignable<CaipAccountId>('namespace:reference:😀');
-expectAssignable<CaipAccountId>('😀:reference:accountAddress');
-expectNotAssignable<CaipAccountId>(0);
-expectNotAssignable<CaipAccountId>('🙃');
+expectTypeOf<'namespace:reference:😀'>().toMatchTypeOf<CaipAccountId>();
+expectTypeOf<'😀:reference:accountAddress'>().toMatchTypeOf<CaipAccountId>();
+expectTypeOf<number>().not.toMatchTypeOf<CaipAccountId>();
+expectTypeOf<'🙃'>().not.toMatchTypeOf<CaipAccountId>();
 
-expectNotAssignable<CaipAccountAddress>(0);
+expectTypeOf<number>().not.toMatchTypeOf<CaipAccountAddress>();
 
-expectNotAssignable<CaipAssetNamespace>(0);
+expectTypeOf<number>().not.toMatchTypeOf<CaipAssetNamespace>();
 
-expectNotAssignable<CaipAssetReference>(0);
+expectTypeOf<number>().not.toMatchTypeOf<CaipAssetReference>();
 
-expectNotAssignable<CaipAssetType>(0);
-expectNotAssignable<CaipAssetType>('🙃');
+expectTypeOf<number>().not.toMatchTypeOf<CaipAssetType>();
+expectTypeOf<'🙃'>().not.toMatchTypeOf<CaipAssetType>();
 
-expectNotAssignable<CaipAssetId>(0);
-expectNotAssignable<CaipAssetId>('🙃');
+expectTypeOf<number>().not.toMatchTypeOf<CaipAssetId>();
+expectTypeOf<'🙃'>().not.toMatchTypeOf<CaipAssetId>();

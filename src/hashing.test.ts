@@ -1,15 +1,24 @@
 import * as nobleHashes from '@noble/hashes/sha256';
 import { webcrypto } from 'crypto';
 import { parse } from 'semver';
+import { vi } from 'vitest';
 
 import { bytesToHex, stringToBytes } from './bytes';
 import { sha256 } from './hashing';
+
+vi.mock('@noble/hashes/sha256', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('@noble/hashes/sha256')>();
+  return {
+    ...actual,
+    sha256: vi.fn(actual.sha256),
+  };
+});
 
 describe('sha256', () => {
   const isNode18 = parse(process.version)?.major === 18;
 
   // The global does not exist in Node 18, so we must add it.
-  // eslint-disable-next-line jest/no-if
   if (isNode18) {
     Object.defineProperty(globalThis, 'crypto', {
       value: webcrypto,
@@ -32,7 +41,7 @@ describe('sha256', () => {
   });
 
   it('falls back to noble when digest function is unavailable', async () => {
-    const nobleSpy = jest.spyOn(nobleHashes, 'sha256');
+    const nobleSpy = vi.spyOn(nobleHashes, 'sha256');
 
     Object.defineProperty(globalThis.crypto.subtle, 'digest', {
       value: undefined,
@@ -48,7 +57,7 @@ describe('sha256', () => {
   });
 
   it('falls back to noble when subtle APIs are unavailable', async () => {
-    const nobleSpy = jest.spyOn(nobleHashes, 'sha256');
+    const nobleSpy = vi.spyOn(nobleHashes, 'sha256');
 
     Object.defineProperty(globalThis.crypto, 'subtle', {
       value: undefined,
