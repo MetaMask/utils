@@ -9,6 +9,7 @@ import {
   number,
   optional,
 } from '@metamask/superstruct';
+import { vi, type MockedFunction } from 'vitest';
 
 import {
   assert,
@@ -46,9 +47,9 @@ import {
   JSON_VALIDATION_FIXTURES,
 } from './__fixtures__';
 
-jest.mock('@metamask/superstruct', () => ({
-  ...jest.requireActual('@metamask/superstruct'),
-  assert: jest.fn(),
+vi.mock('@metamask/superstruct', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@metamask/superstruct')>()),
+  assert: vi.fn(),
 }));
 
 describe('object', () => {
@@ -224,10 +225,13 @@ describe('exactOptional', () => {
 });
 
 describe('json', () => {
-  beforeEach(() => {
-    const actual = jest.requireActual('@metamask/superstruct');
+  beforeEach(async () => {
+    const actual =
+      await vi.importActual<typeof import('@metamask/superstruct')>(
+        '@metamask/superstruct',
+      );
     (
-      superstructAssert as jest.MockedFunction<typeof superstructAssert>
+      superstructAssert as MockedFunction<typeof superstructAssert>
     ).mockImplementation(actual.assert);
   });
 
@@ -299,7 +303,7 @@ describe('json', () => {
     });
 
     it.each(JSON_VALIDATION_FIXTURES)(
-      'works on complex object %o',
+      'works on complex object: $label',
       ({ value, valid }) => {
         expect(isValidJson(value)).toBe(valid);
       },
@@ -315,7 +319,7 @@ describe('json', () => {
 
   describe('getJsonSize', () => {
     it.each(JSON_VALIDATION_FIXTURES.filter((fixture) => fixture.valid))(
-      'returns the size of %o',
+      'returns the size of $label',
       ({ value, size }) => {
         expect(getJsonSize(value)).toBe(size);
       },
@@ -365,7 +369,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops';
@@ -420,7 +424,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops';
@@ -491,7 +495,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops.';
@@ -546,7 +550,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops.';
@@ -601,7 +605,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops';
@@ -648,7 +652,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops';
@@ -703,7 +707,7 @@ describe('json', () => {
 
     it('includes the value thrown in the message if it is not an error', () => {
       (
-        superstructAssert as jest.MockedFunction<typeof superstructAssert>
+        superstructAssert as MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw 'oops.';

@@ -1,14 +1,15 @@
 import { MockWritable } from 'stdio-mock';
+import { vi } from 'vitest';
 
 import { createProjectLogger, createModuleLogger } from './logging';
 
 describe('logging', () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2022-01-01'));
+    vi.useFakeTimers().setSystemTime(new Date('2022-01-01'));
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   describe('createProjectLogger', () => {
