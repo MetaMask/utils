@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import fs from 'fs';
 import { when } from 'jest-when';
 import os from 'os';
