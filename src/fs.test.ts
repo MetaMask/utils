@@ -1,9 +1,9 @@
+import crypto from 'crypto';
 import fs from 'fs';
 import { when } from 'jest-when';
 import os from 'os';
 import path from 'path';
 import util from 'util';
-import * as uuid from 'uuid';
 
 import {
   createSandbox,
@@ -19,13 +19,13 @@ import {
 
 const { withinSandbox } = createSandbox('utils');
 
-// Clone the `uuid` module so that we can spy on its exports
-jest.mock('uuid', () => {
+// Clone the `crypto` module so that we can spy on its exports
+jest.mock('crypto', () => {
   return {
     // This is how to mock an ES-compatible module in Jest.
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    ...jest.requireActual('uuid'),
+    ...jest.requireActual('crypto'),
   };
 });
 
@@ -685,7 +685,7 @@ describe('fs', () => {
     });
 
     it('does not create the sandbox directory immediately', async () => {
-      jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+      jest.spyOn(crypto, 'randomUUID').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
       createSandbox('utils-fs');
 
       const sandboxDirectoryPath = path.join(
@@ -702,7 +702,7 @@ describe('fs', () => {
     describe('withinSandbox', () => {
       it('creates the sandbox directory and keeps it around before its given function ends', async () => {
         expect.assertions(1);
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        jest.spyOn(crypto, 'randomUUID').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         await withinTestSandbox(async () => {
@@ -718,7 +718,7 @@ describe('fs', () => {
       });
 
       it('removes the sandbox directory after its given function ends', async () => {
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        jest.spyOn(crypto, 'randomUUID').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         await withinTestSandbox(async () => {
@@ -736,7 +736,7 @@ describe('fs', () => {
       });
 
       it('throws if the sandbox directory already exists', async () => {
-        jest.spyOn(uuid, 'v4').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
+        jest.spyOn(crypto, 'randomUUID').mockReturnValue('AAAA-AAAA-AAAA-AAAA');
         const { withinSandbox: withinTestSandbox } = createSandbox('utils-fs');
 
         const sandboxDirectoryPath = path.join(
