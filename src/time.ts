@@ -1,42 +1,44 @@
 /**
  * Common duration constants, in milliseconds.
  */
-export enum Duration {
+export const Duration = {
   /**
    * A millisecond.
    */
-  Millisecond = 1,
+  Millisecond: 1,
 
   /**
    * A second, in milliseconds.
    */
-  Second = 1000, // Millisecond * 1000
+  Second: 1000, // Millisecond * 1000
 
   /**
    * A minute, in milliseconds.
    */
-  Minute = 60_000, // Second * 60
+  Minute: 60_000, // Second * 60
 
   /**
    * An hour, in milliseconds.
    */
-  Hour = 3_600_000, // Minute * 60
+  Hour: 3_600_000, // Minute * 60
 
   /**
    * A day, in milliseconds.
    */
-  Day = 86_400_000, // Hour * 24
+  Day: 86_400_000, // Hour * 24
 
   /**
    * A week, in milliseconds.
    */
-  Week = 604_800_000, // Day * 7
+  Week: 604_800_000, // Day * 7
 
   /**
    * A year, in milliseconds.
    */
-  Year = 31_536_000_000, // Day * 365
-}
+  Year: 31_536_000_000, // Day * 365
+} as const;
+
+export type Duration = (typeof Duration)[keyof typeof Duration];
 
 const isNonNegativeInteger = (number: number) =>
   Number.isInteger(number) && number >= 0;

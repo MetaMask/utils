@@ -131,19 +131,22 @@ export const CaipAssetTypeOrIdStruct = definePattern<
 export type CaipAssetTypeOrId = Infer<typeof CaipAssetTypeOrIdStruct>;
 
 /** Known CAIP namespaces. */
-export enum KnownCaipNamespace {
+export const KnownCaipNamespace = {
   /** BIP-122 (Bitcoin) compatible chains. */
-  Bip122 = 'bip122',
+  Bip122: 'bip122',
   /** Solana compatible chains */
-  Solana = 'solana',
+  Solana: 'solana',
   /** Stellar compatible chains */
-  Stellar = 'stellar',
+  Stellar: 'stellar',
   /** Tron compatible chains */
-  Tron = 'tron',
+  Tron: 'tron',
   /** EIP-155 compatible chains. */
-  Eip155 = 'eip155',
-  Wallet = 'wallet',
-}
+  Eip155: 'eip155',
+  Wallet: 'wallet',
+} as const;
+
+export type KnownCaipNamespace =
+  (typeof KnownCaipNamespace)[keyof typeof KnownCaipNamespace];
 
 /**
  * A CAIP-2 chain ID that is guaranteed to have a known CAIP namespace

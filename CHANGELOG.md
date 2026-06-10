@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING:** Change `KnownCaipNamespace`, `JsonSize`, and `Duration` from enums to object literals + object types
+  - If you are accessing a member of these enums at runtime (e.g. `KnownCaipNamespace.Eip155`), you should not have to change anything, nor should you have any breaking changes.
+  - If you are using the whole enum type within another type or within a function or method signature (e.g. `function resolveRpcMethod(namespace: KnownCaipNamespace) { ... }`), these changes will be breaking for you. Consumers of your library will need to switch to `@metamask/utils` 12.0.0.
+  - Accessing a member of the enum type at compile time as though it were an object (e.g. `function resolveRpcMethod(namespace: KnownCaipNamespace.Eip155) { ... }`) is no longer supported. Use a literal (e.g. `'Eip155'`) instead.
+
 ## [11.11.0]
 
 ### Added
