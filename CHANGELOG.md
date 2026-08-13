@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add `@metamask/scure-bip39` as a dependency
+- Add `@metamask/scure-bip39` as a dependency ([#300](https://github.com/MetaMask/utils/pull/300))
 
 ## [11.11.0]
 
