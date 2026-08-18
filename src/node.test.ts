@@ -175,6 +175,7 @@ describe('node', () => {
         "uint8ArrayToMnemonic",
         "unitMap",
         "valueToBytes",
+        "waitFor",
         "wrapError",
         "writeFile",
         "writeJsonFile",

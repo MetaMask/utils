@@ -1,4 +1,4 @@
-import { Duration, inMilliseconds, timeSince } from '.';
+import { Duration, inMilliseconds, timeSince, waitFor } from '.';
 
 describe('time utilities', () => {
   describe('Duration', () => {
@@ -61,5 +61,44 @@ describe('time utilities', () => {
         expect(timeSince(input as number)).toBe(expected);
       });
     });
+  });
+});
+
+describe('waitFor', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('resolves once the given duration has elapsed', async () => {
+    const onResolved = jest.fn();
+    const promise = waitFor(Duration.Second).then(onResolved);
+
+    await Promise.resolve();
+    jest.advanceTimersByTime(Duration.Second - 1);
+    await Promise.resolve();
+    expect(onResolved).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(1);
+    await promise;
+    expect(onResolved).toHaveBeenCalledTimes(1);
+  });
+
+  it('resolves with undefined for a zero duration', async () => {
+    const promise = waitFor(0);
+    jest.advanceTimersByTime(0);
+    expect(await promise).toBeUndefined();
+  });
+
+  it('rejects for a negative or non-integer duration', async () => {
+    await expect(waitFor(-1)).rejects.toThrow(
+      '"milliseconds" must be a non-negative integer. Received: "-1".',
+    );
+    await expect(waitFor(1.5)).rejects.toThrow(
+      '"milliseconds" must be a non-negative integer. Received: "1.5".',
+    );
   });
 });
