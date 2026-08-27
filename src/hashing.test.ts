@@ -21,18 +21,13 @@ describe('hash functions', () => {
         writable: true,
       });
     }
+  });
 
-    // Restore digest if previous tests broke it
-    if (!globalThis.crypto.subtle?.digest) {
-      Object.defineProperty(globalThis.crypto, 'subtle', {
-        value: originalSubtle,
-        writable: true,
-      });
-      Object.defineProperty(globalThis.crypto.subtle, 'digest', {
-        value: originalDigest,
-        writable: true,
-      });
-    }
+  afterEach(() => {
+    Object.defineProperty(globalThis.crypto, 'subtle', {
+      value: { ...originalSubtle, digest: originalDigest },
+      writable: true,
+    });
   });
 
   describe('sha256', () => {
