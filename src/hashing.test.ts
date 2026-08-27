@@ -25,7 +25,11 @@ describe('hash functions', () => {
 
   afterEach(() => {
     Object.defineProperty(globalThis.crypto, 'subtle', {
-      value: { ...originalSubtle, digest: originalDigest },
+      value: originalSubtle,
+      writable: true,
+    });
+    Object.defineProperty(globalThis.crypto.subtle, 'digest', {
+      value: originalDigest,
       writable: true,
     });
   });
