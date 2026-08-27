@@ -7,7 +7,8 @@ import { bytesToHex, stringToBytes } from './bytes';
 import { sha256, sha512, sha384 } from './hashing';
 
 describe('hash functions', () => {
-  const originalSubtle = globalThis.crypto.subtle ?? webcrypto.subtle;
+  const originalSubtle = globalThis.crypto?.subtle ?? webcrypto.subtle;
+  const originalDigest = originalSubtle?.digest?.bind(originalSubtle);
 
   beforeEach(() => {
     const isNode18 = parse(process.version)?.major === 18;
@@ -21,10 +22,14 @@ describe('hash functions', () => {
       });
     }
 
-    // Restore subtle if previous tests broke it
-    if (!globalThis.crypto.subtle) {
+    // Restore digest if previous tests broke it
+    if (!globalThis.crypto.subtle?.digest) {
       Object.defineProperty(globalThis.crypto, 'subtle', {
         value: originalSubtle,
+        writable: true,
+      });
+      Object.defineProperty(globalThis.crypto.subtle, 'digest', {
+        value: originalDigest,
         writable: true,
       });
     }
