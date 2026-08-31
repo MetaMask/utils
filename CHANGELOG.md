@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `@metamask/scure-bip39` as a dependency ([#300](https://github.com/MetaMask/utils/pull/300))
 - Add optimized `sha512` and `sha384` utility functions ([#305](https://github.com/MetaMask/utils/pull/305))
 
+### Fixed
+
+- Bump `@metamask/superstruct` to `^3.2.1` and migrate `JsonRpcRequestStruct`, `JsonRpcNotificationStruct`, and `JsonRpcErrorStruct` to use the native `exactOptional`/`object` ([#306](https://github.com/MetaMask/utils/pull/306))
+  - This fixes an incompatibility with superstruct's `pick` and `omit` functions on these structs ([#158](https://github.com/MetaMask/utils/issues/158)).
+
 ## [11.11.0]
 
 ### Added

@@ -8,6 +8,8 @@ import {
   max,
   number,
   optional,
+  pick,
+  omit,
 } from '@metamask/superstruct';
 
 import {
@@ -33,6 +35,9 @@ import {
   object,
   exactOptional,
   JsonStruct,
+  JsonRpcRequestStruct,
+  JsonRpcNotificationStruct,
+  JsonRpcErrorStruct,
 } from '.';
 import {
   JSON_FIXTURES,
@@ -793,5 +798,35 @@ describe('json', () => {
         ),
       ).not.toThrow();
     });
+  });
+});
+
+// See https://github.com/MetaMask/utils/issues/158.
+describe('superstruct `pick`/`omit` compatibility', () => {
+  it('supports `pick` on `JsonRpcRequestStruct`', () => {
+    expect(() =>
+      pick(JsonRpcRequestStruct, ['method', 'params']),
+    ).not.toThrow();
+  });
+
+  it('supports `omit` on `JsonRpcRequestStruct`', () => {
+    expect(() => omit(JsonRpcRequestStruct, ['params'])).not.toThrow();
+  });
+
+  it('supports `pick` on `JsonRpcNotificationStruct`', () => {
+    expect(() =>
+      pick(JsonRpcNotificationStruct, ['method', 'params']),
+    ).not.toThrow();
+  });
+
+  it('supports `pick` on `JsonRpcErrorStruct`', () => {
+    expect(() => pick(JsonRpcErrorStruct, ['code', 'message'])).not.toThrow();
+  });
+
+  it('validates values against a struct built via `pick`', () => {
+    const PickedStruct = pick(JsonRpcRequestStruct, ['method', 'params']);
+    expect(is({ method: 'eth_call', params: ['0x1'] }, PickedStruct)).toBe(
+      true,
+    );
   });
 });
