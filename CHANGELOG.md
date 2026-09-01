@@ -9,12 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.12.0]
 
-### Uncategorized
-
-- ci: Add missing top-level `permissions` to publish-release workflow ([#292](https://github.com/MetaMask/utils/pull/292))
-- ci: Update `action-npm-publish` to v6 ([#291](https://github.com/MetaMask/utils/pull/291))
-- chore: Bump Yarn to `4.16.0` ([#290](https://github.com/MetaMask/utils/pull/290))
-
 ### Added
 
 - Add `uint8ArrayToMnemonic` and `convertMnemonicToWordlistIndices` utilities ([#300](https://github.com/MetaMask/utils/pull/300))
