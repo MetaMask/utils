@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump `@scure/base` from `^1.1.3` to `^1.2.6` ([#311](https://github.com/MetaMask/utils/pull/311))
 - Bump `semver` from `^7.5.4` to `^7.6.3` ([#311](https://github.com/MetaMask/utils/pull/311))
 
+## [11.12.1]
+
+### Fixed
+
+- Fix ESM compatibility for the BIP-39 mnemonic utilities ([#309](https://github.com/MetaMask/utils/pull/309))
+
 ## [11.12.0]
 
 ### Added
@@ -510,7 +516,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/MetaMask/utils/compare/v11.12.0...HEAD
+[Unreleased]: https://github.com/MetaMask/utils/compare/v11.12.1...HEAD
+[11.12.1]: https://github.com/MetaMask/utils/compare/v11.12.0...v11.12.1
 [11.12.0]: https://github.com/MetaMask/utils/compare/v11.11.0...v11.12.0
 [11.11.0]: https://github.com/MetaMask/utils/compare/v11.10.0...v11.11.0
 [11.10.0]: https://github.com/MetaMask/utils/compare/v11.9.0...v11.10.0
