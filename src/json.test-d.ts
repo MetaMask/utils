@@ -1,11 +1,24 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 import type { Infer } from '@metamask/superstruct';
-import { boolean, number, optional, string } from '@metamask/superstruct';
+import {
+  boolean,
+  number,
+  optional,
+  string,
+  pick,
+  omit,
+} from '@metamask/superstruct';
 import { expectAssignable, expectNotAssignable } from 'tsd';
 
 import type { Json } from '.';
-import { exactOptional, object } from '.';
+import {
+  exactOptional,
+  object,
+  JsonRpcRequestStruct,
+  JsonRpcNotificationStruct,
+  JsonRpcErrorStruct,
+} from '.';
 
 // Valid Json:
 
@@ -156,4 +169,52 @@ expectNotAssignable<ExactOptionalObject>({
   a: 0,
   b: 'test',
   c: undefined,
+});
+
+// `pick`/`omit` compatibility for JSON-RPC structs:
+// See https://github.com/MetaMask/utils/issues/158.
+
+const pickedRequestStruct = pick(JsonRpcRequestStruct, ['method', 'params']);
+type PickedRequest = Infer<typeof pickedRequestStruct>;
+
+expectAssignable<PickedRequest>({ method: 'eth_call' });
+expectAssignable<PickedRequest>({ method: 'eth_call', params: ['0x1'] });
+
+const omittedRequestStruct = omit(JsonRpcRequestStruct, ['params']);
+type OmittedRequest = Infer<typeof omittedRequestStruct>;
+
+expectAssignable<OmittedRequest>({
+  id: 1,
+  jsonrpc: '2.0',
+  method: 'eth_call',
+});
+expectNotAssignable<OmittedRequest>({ jsonrpc: '2.0', method: 'eth_call' });
+
+const pickedNotificationStruct = pick(JsonRpcNotificationStruct, ['method']);
+expectAssignable<Infer<typeof pickedNotificationStruct>>({
+  method: 'eth_subscribe',
+});
+
+const pickedErrorStruct = pick(JsonRpcErrorStruct, ['code', 'message']);
+expectAssignable<Infer<typeof pickedErrorStruct>>({
+  code: -32000,
+  message: 'boom',
+});
+
+// `params`, `data`, and `stack` remain exact-optional on the un-picked
+// structs (this is the behavior the migration to native `exactOptional`
+// must preserve).
+
+type FullRequest = Infer<typeof JsonRpcRequestStruct>;
+
+expectAssignable<FullRequest>({
+  id: 1,
+  jsonrpc: '2.0',
+  method: 'eth_call',
+});
+expectNotAssignable<FullRequest>({
+  id: 1,
+  jsonrpc: '2.0',
+  method: 'eth_call',
+  params: undefined,
 });

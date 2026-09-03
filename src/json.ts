@@ -4,6 +4,7 @@ import {
   coerce,
   create,
   define,
+  exactOptional as nativeExactOptional,
   integer,
   is,
   literal,
@@ -303,11 +304,11 @@ export const JsonRpcIdStruct = nullable(union([number(), string()]));
  */
 export type JsonRpcId = Infer<typeof JsonRpcIdStruct>;
 
-export const JsonRpcErrorStruct = object({
+export const JsonRpcErrorStruct = superstructObject({
   code: integer(),
   message: string(),
-  data: exactOptional(JsonStruct),
-  stack: exactOptional(string()),
+  data: nativeExactOptional(JsonStruct),
+  stack: nativeExactOptional(string()),
 });
 
 /**
@@ -335,11 +336,11 @@ export const JsonRpcParamsStruct: Struct<Json[] | Record<string, Json>, null> =
 
 export type JsonRpcParams = Json[] | Record<string, Json>;
 
-export const JsonRpcRequestStruct = object({
+export const JsonRpcRequestStruct = superstructObject({
   id: JsonRpcIdStruct,
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: exactOptional(JsonRpcParamsStruct),
+  params: nativeExactOptional(JsonRpcParamsStruct),
 });
 
 export type InferWithParams<
@@ -355,10 +356,10 @@ export type InferWithParams<
 export type JsonRpcRequest<Params extends JsonRpcParams = JsonRpcParams> =
   InferWithParams<typeof JsonRpcRequestStruct, Params>;
 
-export const JsonRpcNotificationStruct = object({
+export const JsonRpcNotificationStruct = superstructObject({
   jsonrpc: JsonRpcVersionStruct,
   method: string(),
-  params: exactOptional(JsonRpcParamsStruct),
+  params: nativeExactOptional(JsonRpcParamsStruct),
 });
 
 /**
