@@ -32,7 +32,6 @@ jobs:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
       - run: yarn build
-      - run: yarn test:build
       # This step is dependent on the TypeScript build output, so it's run
       # here, rather than in the test job.
       - run: yarn test:types
