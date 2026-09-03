@@ -9,10 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [11.12.1]
 
-### Uncategorized
-
-- chore: add migration notice to README ([#310](https://github.com/MetaMask/utils/pull/310))
-
 ### Fixed
 
 - Fix ESM compatibility for the BIP-39 mnemonic utilities ([#309](https://github.com/MetaMask/utils/pull/309))
