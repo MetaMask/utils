@@ -31,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `@metamask/scure-bip39` as a dependency ([#300](https://github.com/MetaMask/utils/pull/300))
 - Add optimized `sha512` and `sha384` utility functions ([#305](https://github.com/MetaMask/utils/pull/305))
 
+### Fixed
+
+- `toWei` now rejects fractional wei values (e.g. `toWei('0.5', 'wei')`), which previously returned an incorrect whole-wei value instead of throwing ([#303](https://github.com/MetaMask/utils/pull/303))
+  - This is a caller-visible change: `toWei('0.0', 'wei')` now throws instead of returning `0n`, consistent with how the library already rejects an over-precision fraction for every other unit.
+
 ## [11.11.0]
 
 ### Added
