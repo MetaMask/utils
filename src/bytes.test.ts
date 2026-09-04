@@ -619,18 +619,13 @@ describe('areUint8ArraysEqual', () => {
       return now() - start;
     };
 
-    const median = (values: number[]) => {
-      const sorted = [...values].sort((a, b) => a - b);
-      // `TRIALS` is a non-zero constant, so the midpoint always exists. The
-      // assertion is only here to satisfy `noUncheckedIndexedAccess`.
-      return sorted[Math.floor(sorted.length / 2)] as number;
-    };
+    // Timing noise is strictly additive: scheduling, garbage collection and
+    // cache pressure only ever make a run slower, never faster. The fastest
+    // sample is therefore the closest to the function's true cost, which makes
+    // the minimum a much steadier estimator here than a single reading. A lone
+    // sample per side is what made this assertion fail intermittently on CI.
+    const fastest = (values: number[]) => Math.min(...values);
 
-    // Take several interleaved samples rather than one of each. A single
-    // measurement is at the mercy of one garbage collection pause or a
-    // descheduled CPU slice, which is what made this assertion fail
-    // intermittently on CI. Using the median discards those outliers without
-    // loosening the bound below, so the property being tested is unchanged.
     const earlySamples: number[] = [];
     const lateSamples: number[] = [];
     for (let trial = 0; trial < TRIALS; trial++) {
@@ -638,8 +633,8 @@ describe('areUint8ArraysEqual', () => {
       lateSamples.push(measure(late));
     }
 
-    const earlyTotal = median(earlySamples);
-    const lateTotal = median(lateSamples);
+    const earlyTotal = fastest(earlySamples);
+    const lateTotal = fastest(lateSamples);
 
     // Ratio ≈ 1.0 ⇒ similar runtimes regardless of diff position.
     const ratio =
