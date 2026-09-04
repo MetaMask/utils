@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING:** The package is now ESM only ([#323](https://github.com/MetaMask/utils/pull/323))
+  - The CommonJS build is gone. `require('@metamask/utils')` now fails with `ERR_REQUIRE_ESM`; use `import` instead.
+  - `main` and `module` are removed. Both `.` and `./node` resolve through `exports` to a single `./dist/*.js` with `./dist/*.d.ts` types.
+  - Consumers already using `import` are unaffected.
 - Bump `@ethereumjs/tx` from `^4.2.0` to `^5.4.0` ([#321](https://github.com/MetaMask/utils/pull/321))
   - The deprecated `Keyring.signTransaction` now returns `LegacyTxData` rather than `TxData`. These describe the same shape: `@ethereumjs/tx@5` repurposed the name `TxData` for a map keyed by transaction type and renamed the old meaning to `LegacyTxData`. Implementations do not need changing.
 - Bump `@metamask/scure-bip39` from `^2.0.3` to `^2.1.1` ([#311](https://github.com/MetaMask/utils/pull/311))

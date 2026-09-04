@@ -6,8 +6,8 @@ import os from 'os';
 import path from 'path';
 import * as uuid from 'uuid';
 
-import { isErrorWithCode, wrapError } from './errors';
-import type { Json } from './json';
+import { isErrorWithCode, wrapError } from './errors.js';
+import type { Json } from './json.js';
 
 /**
  * Information about the file sandbox provided to tests that need temporary

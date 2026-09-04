@@ -4,11 +4,12 @@
     "@lavamoat/preinstall-always-fail",
     "@metamask/auto-changelog",
     "@types/*",
-    "@yarnpkg/core",
     "@yarnpkg/cli",
+    "@yarnpkg/core",
     "@yarnpkg/fslib",
     "clipanion",
     "prettier-plugin-packagejson",
+    "rimraf",
     "ts-node",
     "typedoc"
   ]

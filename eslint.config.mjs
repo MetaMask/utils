@@ -2,6 +2,7 @@ import base, { createConfig } from '@metamask/eslint-config';
 import jest from '@metamask/eslint-config-jest';
 import nodejs from '@metamask/eslint-config-nodejs';
 import typescript from '@metamask/eslint-config-typescript';
+import nodePlugin from 'eslint-plugin-n';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -83,6 +84,33 @@ const config = createConfig([
       // `uuid` ships an exports map that the TypeScript resolver cannot read,
       // so `import-x` sees no named exports and false positives on `uuid.v4`.
       'import-x/ignore': ['uuid'],
+    },
+  },
+  {
+    // The package is ESM, so relative imports carry explicit `.js` specifiers.
+    // These are the same three rules core configures for that, verbatim.
+    // `import-x/extensions` does not support using ".js" for TypeScript
+    // files(?), so we load the `n` plugin and use `n/file-extension-in-import`
+    // instead.
+    plugins: { n: nodePlugin },
+
+    rules: {
+      'n/file-extension-in-import': ['error', 'always'],
+      'import-x/extensions': [
+        'error',
+        {
+          js: 'ignorePackages',
+          ts: 'never',
+          tsx: 'never',
+          json: 'always',
+        },
+      ],
+      'import-x/no-useless-path-segments': [
+        'error',
+        {
+          noUselessIndex: false,
+        },
+      ],
     },
   },
   {
