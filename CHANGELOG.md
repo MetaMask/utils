@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING:** Drop support for Node 18 and 20 ([#324](https://github.com/MetaMask/utils/pull/324))
+  - The supported range is now `^22.14.0 || ^24`, matching core.
 - **BREAKING:** The package is now ESM only ([#323](https://github.com/MetaMask/utils/pull/323))
   - The CommonJS build is gone. `require('@metamask/utils')` now fails with `ERR_REQUIRE_ESM`; use `import` instead.
   - `main` and `module` are removed. Both `.` and `./node` resolve through `exports` to a single `./dist/*.js` with `./dist/*.d.ts` types.

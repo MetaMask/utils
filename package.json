@@ -110,7 +110,7 @@
     "directory": "src"
   },
   "engines": {
-    "node": "^18.18 || ^20.14 || >=22"
+    "node": "^22.14.0 || ^24"
   },
   "packageManager": "yarn@4.16.0",
   "lavamoat": {
