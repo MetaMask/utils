@@ -3,7 +3,7 @@
    element, but dropping them widens the inferred array element type from
    `Hex` to `string`, so the callback argument stops satisfying the `Hex`
    parameter and the suite fails to compile. */
-import type { Hex } from './hex';
+import type { Hex } from './hex.js';
 import {
   add0x,
   assertIsHexString,
@@ -17,7 +17,7 @@ import {
   remove0x,
   getChecksumAddressUnmemoized as getChecksumAddress,
   getChecksumAddress as getChecksumAddressMemoized,
-} from './hex';
+} from './hex.js';
 
 describe('isHexString', () => {
   it.each([
