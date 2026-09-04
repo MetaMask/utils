@@ -23,7 +23,7 @@ const { withinSandbox } = createSandbox('utils');
 jest.mock('uuid', () => {
   return {
     // This is how to mock an ES-compatible module in Jest.
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     __esModule: true,
     ...jest.requireActual('uuid'),
   };
