@@ -592,6 +592,7 @@ describe('areUint8ArraysEqual', () => {
   it('has similar runtime for early vs late differences on large arrays', () => {
     const LENGTH = 100_000;
     const ITERATIONS = 200;
+    const TRIALS = 7;
 
     const base = new Uint8Array(LENGTH).fill(7);
     const early = base.slice();
@@ -610,26 +611,37 @@ describe('areUint8ArraysEqual', () => {
 
     const now = () => Number(process.hrtime.bigint());
 
-    let earlyTotal = 0;
-    let lateTotal = 0;
+    const measure = (candidate: Uint8Array) => {
+      const start = now();
+      for (let i = 0; i < ITERATIONS; i++) {
+        areUint8ArraysEqual(candidate, base);
+      }
+      return now() - start;
+    };
 
-    // Measure early difference
-    const startEarly = now();
-    for (let i = 0; i < ITERATIONS; i++) {
-      areUint8ArraysEqual(early, base);
-    }
-    earlyTotal = now() - startEarly;
+    const median = (values: number[]) => {
+      const sorted = [...values].sort((a, b) => a - b);
+      // `TRIALS` is a non-zero constant, so the midpoint always exists. The
+      // assertion is only here to satisfy `noUncheckedIndexedAccess`.
+      return sorted[Math.floor(sorted.length / 2)] as number;
+    };
 
-    // Measure late difference
-    const startLate = now();
-    for (let i = 0; i < ITERATIONS; i++) {
-      areUint8ArraysEqual(late, base);
+    // Take several interleaved samples rather than one of each. A single
+    // measurement is at the mercy of one garbage collection pause or a
+    // descheduled CPU slice, which is what made this assertion fail
+    // intermittently on CI. Using the median discards those outliers without
+    // loosening the bound below, so the property being tested is unchanged.
+    const earlySamples: number[] = [];
+    const lateSamples: number[] = [];
+    for (let trial = 0; trial < TRIALS; trial++) {
+      earlySamples.push(measure(early));
+      lateSamples.push(measure(late));
     }
-    lateTotal = now() - startLate;
+
+    const earlyTotal = median(earlySamples);
+    const lateTotal = median(lateSamples);
 
     // Ratio ≈ 1.0 ⇒ similar runtimes regardless of diff position.
-    // The threshold enforces the same order of magnitude while allowing normal system jitter.
-    // It's an empirical upper bound (~p95). To tune: run multiple trials, take a high percentile, and set slightly above it.
     const ratio =
       earlyTotal > lateTotal ? earlyTotal / lateTotal : lateTotal / earlyTotal;
     expect(ratio).toBeLessThan(1.1);
