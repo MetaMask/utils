@@ -61,10 +61,17 @@ export function isHexAddress(value: unknown): value is Hex {
 }
 
 /**
- * Check if a string is a valid hex checksum address.
+ * Check if a string has the shape of a hex address, allowing the mixed case
+ * used by ERC-55 checksummed addresses.
+ *
+ * This only validates the shape - "0x" followed by 40 hexadecimal characters,
+ * upper- or lower-case. It does NOT verify the ERC-55 checksum, so a
+ * non-checksummed (for example all-lowercase) address still passes. Use
+ * {@link getChecksumAddress} to compute the checksummed form.
  *
  * @param value - The value to check.
- * @returns Whether the value is a valid hex checksum address.
+ * @returns Whether the value has the shape of a (possibly checksummed) hex
+ * address. The ERC-55 checksum itself is not verified.
  */
 export function isHexChecksumAddress(value: unknown): value is Hex {
   return isString(value) && HEX_CHECKSUM_ADDRESS_REGEX.test(value);
