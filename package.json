@@ -46,7 +46,7 @@
     "lint:misc": "oxfmt --ignore-path .gitignore",
     "prepack": "./scripts/prepack.sh",
     "test": "yarn test:source && yarn test:types",
-    "test:source": "jest && jest-it-up",
+    "test:source": "jest && jest-it-up --config jest.config.cjs",
     "test:types": "tsd --files 'src/*.test-d.ts'",
     "test:watch": "jest --watch"
   },
