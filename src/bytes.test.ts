@@ -637,8 +637,17 @@ describe('areUint8ArraysEqual', () => {
     const lateTotal = fastest(lateSamples);
 
     // Ratio ≈ 1.0 ⇒ similar runtimes regardless of diff position.
+    //
+    // The bound is deliberately loose. What this test exists to catch is the
+    // comparison regaining an early return on the first differing byte. Were
+    // that to happen, `early` would stop after one byte while `late` still
+    // walked all 100,000, so the ratio would land in the thousands rather than
+    // slightly above 1. Anything under an order of magnitude is measurement
+    // noise, and on shared CI runners that noise reaches ~1.14 no matter how
+    // the samples are taken. A tighter bound buys no sensitivity to the real
+    // regression, only flakiness.
     const ratio =
       earlyTotal > lateTotal ? earlyTotal / lateTotal : lateTotal / earlyTotal;
-    expect(ratio).toBeLessThan(1.1);
+    expect(ratio).toBeLessThan(2);
   });
 });
