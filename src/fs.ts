@@ -1,5 +1,5 @@
 // This file is intended to be used only in a Node.js context.
-/* eslint-disable import/no-nodejs-modules */
+/* eslint-disable import-x/no-nodejs-modules */
 
 import fs from 'fs';
 import os from 'os';

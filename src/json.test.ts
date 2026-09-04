@@ -279,10 +279,14 @@ describe('json', () => {
       // Check that it's a value, not a getter explicitly
       const descriptor = Object.getOwnPropertyDescriptor(result, 'jailbreak');
       expect(descriptor?.value).toBe(result.jailbreak);
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+
+      /* eslint-disable jest/unbound-method -- Asserting the descriptor has no
+         accessors at all; the functions are never called, so there is nothing
+         to bind. */
       expect(descriptor?.get).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+
       expect(descriptor?.set).toBeUndefined();
+      /* eslint-enable jest/unbound-method */
     });
 
     it('strips __proto__ and constructor', () => {
@@ -367,7 +371,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops';
       });
 
@@ -422,7 +426,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops';
       });
 
@@ -493,7 +497,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops.';
       });
 
@@ -548,7 +552,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops.';
       });
 
@@ -603,7 +607,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops';
       });
 
@@ -650,7 +654,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops';
       });
 
@@ -705,7 +709,7 @@ describe('json', () => {
       (
         superstructAssert as jest.MockedFunction<typeof superstructAssert>
       ).mockImplementation(() => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 'oops.';
       });
 

@@ -601,11 +601,10 @@ describe('areUint8ArraysEqual', () => {
 
     // Warm up JIT
     for (let i = 0; i < 20; i++) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       areUint8ArraysEqual(base, base);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
       areUint8ArraysEqual(early, base);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
       areUint8ArraysEqual(late, base);
     }
 
@@ -617,7 +616,6 @@ describe('areUint8ArraysEqual', () => {
     // Measure early difference
     const startEarly = now();
     for (let i = 0; i < ITERATIONS; i++) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       areUint8ArraysEqual(early, base);
     }
     earlyTotal = now() - startEarly;
@@ -625,7 +623,6 @@ describe('areUint8ArraysEqual', () => {
     // Measure late difference
     const startLate = now();
     for (let i = 0; i < ITERATIONS; i++) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       areUint8ArraysEqual(late, base);
     }
     lateTotal = now() - startLate;

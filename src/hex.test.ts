@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion --
+   The `as Hex` assertions in the `it.each` tables below look redundant per
+   element, but dropping them widens the inferred array element type from
+   `Hex` to `string`, so the callback argument stops satisfying the `Hex`
+   parameter and the suite fails to compile. */
 import type { Hex } from './hex';
 import {
   add0x,
