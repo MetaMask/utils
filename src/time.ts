@@ -71,3 +71,18 @@ export function timeSince(timestamp: number): number {
   assertIsNonNegativeInteger(timestamp, 'timestamp');
   return Date.now() - timestamp;
 }
+
+/**
+ * Waits for the given number of milliseconds.
+ *
+ * This is a promisified `setTimeout`, useful for pausing execution in an async
+ * function. Combine it with {@link inMilliseconds} to wait for a different
+ * {@link Duration}, for example `waitFor(inMilliseconds(2, Duration.Second))`.
+ *
+ * @param milliseconds - The number of milliseconds to wait.
+ * @returns A promise that resolves once the given duration has elapsed.
+ */
+export async function waitFor(milliseconds: number): Promise<void> {
+  assertIsNonNegativeInteger(milliseconds, 'milliseconds');
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}

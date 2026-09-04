@@ -168,6 +168,7 @@ describe('index', () => {
         "uint8ArrayToMnemonic",
         "unitMap",
         "valueToBytes",
+        "waitFor",
         "wrapError",
       ]
     `);
