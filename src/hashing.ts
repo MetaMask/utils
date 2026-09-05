@@ -12,6 +12,11 @@ import {
  * @param bytes - A byte array.
  * @returns The SHA-256 hash as a byte array.
  */
+// `crypto.subtle.digest` takes a `BufferSource`, which TypeScript 7 will not
+// accept a plain `Uint8Array` for: it is now generic over the buffer, so it
+// could be backed by a `SharedArrayBuffer`. Runtimes accept those, and
+// narrowing the exported signatures below would break callers, so the
+// assertion is kept at the call sites.
 export async function sha256(bytes: Uint8Array): Promise<Uint8Array> {
   // Use crypto.subtle.digest whenever possible as it is faster.
   if (
@@ -20,7 +25,7 @@ export async function sha256(bytes: Uint8Array): Promise<Uint8Array> {
     globalThis.crypto.subtle?.digest
   ) {
     return new Uint8Array(
-      await globalThis.crypto.subtle.digest('SHA-256', bytes),
+      await globalThis.crypto.subtle.digest('SHA-256', bytes as BufferSource),
     );
   }
   return nobleSha256(bytes);
@@ -42,7 +47,7 @@ export async function sha512(bytes: Uint8Array): Promise<Uint8Array> {
     globalThis.crypto.subtle?.digest
   ) {
     return new Uint8Array(
-      await globalThis.crypto.subtle.digest('SHA-512', bytes),
+      await globalThis.crypto.subtle.digest('SHA-512', bytes as BufferSource),
     );
   }
   return nobleSha512(bytes);
@@ -64,7 +69,7 @@ export async function sha384(bytes: Uint8Array): Promise<Uint8Array> {
     globalThis.crypto.subtle?.digest
   ) {
     return new Uint8Array(
-      await globalThis.crypto.subtle.digest('SHA-384', bytes),
+      await globalThis.crypto.subtle.digest('SHA-384', bytes as BufferSource),
     );
   }
   return nobleSha384(bytes);
