@@ -75,7 +75,7 @@
     "@types/eslint": "^9.6.1",
     "@types/jest": "^30.0.0",
     "@types/jest-when": "^3.5.3",
-    "@types/node": "~18.18.14",
+    "@types/node": "^22.13.14",
     "@types/semver": "^7",
     "@types/uuid": "^9.0.8",
     "depcheck": "^1.4.7",
