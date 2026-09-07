@@ -85,7 +85,6 @@
     "@metamask/eslint-config-typescript": "^15.0.0",
     "@ts-bridge/cli": "^0.1.2",
     "@ts-bridge/shims": "^0.1.1",
-    "@types/eslint": "^9.6.1",
     "@types/jest": "^28.1.7",
     "@types/jest-when": "^3.5.3",
     "@types/node": "~18.18.14",
