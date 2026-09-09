@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING:** Bump the TypeScript `target` and `lib` to `ES2022` ([#332](https://github.com/MetaMask/utils/pull/332))
+  - Emitted output now uses ES2022 syntax, matching core. Consumers on the supported Node range are unaffected.
 - **BREAKING:** Drop support for Node 18 and 20 ([#328](https://github.com/MetaMask/utils/pull/328))
 - **BREAKING:** Drop CommonJS support ([#9536](https://github.com/MetaMask/core/pull/9536))
   - This package is now ESM-only, but can still be used in CommonJS projects via `require(esm)` in modern Node.js versions (22+), or dynamic imports in older Node.js versions.
