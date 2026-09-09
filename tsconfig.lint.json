@@ -1,0 +1,23 @@
+{
+  /**
+   * Type checks everything the build does not: tests, fixtures and the config
+   * files at the root. `tsconfig.build.json` only covers `src` minus tests, and
+   * ts-jest runs in transpile-only mode because `isolatedModules` is set, so
+   * without this nothing checks the types in a test file.
+   */
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /**
+     * Dependencies ship declarations that do not satisfy the strict flags used
+     * here, and their errors are not ours to fix.
+     */
+    "skipLibCheck": true
+  },
+  /**
+   * `*.test-d.ts` files belong to `tsd`, which type checks them itself via
+   * `yarn test:types`. Pulling them in here would drag `tsd`'s own types into
+   * the program, and those reference `lib="esnext"`, which widens built in
+   * types like `ReadonlySet` well beyond the `lib` this package targets.
+   */
+  "exclude": ["./dist/**/*", "./src/**/*.test-d.ts"]
+}
