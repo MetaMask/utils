@@ -602,9 +602,7 @@ describe('areUint8ArraysEqual', () => {
     // Warm up JIT
     for (let i = 0; i < 20; i++) {
       areUint8ArraysEqual(base, base);
-
       areUint8ArraysEqual(early, base);
-
       areUint8ArraysEqual(late, base);
     }
 

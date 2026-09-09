@@ -43,7 +43,6 @@ function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
  * @param message - The error message.
  * @returns The error object.
  */
-
 function getError(ErrorWrapper: AssertionErrorConstructor, message: string) {
   if (isConstructable(ErrorWrapper)) {
     return new ErrorWrapper({
@@ -81,7 +80,6 @@ export class AssertionError extends Error {
 export function assert(
   value: any,
   message: string | Error = 'Assertion failed.',
-
   ErrorWrapper: AssertionErrorConstructor = AssertionError,
 ): asserts value {
   if (!value) {
@@ -108,7 +106,6 @@ export function assertStruct<Type, Schema>(
   value: unknown,
   struct: Struct<Type, Schema>,
   errorPrefix = 'Assertion failed',
-
   ErrorWrapper: AssertionErrorConstructor = AssertionError,
 ): asserts value is Type {
   try {

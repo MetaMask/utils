@@ -23,7 +23,6 @@ const { withinSandbox } = createSandbox('utils');
 jest.mock('uuid', () => {
   return {
     // This is how to mock an ES-compatible module in Jest.
-
     __esModule: true,
     ...jest.requireActual('uuid'),
   };

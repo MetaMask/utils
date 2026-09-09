@@ -391,7 +391,6 @@ export function isJsonRpcNotification(
  */
 export function assertIsJsonRpcNotification(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcNotification {
   assertStruct(
@@ -422,7 +421,6 @@ export function isJsonRpcRequest(value: unknown): value is JsonRpcRequest {
  */
 export function assertIsJsonRpcRequest(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcRequest {
   assertStruct(
@@ -516,7 +514,6 @@ export function isPendingJsonRpcResponse(
  */
 export function assertIsPendingJsonRpcResponse(
   response: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts response is PendingJsonRpcResponse {
   assertStruct(
@@ -549,7 +546,6 @@ export function isJsonRpcResponse(
  */
 export function assertIsJsonRpcResponse(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcResponse {
   assertStruct(
@@ -580,7 +576,6 @@ export function isJsonRpcSuccess(value: unknown): value is JsonRpcSuccess {
  */
 export function assertIsJsonRpcSuccess(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcSuccess {
   assertStruct(
@@ -611,7 +606,6 @@ export function isJsonRpcFailure(value: unknown): value is JsonRpcFailure {
  */
 export function assertIsJsonRpcFailure(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcFailure {
   assertStruct(
@@ -642,7 +636,6 @@ export function isJsonRpcError(value: unknown): value is JsonRpcError {
  */
 export function assertIsJsonRpcError(
   value: unknown,
-
   ErrorWrapper?: AssertionErrorConstructor,
 ): asserts value is JsonRpcError {
   assertStruct(

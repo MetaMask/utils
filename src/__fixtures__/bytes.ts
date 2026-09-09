@@ -101,7 +101,6 @@ export const LARGE_BYTES_FIXTURES = [
     ),
     base64: 'oiJD+4WquMtb065HpdccqBsSAls53j42d8zkz2nmpms=',
   },
-
   {
     // 1024 random bytes.
     // prettier-ignore
