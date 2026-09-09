@@ -3,6 +3,9 @@ import { when } from 'jest-when';
 import os from 'os';
 import path from 'path';
 import util from 'util';
+// The namespace object is required so the tests below can
+// `jest.spyOn(uuid, 'v4')`, which a named import cannot support.
+// eslint-disable-next-line import-x/namespace -- import-x cannot read named exports out of uuid's CommonJS build.
 import * as uuid from 'uuid';
 
 import {

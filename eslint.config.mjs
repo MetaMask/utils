@@ -79,13 +79,6 @@ const config = createConfig([
     },
   },
   {
-    settings: {
-      // `uuid` ships an exports map that the TypeScript resolver cannot read,
-      // so `import-x` sees no named exports and false positives on `uuid.v4`.
-      'import-x/ignore': ['uuid'],
-    },
-  },
-  {
     files: ['**/*.test-d.ts'],
     rules: {
       // In `tsd` type tests the assertions carry the meaning of the test, so
