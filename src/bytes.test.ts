@@ -609,7 +609,7 @@ describe('areUint8ArraysEqual', () => {
 
     const now = (): number => Number(process.hrtime.bigint());
 
-    const measure = (candidate: Uint8Array) => {
+    const measure = (candidate: Uint8Array): number => {
       const start = now();
       for (let i = 0; i < ITERATIONS; i++) {
         areUint8ArraysEqual(candidate, base);
@@ -622,7 +622,7 @@ describe('areUint8ArraysEqual', () => {
     // sample is therefore the closest to the function's true cost, which makes
     // the minimum a much steadier estimator here than a single reading. A lone
     // sample per side is what made this assertion fail intermittently on CI.
-    const fastest = (values: number[]) => Math.min(...values);
+    const fastest = (values: number[]): number => Math.min(...values);
 
     const earlySamples: number[] = [];
     const lateSamples: number[] = [];
