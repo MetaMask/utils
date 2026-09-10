@@ -9,20 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [12.0.0]
 
-### Uncategorized
-
-- chore: type check tests via lint:tsc ([#334](https://github.com/MetaMask/utils/pull/334))
-- chore!: bump TypeScript target and lib to `ES2022` ([#333](https://github.com/MetaMask/utils/pull/333))
-- chore: adopt core's TypeScript 6 and 7 arrangement ([#325](https://github.com/MetaMask/utils/pull/325))
-- feat!: convert the package to ESM only ([#323](https://github.com/MetaMask/utils/pull/323))
-- chore: replace depcheck with knip ([#330](https://github.com/MetaMask/utils/pull/330))
-- fix: make the tsd type tests actually run ([#322](https://github.com/MetaMask/utils/pull/322))
-- chore: bump Jest to v30 ([#319](https://github.com/MetaMask/utils/pull/319))
-- chore: align remaining dev deps and tooling config with core ([#318](https://github.com/MetaMask/utils/pull/318))
-- chore: bump ESLint stack to v15 and migrate to flat config ([#317](https://github.com/MetaMask/utils/pull/317))
-- ci: add preview build publishing ([#326](https://github.com/MetaMask/utils/pull/326))
-- chore: replace Prettier formatting with Oxfmt ([#314](https://github.com/MetaMask/utils/pull/314))
-
 ### Changed
 
 - **BREAKING:** Bump TypeScript target to ES2022 ([#332](https://github.com/MetaMask/utils/pull/332))
