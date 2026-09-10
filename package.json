@@ -73,7 +73,7 @@
     "lodash": "^4.17.21",
     "pony-cause": "^2.1.10",
     "semver": "^7.6.3",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^3.0.4",
