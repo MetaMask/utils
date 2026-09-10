@@ -145,7 +145,7 @@ describe('fs', () => {
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'test.json');
           const parser = {
-            parse(content: string) {
+            parse(content: string): { content: string } {
               return { content };
             },
           };
@@ -164,7 +164,7 @@ describe('fs', () => {
         await withinSandbox(async (sandbox) => {
           const filePath = path.join(sandbox.directoryPath, 'nonexistent.json');
           const parser = {
-            parse(content: string) {
+            parse(content: string): { content: string } {
               return { content };
             },
           };
@@ -267,7 +267,7 @@ describe('fs', () => {
                 | (number | string)[]
                 | null,
               space?: string,
-            ) {
+            ): string {
               return (
                 `${util.inspect(json)}\n` +
                 `replacer: ${util.inspect(replacer)}, space: ${util.inspect(
@@ -298,7 +298,7 @@ describe('fs', () => {
                 | (number | string)[]
                 | null,
               space?: string,
-            ) {
+            ): string {
               return (
                 `${util.inspect(json)}\n` +
                 `replacer: ${util.inspect(replacer)}, space: ${util.inspect(
@@ -333,7 +333,7 @@ describe('fs', () => {
                 | (number | string)[]
                 | null,
               space?: string,
-            ) {
+            ): string {
               return (
                 `${util.inspect(json)}\n` +
                 `replacer: ${util.inspect(replacer)}, space: ${util.inspect(
@@ -370,7 +370,7 @@ describe('fs', () => {
                 | (number | string)[]
                 | null,
               space?: string,
-            ) {
+            ): string {
               return (
                 `${util.inspect(json)}\n` +
                 `replacer: ${util.inspect(replacer)}, space: ${util.inspect(

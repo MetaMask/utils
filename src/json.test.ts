@@ -718,7 +718,19 @@ describe('json', () => {
   });
 
   describe('getJsonRpcIdValidator', () => {
-    const getInputs = () => {
+    const getInputs = (): Record<
+      | 'fractionString'
+      | 'negativeInteger'
+      | 'object'
+      | 'positiveInteger'
+      | 'string'
+      | 'undefined'
+      | 'zero'
+      | 'emptyString'
+      | 'fraction'
+      | 'null',
+      { value: unknown; expected: boolean }
+    > => {
       return {
         // invariant with respect to options
         fractionString: { value: '1.2', expected: true },
@@ -738,7 +750,7 @@ describe('json', () => {
     const validateAll = (
       validator: ReturnType<typeof getJsonRpcIdValidator>,
       inputs: ReturnType<typeof getInputs>,
-    ) => {
+    ): void => {
       for (const input of Object.values(inputs)) {
         expect(validator(input.value)).toStrictEqual(input.expected);
       }

@@ -676,7 +676,9 @@ type JsonRpcValidatorOptions = {
  * Default: `true`
  * @returns The JSON-RPC ID validator function.
  */
-export function getJsonRpcIdValidator(options?: JsonRpcValidatorOptions) {
+export function getJsonRpcIdValidator(
+  options?: JsonRpcValidatorOptions,
+): (id: unknown) => id is JsonRpcId {
   const { permitEmptyString, permitFractions, permitNull } = {
     permitEmptyString: true,
     permitFractions: false,

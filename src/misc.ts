@@ -182,7 +182,7 @@ export function isPlainObject(value: unknown): value is PlainObject {
  * @param character - Character.
  * @returns True if a character code is ASCII, false if not.
  */
-export function isASCII(character: string) {
+export function isASCII(character: string): boolean {
   return character.charCodeAt(0) <= 127;
 }
 

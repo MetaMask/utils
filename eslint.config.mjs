@@ -70,15 +70,6 @@ const config = createConfig([
     },
   },
   {
-    files: ['**/*.ts'],
-    rules: {
-      // TODO: Re-enable these rules.
-      // Newly surfaced by eslint-config v15; not enforced under v12.
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/prefer-nullish-coalescing': 'off',
-    },
-  },
-  {
     files: ['**/*.test-d.ts'],
     rules: {
       // In `tsd` type tests the assertions carry the meaning of the test, so

@@ -247,7 +247,7 @@ export function createSandbox(projectName: string): FileSandbox {
     directoryPath,
     async withinSandbox(
       test: (args: { directoryPath: string }) => Promise<void>,
-    ) {
+    ): Promise<void> {
       if (await directoryExists(directoryPath)) {
         throw new Error(`${directoryPath} already exists. Cannot continue.`);
       }

@@ -5,7 +5,7 @@ export const JSON_FIXTURES = {
     ['a', 2, null],
     [{ a: null, b: 2, c: [{ foo: 'bar' }] }],
   ],
-  invalid: [undefined, Symbol('bar'), () => 'foo', [{ a: undefined }]],
+  invalid: [undefined, Symbol('bar'), (): string => 'foo', [{ a: undefined }]],
 };
 
 export const JSON_RPC_NOTIFICATION_FIXTURES = {
@@ -1111,13 +1111,13 @@ const INDIRECT_CIRCULAR_REFERENCE_OBJECT: Record<string, unknown> = {
 };
 
 const TO_JSON_CIRCULAR_REFERENCE = {
-  toJSON() {
+  toJSON(): object {
     return {};
   },
 };
 
 const CIRCULAR_REFERENCE = { prop: TO_JSON_CIRCULAR_REFERENCE };
-TO_JSON_CIRCULAR_REFERENCE.toJSON = function () {
+TO_JSON_CIRCULAR_REFERENCE.toJSON = function (): object {
   return CIRCULAR_REFERENCE;
 };
 
@@ -1335,7 +1335,7 @@ export const JSON_VALIDATION_FIXTURES = [
         levelTwo: {
           levelThree: {
             levelFour: {
-              levelFive: () => {
+              levelFive: (): string => {
                 return 'anything';
               },
             },
@@ -1355,7 +1355,7 @@ export const JSON_VALIDATION_FIXTURES = [
   },
   {
     value: [
-      function () {
+      function (): string {
         return 'whatever';
       },
     ],
@@ -1472,7 +1472,7 @@ export const JSON_VALIDATION_FIXTURES = [
   },
   {
     value: {
-      get key() {
+      get key(): never {
         throw new Error();
       },
     },

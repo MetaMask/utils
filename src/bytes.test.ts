@@ -606,7 +606,7 @@ describe('areUint8ArraysEqual', () => {
       areUint8ArraysEqual(late, base);
     }
 
-    const now = () => Number(process.hrtime.bigint());
+    const now = (): number => Number(process.hrtime.bigint());
 
     let earlyTotal = 0;
     let lateTotal = 0;

@@ -142,7 +142,9 @@ export const getChecksumAddress = memoize(getChecksumAddressUnmemoized);
  * @param possibleChecksum - The hex address to check.
  * @returns True if the address is a checksum address.
  */
-export function isValidChecksumAddressUnmemoized(possibleChecksum: Hex) {
+export function isValidChecksumAddressUnmemoized(
+  possibleChecksum: Hex,
+): boolean {
   if (!isHexChecksumAddress(possibleChecksum)) {
     return false;
   }
@@ -166,7 +168,7 @@ export const isValidChecksumAddress = memoize(isValidChecksumAddressUnmemoized);
  * @param possibleAddress - Input parameter to check against.
  * @returns Whether or not the input is a valid hex address.
  */
-export function isValidHexAddressUnmemoized(possibleAddress: Hex) {
+export function isValidHexAddressUnmemoized(possibleAddress: Hex): boolean {
   return (
     isHexAddress(possibleAddress) || isValidChecksumAddress(possibleAddress)
   );

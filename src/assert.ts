@@ -43,7 +43,10 @@ function getErrorMessageWithoutTrailingPeriod(error: unknown): string {
  * @param message - The error message.
  * @returns The error object.
  */
-function getError(ErrorWrapper: AssertionErrorConstructor, message: string) {
+function getError(
+  ErrorWrapper: AssertionErrorConstructor,
+  message: string,
+): Error {
   if (isConstructable(ErrorWrapper)) {
     return new ErrorWrapper({
       message,
