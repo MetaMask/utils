@@ -45,7 +45,7 @@
     "lint:eslint": "eslint . --cache",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:constraints --fix && yarn lint:misc --write && yarn lint:dependencies:fix && yarn lint:changelog",
     "lint:misc": "oxfmt --ignore-path .gitignore",
-    "lint:tsc": "tsc --noEmit --project tsconfig.lint.json",
+    "lint:tsc": "tsc --project tsconfig.lint.json",
     "prepack": "./scripts/prepack.sh",
     "test": "yarn test:source && yarn test:types",
     "test:source": "jest && jest-it-up --config jest.config.cjs",
